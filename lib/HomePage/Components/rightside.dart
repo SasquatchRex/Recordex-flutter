@@ -43,6 +43,13 @@ class _RightSideState extends State<RightSide> {
                       SizedBox(width: 40,),
                       TotalUsers(),
                     ],
+                  ),
+
+                  SizedBox(height: 30,),
+                  Row(
+                    children: [
+                      MonthlyRevenue(),
+                    ],
                   )
                 ],
               ),
@@ -275,6 +282,11 @@ class TotalUsers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> gradientColors = [
+      Colors.lightGreenAccent,
+      Colors.green,
+    ];
+
     return Container(
       width: 250,
       height: 250,
@@ -296,40 +308,64 @@ class TotalUsers extends StatelessWidget {
 
             ),
             Text(
-                "Active Users",
+                "Total Users",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 14,
                   fontWeight: FontWeight.w300
               ),
             ),
-            SizedBox(height: 30,),
-            // LineChart(
-            //   LineChartData(
-            //     gridData: FlGridData(show: false),
-            //     titlesData: FlTitlesData(show: false),
-            //     borderData: FlBorderData(show: true),
-            //     minX: 0,
-            //     maxX: 10,
-            //     minY: 0,
-            //     maxY: 10,
-            //     lineBarsData: [
-            //       LineChartBarData(
-            //         spots: [
-            //           FlSpot(0, 0),
-            //           FlSpot(1, 1),
-            //           FlSpot(2, 2),
-            //           FlSpot(3, 3),
-            //
-            //         ],
-            //         isCurved: true, // To create a smooth curve
-            //         // color: Colors.green,
-            //         dotData: FlDotData(show: false),
-            //         belowBarData: BarAreaData(show: false),
-            //       )
-            //     ]
-            //   )
-            // ),
+            SizedBox(height: 15,),
+
+            Container(
+              height: 100,
+              width: 150,
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: false),
+                  titlesData: FlTitlesData(show: false),
+                  borderData: FlBorderData(show: false),
+                  minX: 0,
+                  maxX: 10,
+                  minY: 0,
+                  maxY: 15,
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, 5),
+                        FlSpot(1, 6),
+                        FlSpot(2, 8),
+                        FlSpot(4, 5),
+                        FlSpot(5, 6),
+                        FlSpot(6, 8),
+                        FlSpot(7, 10),
+                        FlSpot(8, 7),
+                        FlSpot(9, 10),
+                        FlSpot(10, 12.5),
+
+
+                      ],
+                      isCurved: true, // To create a smooth curve
+                      color: Colors.green,
+                      gradient: LinearGradient(
+                        colors: gradientColors,
+                      ),
+
+                      dotData: FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        gradient: LinearGradient(
+                          colors: gradientColors
+                              .map((color) => color.withValues(alpha: 0.3))
+                              .toList(),
+                        ),
+                      ),
+                    )
+                  ]
+                )
+              ),
+            ),
+            SizedBox(height: 15,),
             Container(
               width: 180,
               child: Text(
@@ -349,6 +385,186 @@ class TotalUsers extends StatelessWidget {
       ),
 
     );
+  }
+}
+
+
+class MonthlyRevenue extends StatelessWidget {
+  const MonthlyRevenue({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<Color> gradientColors = [
+      Colors.lightGreenAccent,
+      Colors.green,
+    ];
+
+    return Container(
+      width: 420,
+      height: 400,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Text(
+                "Monthly Revenue",
+              style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600
+              ),
+
+            ),
+            SizedBox(height: 30,),
+
+            Container(
+              height: 200,
+              width: 350,
+              child: BarChartWidget(),
+            ),
+            SizedBox(height: 15,),
+            Container(
+              width: 350,
+              child: Text(
+                "Average monthly sale",
+                textAlign: TextAlign.left ,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                SizedBox(width: 20,),
+                Text(
+                  "68.9%",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 34,
+
+                  ),
+                ),
+                SizedBox(width: 15,),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "3.45%",
+
+                    style: TextStyle(
+                      color: Colors.green
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_drop_up,
+                  color: Colors.green,
+                )
+              ],
+            )
+
+          ],
+        ),
+      ),
+
+    );
+  }
+}
+
+
+
+class BarChartWidget extends StatelessWidget {
+  const BarChartWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return BarChart(
+      BarChartData(
+        backgroundColor: Colors.transparent,
+        maxY: 70,
+        barGroups: _chartData(),
+        borderData: FlBorderData(show: false),
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false, // Hide vertical grid lines
+          checkToShowHorizontalLine: (value) => true, // Show all horizontal lines
+          getDrawingHorizontalLine: (value) => FlLine(
+            color: Colors.white.withOpacity(0.2),
+            strokeWidth: 1,
+          ),
+        ),
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                );
+              },
+              interval: 10
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                List<String> months = [
+                  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep'
+                ];
+
+                return Text(
+                  months[value.toInt()],
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                );
+              },
+              interval: 1,
+            ),
+          ),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)), // Remove top text
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)), // Remove right text
+
+        ),
+      ),
+    );
+  }
+
+  List<BarChartGroupData> _chartData() {
+    List<double> data = [10, 35, 40, 50, 25, 20, 15, 30, 18];
+    double maxYValue = (data.reduce((a, b) => a > b ? a : b) / 10).ceil() * 10 + 10;
+
+    return List.generate(data.length, (index) {
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: data[index],
+
+            gradient: const LinearGradient(
+              colors: [Colors.cyan, Colors.greenAccent],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+            width: 15,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ],
+      );
+    });
   }
 }
 
