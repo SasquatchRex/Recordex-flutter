@@ -3,12 +3,17 @@ import 'topside.dart';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 
-
 class RightSide extends StatefulWidget {
   final VoidCallback onToggleMenu;
+  final VoidCallback toggleNotification;
   final bool fullMenu;
+  final bool notification;
 
-  const RightSide({required this.onToggleMenu, required this.fullMenu});
+  const RightSide(
+      {required this.onToggleMenu,
+      required this.fullMenu,
+      required this.notification,
+      required this.toggleNotification});
 
   // const RightSide({super.key});
 
@@ -19,43 +24,125 @@ class RightSide extends StatefulWidget {
 class _RightSideState extends State<RightSide> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      width: widget.fullMenu? 0.80* MediaQuery.of(context).size.width : 0.905* MediaQuery.of(context).size.width,
+    return Container(
+      width: widget.fullMenu
+          ? 0.80 * MediaQuery.of(context).size.width
+          : 0.905 * MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: Colors.black,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: Stack(
           children: [
-            Topside(onToggleMenu: widget.onToggleMenu),
-
-            SizedBox(height: 50,),
-
-            Container(
-              alignment: Alignment.topLeft,
-              child: Column(
-                children: [
-                  Row(
+            Column(
+              children: [
+                Topside(
+                  onToggleMenu: widget.onToggleMenu,
+                  toggleNotification: widget.toggleNotification,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Column(
                     children: [
-                      Welcome(),
-                      SizedBox(width: 40,),
-                      ActiveUsers() ,
-                      SizedBox(width: 40,),
-                      TotalUsers(),
+                      Row(
+                        children: [
+                          Welcome(),
+                          SizedBox(
+                            width: 40,
+                          ),
+                          ActiveUsers(),
+                          SizedBox(
+                            width: 40,
+                          ),
+                          TotalUsers(),
+                          SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          MonthlyRevenue(),
+                        ],
+                      )
                     ],
                   ),
+                ),
 
-                  SizedBox(height: 30,),
-                  Row(
-                    children: [
-                      MonthlyRevenue(),
-                    ],
-                  )
-                ],
-              ),
-            )
+              ],
+            ),
+            if (widget.notification)
+              Positioned(
+                right: 0,
+                top: 80,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  width: 300,
+                  height: 400,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.035),
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Notifications",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 20
+                          ),
 
-
+                        ),
+                        SizedBox(height: 10,),
+                        for(int i=1;i<=5;i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              print("Option 1");
+                            },
+                            child: Container(
+                                color: Colors.white.withOpacity(0.018),
+                                width: 300,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Heading 1",
+                                        style: TextStyle(
+                                          color: Colors.white54,
+                                        ),
+                                      ),
+                                      SizedBox(height: 2,),
+                                      Text(
+                                        "This is the description for heading 1",
+                                        style: TextStyle(
+                                          color: Colors.white38,
+                                          fontSize: 12
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
           ],
         ),
       ),
@@ -79,7 +166,7 @@ class Welcome extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
-        padding: EdgeInsets.only(left: 20,right: 0, top: 15, bottom: 15),
+        padding: EdgeInsets.only(left: 20, right: 0, top: 15, bottom: 15),
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,42 +179,43 @@ class Welcome extends StatelessWidget {
                     children: [
                       Container(
                         // alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
+                        decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blue.withOpacity(0.5)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Profile_Dash(),
-                          ),
+                            color: Colors.blue.withOpacity(0.5)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Profile_Dash(),
+                        ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "Welcome back,",
-                            style: TextStyle(
-                              color: Colors.white30
-                            ),
+                            "Welcome back,",
+                            style: TextStyle(color: Colors.white30),
                           ),
                           // SizedBox(height: 10,),
                           Text(
-                              "Prithak Lamsal!",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 28
-                            ),
+                            "Prithak Lamsal!",
+                            style:
+                                TextStyle(color: Colors.white70, fontSize: 28),
                           )
                         ],
                       )
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Row(
                     children: [
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -135,21 +223,20 @@ class Welcome extends StatelessWidget {
                           Text(
                             "\$65.4K",
                             style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
-                            ),
+                                color: Colors.white70,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
                           ),
                           Text(
                             "Today's Sale",
                             style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300
-                            ),
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300),
                           ),
-                          SizedBox(height: 10,),
-
+                          SizedBox(
+                            height: 10,
+                          ),
                           PercentageLine(
                             percentage: 64, // Fill 75% of the line
                             backgroundColor: Colors.white12,
@@ -157,10 +244,11 @@ class Welcome extends StatelessWidget {
                             height: 6,
                             width: 100,
                           )
-
                         ],
                       ),
-                      SizedBox(width: 40,),
+                      SizedBox(
+                        width: 40,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -168,21 +256,20 @@ class Welcome extends StatelessWidget {
                           Text(
                             "74%",
                             style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600
-                            ),
+                                color: Colors.white70,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
                           ),
                           Text(
                             "Growth Rate",
                             style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300
-                            ),
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300),
                           ),
-                          SizedBox(height: 10,),
-
+                          SizedBox(
+                            height: 10,
+                          ),
                           PercentageLine(
                             percentage: 74, // Fill 75% of the line
                             backgroundColor: Colors.white12,
@@ -190,12 +277,10 @@ class Welcome extends StatelessWidget {
                             height: 6,
                             width: 100,
                           )
-
                         ],
                       )
                     ],
                   )
-
                 ],
               ),
               Image.asset(
@@ -229,23 +314,22 @@ class ActiveUsers extends StatelessWidget {
         child: Column(
           children: [
             Text(
-                "42.5K",
+              "42.5K",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 20,
-                  fontWeight: FontWeight.w600
-              ),
-
+                  fontWeight: FontWeight.w600),
             ),
             Text(
-                "Active Users",
+              "Active Users",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 14,
-                  fontWeight: FontWeight.w300
-              ),
+                  fontWeight: FontWeight.w300),
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             HalfCircleProgress(
               percentage: 78, // Fill 75% of the half-circle
               backgroundColor: Colors.grey[900]!,
@@ -257,20 +341,18 @@ class ActiveUsers extends StatelessWidget {
               width: 180,
               child: Text(
                 "12.5K users increased from last month",
-                textAlign: TextAlign.center ,
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.white30,
                     fontSize: 14,
-                    fontWeight: FontWeight.w400
-                ),
+                    fontWeight: FontWeight.w400),
               ),
             )
           ],
         ),
       ),
-
     );
   }
 }
@@ -299,29 +381,26 @@ class TotalUsers extends StatelessWidget {
         child: Column(
           children: [
             Text(
-                "42.5K",
+              "42.5K",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 20,
-                  fontWeight: FontWeight.w600
-              ),
-
+                  fontWeight: FontWeight.w600),
             ),
             Text(
-                "Total Users",
+              "Total Users",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 14,
-                  fontWeight: FontWeight.w300
-              ),
+                  fontWeight: FontWeight.w300),
             ),
-            SizedBox(height: 15,),
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               height: 100,
               width: 150,
-              child: LineChart(
-                LineChartData(
+              child: LineChart(LineChartData(
                   gridData: FlGridData(show: false),
                   titlesData: FlTitlesData(show: false),
                   borderData: FlBorderData(show: false),
@@ -342,8 +421,6 @@ class TotalUsers extends StatelessWidget {
                         FlSpot(8, 7),
                         FlSpot(9, 10),
                         FlSpot(10, 12.5),
-
-
                       ],
                       isCurved: true, // To create a smooth curve
                       color: Colors.green,
@@ -361,33 +438,30 @@ class TotalUsers extends StatelessWidget {
                         ),
                       ),
                     )
-                  ]
-                )
-              ),
+                  ])),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
               width: 180,
               child: Text(
                 "12.5K users increased from last month",
-                textAlign: TextAlign.center ,
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.white30,
                     fontSize: 14,
-                    fontWeight: FontWeight.w400
-                ),
+                    fontWeight: FontWeight.w400),
               ),
             )
           ],
         ),
       ),
-
     );
   }
 }
-
 
 class MonthlyRevenue extends StatelessWidget {
   const MonthlyRevenue({
@@ -403,7 +477,7 @@ class MonthlyRevenue extends StatelessWidget {
 
     return Container(
       width: 420,
-      height: 400,
+      height: 370,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -413,57 +487,57 @@ class MonthlyRevenue extends StatelessWidget {
         child: Column(
           children: [
             Text(
-                "Monthly Revenue",
+              "Monthly Revenue",
               style: TextStyle(
                   color: Colors.white70,
                   fontSize: 20,
-                  fontWeight: FontWeight.w600
-              ),
-
+                  fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: 30,),
-
+            SizedBox(
+              height: 30,
+            ),
             Container(
               height: 200,
               width: 350,
               child: BarChartWidget(),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
               width: 350,
               child: Text(
                 "Average monthly sale",
-                textAlign: TextAlign.left ,
+                textAlign: TextAlign.left,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
-                    fontWeight: FontWeight.w400
-                ),
+                    fontWeight: FontWeight.w400),
               ),
             ),
             Row(
               children: [
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Text(
                   "68.9%",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.blueAccent,
                     fontSize: 34,
-
                   ),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 Container(
                   alignment: Alignment.bottomCenter,
                   child: Text(
                     "3.45%",
-
-                    style: TextStyle(
-                      color: Colors.green
-                    ),
+                    style: TextStyle(color: Colors.green),
                   ),
                 ),
                 Icon(
@@ -472,23 +546,18 @@ class MonthlyRevenue extends StatelessWidget {
                 )
               ],
             )
-
           ],
         ),
       ),
-
     );
   }
 }
-
-
 
 class BarChartWidget extends StatelessWidget {
   const BarChartWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return BarChart(
       BarChartData(
         backgroundColor: Colors.transparent,
@@ -498,7 +567,8 @@ class BarChartWidget extends StatelessWidget {
         gridData: FlGridData(
           show: true,
           drawVerticalLine: false, // Hide vertical grid lines
-          checkToShowHorizontalLine: (value) => true, // Show all horizontal lines
+          checkToShowHorizontalLine: (value) =>
+              true, // Show all horizontal lines
           getDrawingHorizontalLine: (value) => FlLine(
             color: Colors.white.withOpacity(0.2),
             strokeWidth: 1,
@@ -507,24 +577,30 @@ class BarChartWidget extends StatelessWidget {
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 40,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  value.toInt().toString(),
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
-                );
-              },
-              interval: 10
-            ),
+                showTitles: true,
+                reservedSize: 40,
+                getTitlesWidget: (value, meta) {
+                  return Text(
+                    value.toInt().toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  );
+                },
+                interval: 10),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 List<String> months = [
-                  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                  'Jul', 'Aug', 'Sep'
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul',
+                  'Aug',
+                  'Sep'
                 ];
 
                 return Text(
@@ -535,9 +611,10 @@ class BarChartWidget extends StatelessWidget {
               interval: 1,
             ),
           ),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)), // Remove top text
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)), // Remove right text
-
+          topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false)), // Remove top text
+          rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false)), // Remove right text
         ),
       ),
     );
@@ -545,7 +622,8 @@ class BarChartWidget extends StatelessWidget {
 
   List<BarChartGroupData> _chartData() {
     List<double> data = [10, 35, 40, 50, 25, 20, 15, 30, 18];
-    double maxYValue = (data.reduce((a, b) => a > b ? a : b) / 10).ceil() * 10 + 10;
+    double maxYValue =
+        (data.reduce((a, b) => a > b ? a : b) / 10).ceil() * 10 + 10;
 
     return List.generate(data.length, (index) {
       return BarChartGroupData(
@@ -553,7 +631,6 @@ class BarChartWidget extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: data[index],
-
             gradient: const LinearGradient(
               colors: [Colors.cyan, Colors.greenAccent],
               begin: Alignment.bottomCenter,
@@ -568,7 +645,6 @@ class BarChartWidget extends StatelessWidget {
   }
 }
 
-
 class Profile_Dash extends StatelessWidget {
   const Profile_Dash({
     super.key,
@@ -580,19 +656,15 @@ class Profile_Dash extends StatelessWidget {
       width: 60,
       height: 60,
       child: ClipRRect(
-
-
           borderRadius: BorderRadius.circular(100),
           child: Image.asset(
             "assets/profile.png",
             scale: 1.8,
             fit: BoxFit.cover,
-          )
-      ),
+          )),
     );
   }
 }
-
 
 class PercentageLine extends StatelessWidget {
   final double percentage; // Percentage to fill (0 to 100)
@@ -601,14 +673,14 @@ class PercentageLine extends StatelessWidget {
   final double height;
   final double width;
 
-  const PercentageLine({
-    Key? key,
-    required this.percentage,
-    this.backgroundColor = Colors.white60,
-    this.fillColor = Colors.blue,
-    this.height = 10.0,
-    this.width = 40
-  }) : super(key: key);
+  const PercentageLine(
+      {Key? key,
+      required this.percentage,
+      this.backgroundColor = Colors.white60,
+      this.fillColor = Colors.blue,
+      this.height = 10.0,
+      this.width = 40})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -639,7 +711,6 @@ class PercentageLine extends StatelessWidget {
     );
   }
 }
-
 
 class HalfCircleProgress extends StatelessWidget {
   final double percentage; // Percentage to fill (0 to 100)
@@ -680,7 +751,6 @@ class HalfCircleProgress extends StatelessWidget {
             ),
           ),
         ),
-
       ),
     );
   }
@@ -712,7 +782,7 @@ class _HalfCirclePainter extends CustomPainter {
 
     canvas.drawArc(
       rect,
-      pi *3/4, // Start from left
+      pi * 3 / 4, // Start from left
       pi, // Half-circle (pi radians)
       false,
       backgroundPaint,
@@ -728,7 +798,7 @@ class _HalfCirclePainter extends CustomPainter {
     final sweepAngle = (percentage / 100) * pi; // Calculate progress angle
     canvas.drawArc(
       rect,
-      pi*3/4, // Start from left
+      pi * 3 / 4, // Start from left
       sweepAngle, // Progress arc
       false,
       progressPaint,
@@ -740,5 +810,3 @@ class _HalfCirclePainter extends CustomPainter {
     return true;
   }
 }
-
-

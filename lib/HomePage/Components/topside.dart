@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 // bool fullMenu = true;
 
+
 class Topside extends StatefulWidget {
   final VoidCallback onToggleMenu;
+  final VoidCallback toggleNotification;
 
-  const Topside({required this.onToggleMenu});
+  const Topside({required this.onToggleMenu,required this.toggleNotification});
 
 
   // const Topside({super.key});
@@ -18,6 +20,7 @@ class Topside extends StatefulWidget {
 class _TopsideState extends State<Topside> {
   // final GlobalKey<_LeftSideState> leftSideKey = GlobalKey<_LeftSideState>();
   TextEditingController _searchController = TextEditingController();
+
 
 
   @override
@@ -37,53 +40,64 @@ class _TopsideState extends State<Topside> {
       child: Padding(
         padding:
             const EdgeInsets.only(top: 10, bottom: 10, right: 20, left: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: widget.onToggleMenu,
-                    // print(fullMenu);
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: widget.onToggleMenu,
+                        // print(fullMenu);
 
-                  child: Icon(
-                    Icons.menu,
-                    color: Colors.white70,
-                  ),
+                      child: Icon(
+                        Icons.menu,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    SizedBox(width: 25,),
+                    Container(
+                      width: 1250,
+                      // height: 10,
+                      child: SearchBox(
+                        controller: _searchController,
+                        hintText: "Search",
+                        onChanged: (query) {
+                          // Handle search query changes
+                          print("Search query: $query");
+                        },
+                        onClear: () {
+                          setState(() {
+                            _searchController.clear();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 25,),
-                Container(
-                  width: 1250,
-                  // height: 10,
-                  child: SearchBox(
-                    controller: _searchController,
-                    hintText: "Search",
-                    onChanged: (query) {
-                      // Handle search query changes
-                      print("Search query: $query");
-                    },
-                    onClear: () {
-                      setState(() {
-                        _searchController.clear();
-                      });
-                    },
-                  ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: (){},
+                      child: Icon(
+                          Icons.settings,
+                        color: Colors.white70,
+
+                      ),
+                    ),
+
+                    SizedBox(width: 20,),
+                    GestureDetector(
+                      onTap: widget.toggleNotification,
+                        child: Notification()
+                    ),
+
+                    SizedBox(width: 20,),
+                    Profile(),
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(
-                    Icons.settings,
-                  color: Colors.white70,
-
-                ),
-
-                SizedBox(width: 20,),
-                Notification(),
-
-                SizedBox(width: 20,),
-                Profile(),
               ],
             ),
           ],

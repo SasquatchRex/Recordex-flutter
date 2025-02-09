@@ -13,11 +13,18 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   // final GlobalKey<_LeftSideMenuState> menuKey = GlobalKey<_LeftSideMenuState>();
   bool fullMenu = true;
+  bool notification = false;
 
   void toggleMenu() {
     setState(() {
       fullMenu = !fullMenu;
       print(fullMenu);
+    });
+  }
+  void toggleNotification() {
+    setState(() {
+      notification = !notification;
+      print(notification);
     });
   }
 
@@ -33,7 +40,9 @@ class _HomepageState extends State<Homepage> {
               LeftSide(fullMenu : fullMenu),
               RightSide(
                   onToggleMenu: toggleMenu,
-                  fullMenu : fullMenu
+                  fullMenu : fullMenu,
+                  notification : notification,
+                toggleNotification: toggleNotification,
               ),
 
 
