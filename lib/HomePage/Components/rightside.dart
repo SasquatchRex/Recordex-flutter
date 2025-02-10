@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'topside.dart';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
+import '../color.dart';
 
 class RightSide extends StatefulWidget {
   final VoidCallback onToggleMenu;
@@ -29,49 +30,41 @@ class _RightSideState extends State<RightSide> {
       //     ? 0.80 * MediaQuery.of(context).size.width
       //     : 0.89 * MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      color: Colors.black,
+      color: AppColors.backgroundDark,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Stack(
           children: [
             Column(
               children: [
-                Topside(
-                  onToggleMenu: widget.onToggleMenu,
-                  toggleNotification: widget.toggleNotification,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Topside(
+                    onToggleMenu: widget.onToggleMenu,
+                    toggleNotification: widget.toggleNotification,
+                  ),
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    children: [
-                      Row(
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
                         children: [
-                          Welcome(),
-                          SizedBox(
-                            width: 40,
-                          ),
-                          ActiveUsers(),
-                          SizedBox(
-                            width: 40,
-                          ),
-                          TotalUsers(),
-                          SizedBox(
-                            width: 20,
+                          Wrap(
+                            spacing: 20, // Horizontal spacing
+                            runSpacing: 20, // Vertical spacing
+                            alignment: WrapAlignment.start,
+                            children: [
+                              Welcome(),
+                              ActiveUsers(),
+                              TotalUsers(),
+                              MonthlyRevenue(), // Will move to a new row if needed
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          MonthlyRevenue(),
-                        ],
-                      )
-                    ],
+                    )
                   ),
                 ),
 
@@ -87,7 +80,7 @@ class _RightSideState extends State<RightSide> {
                   width: 300,
                   height: 400,
                   decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.035),
+                      color: AppColors.primaryDark,
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: Padding(
@@ -97,7 +90,7 @@ class _RightSideState extends State<RightSide> {
                         Text(
                           "Notifications",
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: AppColors.tertiaryTextDark,
                             fontSize: 20
                           ),
 
@@ -121,14 +114,14 @@ class _RightSideState extends State<RightSide> {
                                       Text(
                                         "Heading 1",
                                         style: TextStyle(
-                                          color: Colors.white54,
+                                          color: AppColors.NotificationHeader,
                                         ),
                                       ),
                                       SizedBox(height: 2,),
                                       Text(
                                         "This is the description for heading 1",
                                         style: TextStyle(
-                                          color: Colors.white38,
+                                          color: AppColors.NotificationBody,
                                           fontSize: 12
                                         ),
                                       ),
@@ -162,7 +155,7 @@ class Welcome extends StatelessWidget {
       width: 600,
       height: 250,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
@@ -306,7 +299,7 @@ class ActiveUsers extends StatelessWidget {
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
@@ -373,7 +366,7 @@ class TotalUsers extends StatelessWidget {
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
@@ -479,7 +472,7 @@ class MonthlyRevenue extends StatelessWidget {
       width: 420,
       height: 370,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(

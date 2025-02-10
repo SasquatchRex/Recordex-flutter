@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recordex/HomePage/color.dart';
 
 
 // bool fullMenu = true;
@@ -35,7 +36,7 @@ class _TopsideState extends State<Topside> {
     var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.035),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
@@ -55,7 +56,7 @@ class _TopsideState extends State<Topside> {
 
                       child: Icon(
                         Icons.menu,
-                        color: Colors.white70,
+                        color: AppColors.IconDark,
                       ),
                     ),
                     SizedBox(width: 25,),
@@ -84,7 +85,7 @@ class _TopsideState extends State<Topside> {
                       onTap: (){},
                       child: Icon(
                           Icons.settings,
-                        color: Colors.white70,
+                        color: AppColors.IconDark,
 
                       ),
                     ),
@@ -120,7 +121,7 @@ class Notification extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.notifications_active,
-                    color: Colors.white70,
+                    color: AppColors.IconDark,
                     size: 25, // Adjust size as needed
                   ),
                   Positioned(
@@ -131,7 +132,7 @@ class Notification extends StatelessWidget {
                       height: 20,
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: AppColors.NotificationPing,
                         shape: BoxShape.circle, // Ensures a circular badge
                       ),
                       child: Text(
@@ -202,7 +203,7 @@ class _SearchBoxState extends State<SearchBox> {
 
       decoration: BoxDecoration(
         // color: Colors.grey[200],
-        color: Colors.white.withOpacity(0.05),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(

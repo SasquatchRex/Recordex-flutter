@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'topside.dart';
+import '../color.dart';
 
 int activeTileIndexMain = 0;
 
@@ -50,7 +51,7 @@ class _LeftSideState extends State<LeftSide> {
             Container(
               // height: 0.5*height,
               decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.035),
+                  color: AppColors.primaryDark,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -89,7 +90,6 @@ class _LeftSideState extends State<LeftSide> {
 
 
 
-    print(width);
     return Padding(
       // padding:  EdgeInsets.only(bottom:0.005*height),
       padding: EdgeInsets.only(left: 20, right: 20),
@@ -103,7 +103,7 @@ class _LeftSideState extends State<LeftSide> {
           height: 0.05 * height,
           // width: 0.15*width,
           decoration: BoxDecoration(
-            color: isActive ? Colors.white.withOpacity(0.018) : Colors.transparent,
+            color: isActive ? AppColors.secondaryDark : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Padding(
@@ -113,7 +113,7 @@ class _LeftSideState extends State<LeftSide> {
               children: [
                 Icon(
                   icon,
-                  color: isActive? Colors.white38 :Colors.white24,
+                  color: isActive? AppColors.IconDark :AppColors.IconNotActiveDark,
                 ),
                 if(fullMenu_wid )
                 SizedBox(
@@ -126,7 +126,7 @@ class _LeftSideState extends State<LeftSide> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: isActive? Colors.white54 :Colors.white38,
+                        color: isActive? AppColors.MenuActiveDark :AppColors.MenuNotActiveDark,
                     ),
                   ),
                 )
@@ -162,7 +162,7 @@ class _LeftSideState extends State<LeftSide> {
                 "Recordex",
           
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.primaryTextDark,
                   fontSize: 0.015 * width,
                   fontWeight: FontWeight.w700,
           
@@ -179,7 +179,7 @@ class _LeftSideState extends State<LeftSide> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white60,
+                      color: AppColors.CompanyDesc,
                       fontSize: 0.006 * width,
                       fontWeight: FontWeight.w100,
                       // overflow: TextOverflow.ellipsis,
