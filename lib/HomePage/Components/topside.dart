@@ -32,6 +32,7 @@ class _TopsideState extends State<Topside> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.035),
@@ -59,7 +60,7 @@ class _TopsideState extends State<Topside> {
                     ),
                     SizedBox(width: 25,),
                     Container(
-                      width: 1250,
+                      width:  width*0.6,
                       // height: 10,
                       child: SearchBox(
                         controller: _searchController,
@@ -219,14 +220,17 @@ class _SearchBoxState extends State<SearchBox> {
 
             child: TextField(
               controller: widget.controller,
+              cursorColor: Colors.white70,
               style: TextStyle(
                 color: Colors.white70
               ),
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hintText: widget.hintText,
+
                 hintStyle: TextStyle(
-                  color: Colors.white54
+                  color: Colors.white54,
+
                 ),
 
                 border: InputBorder.none,

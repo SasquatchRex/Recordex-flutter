@@ -12,8 +12,12 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   // final GlobalKey<_LeftSideMenuState> menuKey = GlobalKey<_LeftSideMenuState>();
+
   bool fullMenu = true;
   bool notification = false;
+
+
+
 
   void toggleMenu() {
     setState(() {
@@ -30,6 +34,12 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    if(width<1500){
+      setState(() {
+        fullMenu =false;
+      });
+    }
     return MaterialApp(
 
       home: Scaffold(
@@ -38,11 +48,13 @@ class _HomepageState extends State<Homepage> {
           child: Row(
             children: [
               LeftSide(fullMenu : fullMenu),
-              RightSide(
-                  onToggleMenu: toggleMenu,
-                  fullMenu : fullMenu,
-                  notification : notification,
-                toggleNotification: toggleNotification,
+              Expanded(
+                child: RightSide(
+                    onToggleMenu: toggleMenu,
+                    fullMenu : fullMenu,
+                    notification : notification,
+                  toggleNotification: toggleNotification,
+                ),
               ),
 
 

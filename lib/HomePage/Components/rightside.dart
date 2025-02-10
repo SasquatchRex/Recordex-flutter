@@ -25,9 +25,9 @@ class _RightSideState extends State<RightSide> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.fullMenu
-          ? 0.80 * MediaQuery.of(context).size.width
-          : 0.905 * MediaQuery.of(context).size.width,
+      // width: widget.fullMenu
+      //     ? 0.80 * MediaQuery.of(context).size.width
+      //     : 0.89 * MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: Colors.black,
       child: Padding(

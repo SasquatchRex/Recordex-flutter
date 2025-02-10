@@ -33,7 +33,7 @@ class _LeftSideState extends State<LeftSide> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.easeInOut,
-      width: widget.fullMenu || width < 1500 ? 0.20 * width : 0.095*width,
+      width: widget.fullMenu? 0.20 * width : 0.11*width,
       height: height,
       color: Colors.black,
       child: Padding(
@@ -89,7 +89,7 @@ class _LeftSideState extends State<LeftSide> {
 
 
 
-
+    print(width);
     return Padding(
       // padding:  EdgeInsets.only(bottom:0.005*height),
       padding: EdgeInsets.only(left: 20, right: 20),
@@ -115,22 +115,20 @@ class _LeftSideState extends State<LeftSide> {
                   icon,
                   color: isActive? Colors.white38 :Colors.white24,
                 ),
-                if(fullMenu_wid || width < 1500)
+                if(fullMenu_wid )
                 SizedBox(
                   width: 30,
                 ),
-                if(fullMenu_wid || width < 1500)
-                Container(
-                  width: 0.1*width,
-                  // color: Colors.red,
-                  child:Text(
+                if(fullMenu_wid)
+                Expanded(
+                  child: Text(
                     "${text}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         color: isActive? Colors.white54 :Colors.white38,
                     ),
-                  )
+                  ),
                 )
               ],
             ),
@@ -156,39 +154,41 @@ class _LeftSideState extends State<LeftSide> {
           width: 0.01 * width,
         ),
         if(widget.fullMenu)
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "Recordex",
-
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 0.015 * width,
-                fontWeight: FontWeight.w700,
-
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "Recordex",
+          
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 0.015 * width,
+                  fontWeight: FontWeight.w700,
+          
+                ),
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-              width: 0.1 * width,
-              child: Center(
-                child: Text(
-                  "For Sasquatch Rex Pvt.ltd",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: 0.006 * width,
-                    fontWeight: FontWeight.w100,
-                    // overflow: TextOverflow.ellipsis,
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                width: 0.1 * width,
+                child: Center(
+                  child: Text(
+                    "For Sasquatch Rex Pvt.ltd",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white60,
+                      fontSize: 0.006 * width,
+                      fontWeight: FontWeight.w100,
+                      // overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         )
       ],
     );
