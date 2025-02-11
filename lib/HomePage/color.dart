@@ -19,8 +19,6 @@ class AppColors {
   static const Color IconNotActiveDark = Colors.white30;
 
 
-
-
   // Text
   static const Color primaryTextDark = Colors.white;
   static const Color primaryTextLight = Colors.white;
@@ -31,6 +29,12 @@ class AppColors {
   static final Color tertiaryTextDark = Colors.white70;
   static final Color tertiaryTextLight = Colors.white70;
 
+  static final Color QuaternaryTextDark = Colors.white30;
+  static final Color QuaternaryTextLight = Colors.white30;
+
+  static final Color QuinaryTextDark = Colors.white12;
+  static final Color QuinaryTextLight = Colors.white12;
+
 
 
 
@@ -40,8 +44,11 @@ class AppColors {
   static const Color MenuActiveDark = Colors.white70; //Menu
   static const Color MenuNotActiveDark = Colors.white54; //Menu
   static const Color CompanyDesc = Colors.white60; //Company Description
-  static const Color NotificationHeader = Colors.white54; //Company Description
-  static const Color NotificationBody = Colors.white38; //Company Description
+  static const Color NotificationHeader = Colors.white54; //Notification
+  static const Color NotificationBody = Colors.white38; //Notification
+  static const Color BoxShadow = Colors.black26;//Search Box
+  static const Color SearchHint = Colors.white54;//Search Hint
+  static final Color ProfileDecoration = Colors.blue.withOpacity(0.5);//Search Hint
 
 
 

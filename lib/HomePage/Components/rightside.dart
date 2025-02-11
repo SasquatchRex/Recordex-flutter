@@ -104,7 +104,7 @@ class _RightSideState extends State<RightSide> {
                               print("Option 1");
                             },
                             child: Container(
-                                color: Colors.white.withOpacity(0.018),
+                                color: AppColors.secondaryDark,
                                 width: 300,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -174,7 +174,8 @@ class Welcome extends StatelessWidget {
                         // alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blue.withOpacity(0.5)),
+                            color: AppColors.ProfileDecoration,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Profile_Dash(),
@@ -189,13 +190,13 @@ class Welcome extends StatelessWidget {
                         children: [
                           Text(
                             "Welcome back,",
-                            style: TextStyle(color: Colors.white30),
+                            style: TextStyle(color: AppColors.QuaternaryTextDark),
                           ),
                           // SizedBox(height: 10,),
                           Text(
                             "Prithak Lamsal!",
                             style:
-                                TextStyle(color: Colors.white70, fontSize: 28),
+                                TextStyle(color: AppColors.tertiaryTextDark, fontSize: 28),
                           )
                         ],
                       )
@@ -216,14 +217,14 @@ class Welcome extends StatelessWidget {
                           Text(
                             "\$65.4K",
                             style: TextStyle(
-                                color: Colors.white70,
+                                color: AppColors.tertiaryTextDark,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
                             "Today's Sale",
                             style: TextStyle(
-                                color: Colors.white70,
+                                color: AppColors.tertiaryTextDark,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -232,7 +233,7 @@ class Welcome extends StatelessWidget {
                           ),
                           PercentageLine(
                             percentage: 64, // Fill 75% of the line
-                            backgroundColor: Colors.white12,
+                            backgroundColor: AppColors.QuaternaryTextDark,
                             fillColor: Colors.green.shade400,
                             height: 6,
                             width: 100,
@@ -249,14 +250,14 @@ class Welcome extends StatelessWidget {
                           Text(
                             "74%",
                             style: TextStyle(
-                                color: Colors.white70,
+                                color: AppColors.tertiaryTextDark,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
                             "Growth Rate",
                             style: TextStyle(
-                                color: Colors.white70,
+                                color: AppColors.tertiaryTextDark,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -265,7 +266,7 @@ class Welcome extends StatelessWidget {
                           ),
                           PercentageLine(
                             percentage: 74, // Fill 75% of the line
-                            backgroundColor: Colors.white12,
+                            backgroundColor: AppColors.QuinaryTextDark,
                             fillColor: Colors.red.shade400,
                             height: 6,
                             width: 100,
@@ -309,14 +310,14 @@ class ActiveUsers extends StatelessWidget {
             Text(
               "42.5K",
               style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.tertiaryTextDark,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
             Text(
               "Active Users",
               style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.tertiaryTextDark,
                   fontSize: 14,
                   fontWeight: FontWeight.w300),
             ),
@@ -338,7 +339,7 @@ class ActiveUsers extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Colors.white30,
+                    color: AppColors.QuaternaryTextDark,
                     fontSize: 14,
                     fontWeight: FontWeight.w400),
               ),
@@ -376,14 +377,14 @@ class TotalUsers extends StatelessWidget {
             Text(
               "42.5K",
               style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.tertiaryTextDark,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
             Text(
               "Total Users",
               style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.tertiaryTextDark,
                   fontSize: 14,
                   fontWeight: FontWeight.w300),
             ),
@@ -444,7 +445,7 @@ class TotalUsers extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Colors.white30,
+                    color: AppColors.QuaternaryTextDark,
                     fontSize: 14,
                     fontWeight: FontWeight.w400),
               ),
@@ -482,7 +483,7 @@ class MonthlyRevenue extends StatelessWidget {
             Text(
               "Monthly Revenue",
               style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.tertiaryTextDark,
                   fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
@@ -505,7 +506,7 @@ class MonthlyRevenue extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    color: Colors.white70,
+                    color: AppColors.tertiaryTextDark,
                     fontSize: 14,
                     fontWeight: FontWeight.w400),
               ),
@@ -575,7 +576,7 @@ class BarChartWidget extends StatelessWidget {
                 getTitlesWidget: (value, meta) {
                   return Text(
                     value.toInt().toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                    style: const TextStyle(color: AppColors.primaryTextDark, fontSize: 12),
                   );
                 },
                 interval: 10),
@@ -598,7 +599,7 @@ class BarChartWidget extends StatelessWidget {
 
                 return Text(
                   months[value.toInt()],
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  style:  TextStyle(color: AppColors.tertiaryTextDark, fontSize: 12),
                 );
               },
               interval: 1,
@@ -738,7 +739,7 @@ class HalfCircleProgress extends StatelessWidget {
           child: Text(
             "${percentage.toInt()}%",
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.primaryTextDark,
               fontSize: size * 0.2, // Scale font size based on size
               fontWeight: FontWeight.w500,
             ),

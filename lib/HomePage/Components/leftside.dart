@@ -36,7 +36,7 @@ class _LeftSideState extends State<LeftSide> {
       curve: Curves.easeInOut,
       width: widget.fullMenu? 0.20 * width : 0.11*width,
       height: height,
-      color: Colors.black,
+      color: AppColors.backgroundDark,
       child: Padding(
         padding: EdgeInsets.only(right: 0.02 * width, left: 0.02 * width),
         child: Column(

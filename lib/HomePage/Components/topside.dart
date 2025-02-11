@@ -138,7 +138,7 @@ class Notification extends StatelessWidget {
                       child: Text(
                         "4",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.primaryTextDark,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -207,7 +207,7 @@ class _SearchBoxState extends State<SearchBox> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black26,
+            color: AppColors.BoxShadow,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -221,16 +221,16 @@ class _SearchBoxState extends State<SearchBox> {
 
             child: TextField(
               controller: widget.controller,
-              cursorColor: Colors.white70,
+              cursorColor: AppColors.tertiaryTextDark,
               style: TextStyle(
-                color: Colors.white70
+                color: AppColors.tertiaryTextDark
               ),
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hintText: widget.hintText,
 
                 hintStyle: TextStyle(
-                  color: Colors.white54,
+                  color: AppColors.SearchHint,
 
                 ),
 
@@ -243,7 +243,7 @@ class _SearchBoxState extends State<SearchBox> {
           if (widget.controller.text.isNotEmpty)
             GestureDetector(
               onTap: widget.onClear,
-              child: Icon(Icons.clear, color: Colors.white),
+              child: Icon(Icons.clear, color: AppColors.IconDark),
             ),
         ],
       ),
