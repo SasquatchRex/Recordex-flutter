@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:recordex/Provider/color_provider.dart';
+import 'package:recordex/Provider/main_provider.dart';
+
 import 'package:window_manager/window_manager.dart';
 import 'HomePage/homepage.dart';
 
@@ -26,5 +30,14 @@ void main() async{
     // await windowManager.setMovable(true);
 
   });
-  runApp( Homepage());
+  runApp( MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => General()),
+        ChangeNotifierProvider(create: (context) => AppColors()),
+        // ChangeNotifierProvider(create: (_) => AppColors()),
+
+      ],
+      child: Homepage()
+  )
+  );
 }

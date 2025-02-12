@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recordex/HomePage/color.dart';
+import '../../Provider/main_provider.dart';
+import 'package:provider/provider.dart';
 
 
 // bool fullMenu = true;
@@ -36,7 +38,7 @@ class _TopsideState extends State<Topside> {
     var width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primaryDark,
+        color: Provider.of<AppColors>(context).appColors.primary,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
@@ -56,7 +58,7 @@ class _TopsideState extends State<Topside> {
 
                       child: Icon(
                         Icons.menu,
-                        color: AppColors.IconDark,
+                        color: Provider.of<AppColors>(context).appColors.Icon,
                       ),
                     ),
                     SizedBox(width: 25,),
@@ -85,7 +87,7 @@ class _TopsideState extends State<Topside> {
                       onTap: (){},
                       child: Icon(
                           Icons.settings,
-                        color: AppColors.IconDark,
+                        color: Provider.of<AppColors>(context).appColors.Icon,
 
                       ),
                     ),
@@ -121,7 +123,7 @@ class Notification extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.notifications_active,
-                    color: AppColors.IconDark,
+                    color: Provider.of<AppColors>(context).appColors.Icon,
                     size: 25, // Adjust size as needed
                   ),
                   Positioned(
@@ -132,13 +134,13 @@ class Notification extends StatelessWidget {
                       height: 20,
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
-                        color: AppColors.NotificationPing,
+                        color: Provider.of<AppColors>(context).appColors.NotificationPing,
                         shape: BoxShape.circle, // Ensures a circular badge
                       ),
                       child: Text(
                         "4",
                         style: TextStyle(
-                          color: AppColors.primaryTextDark,
+                          color: Provider.of<AppColors>(context).appColors.primaryText,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -203,11 +205,11 @@ class _SearchBoxState extends State<SearchBox> {
 
       decoration: BoxDecoration(
         // color: Colors.grey[200],
-        color: AppColors.primaryDark,
+        color: Provider.of<AppColors>(context).appColors.primary,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: AppColors.BoxShadow,
+            color: Provider.of<AppColors>(context).appColors.BoxShadow,
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -221,16 +223,16 @@ class _SearchBoxState extends State<SearchBox> {
 
             child: TextField(
               controller: widget.controller,
-              cursorColor: AppColors.tertiaryTextDark,
+              cursorColor: Provider.of<AppColors>(context).appColors.tertiaryText,
               style: TextStyle(
-                color: AppColors.tertiaryTextDark
+                color: Provider.of<AppColors>(context).appColors.tertiaryText
               ),
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hintText: widget.hintText,
 
                 hintStyle: TextStyle(
-                  color: AppColors.SearchHint,
+                  color: Provider.of<AppColors>(context).appColors.SearchHint,
 
                 ),
 
@@ -243,7 +245,7 @@ class _SearchBoxState extends State<SearchBox> {
           if (widget.controller.text.isNotEmpty)
             GestureDetector(
               onTap: widget.onClear,
-              child: Icon(Icons.clear, color: AppColors.IconDark),
+              child: Icon(Icons.clear, color: Provider.of<AppColors>(context).appColors.Icon),
             ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../Provider/main_provider.dart';
 import 'topside.dart';
-import '../color.dart';
+// import '../../Provider/color_provider.dart';
 
 int activeTileIndexMain = 0;
 
@@ -36,7 +38,7 @@ class _LeftSideState extends State<LeftSide> {
       curve: Curves.easeInOut,
       width: widget.fullMenu? 0.20 * width : 0.11*width,
       height: height,
-      color: AppColors.backgroundDark,
+      color: Provider.of<AppColors>(context).appColors.background,
       child: Padding(
         padding: EdgeInsets.only(right: 0.02 * width, left: 0.02 * width),
         child: Column(
@@ -51,7 +53,7 @@ class _LeftSideState extends State<LeftSide> {
             Container(
               // height: 0.5*height,
               decoration: BoxDecoration(
-                  color: AppColors.primaryDark,
+                  color: Provider.of<AppColors>(context).appColors.primaryDark,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -103,7 +105,7 @@ class _LeftSideState extends State<LeftSide> {
           height: 0.05 * height,
           // width: 0.15*width,
           decoration: BoxDecoration(
-            color: isActive ? AppColors.secondaryDark : Colors.transparent,
+            color: isActive ? Provider.of<AppColors>(context).appColors.secondaryDark : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Padding(
@@ -113,7 +115,7 @@ class _LeftSideState extends State<LeftSide> {
               children: [
                 Icon(
                   icon,
-                  color: isActive? AppColors.IconDark :AppColors.IconNotActiveDark,
+                  color: isActive? Provider.of<AppColors>(context).appColors.IconDark :Provider.of<AppColors>(context).appColors.IconNotActiveDark,
                 ),
                 if(fullMenu_wid )
                 SizedBox(
@@ -126,7 +128,7 @@ class _LeftSideState extends State<LeftSide> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: isActive? AppColors.MenuActiveDark :AppColors.MenuNotActiveDark,
+                        color: isActive? Provider.of<AppColors>(context).appColors.MenuActiveDark :Provider.of<AppColors>(context).appColors.MenuNotActiveDark,
                     ),
                   ),
                 )
@@ -160,12 +162,12 @@ class _LeftSideState extends State<LeftSide> {
             children: [
               Text(
                 "Recordex",
-          
+
                 style: TextStyle(
-                  color: AppColors.primaryTextDark,
+                  color: Provider.of<AppColors>(context).appColors.primaryTextDark,
                   fontSize: 0.015 * width,
                   fontWeight: FontWeight.w700,
-          
+
                 ),
               ),
               SizedBox(
@@ -179,7 +181,7 @@ class _LeftSideState extends State<LeftSide> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: AppColors.CompanyDesc,
+                      color: Provider.of<AppColors>(context).appColors.CompanyDesc,
                       fontSize: 0.006 * width,
                       fontWeight: FontWeight.w100,
                       // overflow: TextOverflow.ellipsis,

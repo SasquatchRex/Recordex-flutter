@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../Provider/main_provider.dart';
+
 import 'Components/leftside.dart';
 import 'Components/rightside.dart';
 
@@ -40,27 +43,40 @@ class _HomepageState extends State<Homepage> {
         fullMenu =false;
       });
     }
-    return MaterialApp(
 
-      home: Scaffold(
-        appBar: null,
-        body: Container(
-          child: Row(
-            children: [
-              LeftSide(fullMenu : fullMenu),
-              Expanded(
-                child: RightSide(
-                    onToggleMenu: toggleMenu,
-                    fullMenu : fullMenu,
-                    notification : notification,
-                  toggleNotification: toggleNotification,
+
+    print(AppColors);
+
+    return ChangeNotifierProvider<AppColors>(
+      create: (_) => AppColors(),
+      child: Consumer<AppColors>(
+        builder: (context,appColors,child) {
+          final colorsAPP = appColors.appColors;
+          return MaterialApp(
+
+            home: Scaffold(
+              appBar: null,
+              body: Container(
+                child: Row(
+                  children: [
+                    LeftSide(fullMenu : fullMenu),
+                    Expanded(
+                      child: RightSide(
+                          onToggleMenu: toggleMenu,
+                          fullMenu : fullMenu,
+                          notification : notification,
+                        toggleNotification: toggleNotification,
+                      ),
+                    ),
+
+
+
+                  ],
                 ),
               ),
-
-
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }
