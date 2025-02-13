@@ -6,21 +6,18 @@ import '../HomePage/color.dart';
 
 class General with ChangeNotifier{
 
-  bool _isDark = true; // Default to dark mode
-
-  bool get isDark => _isDark;
-
-  // dynamic get currentColors {
-  //   return _isDark ? AppColorsDark : AppColorsLight;
+  // bool _isDark = true; // Default to dark mode
+  //
+  // bool get isDark => _isDark;
+  //
+  //
+  //
+  // void toggleDarkMode() {
+  //   _isDark = !_isDark;
+  //   notifyListeners(); // Notify listeners when the theme changes
   // }
 
-
-  void toggleDarkMode() {
-    _isDark = !_isDark;
-    notifyListeners(); // Notify listeners when the theme changes
-  }
-
-  dynamic get colors => _isDark ? AppColorsDark() : AppColorsLight();
+  // dynamic get colors => _isDark ? AppColorsDark() : AppColorsLight();
 
 
 }

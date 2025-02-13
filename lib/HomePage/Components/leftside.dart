@@ -53,7 +53,7 @@ class _LeftSideState extends State<LeftSide> {
             Container(
               // height: 0.5*height,
               decoration: BoxDecoration(
-                  color: Provider.of<AppColors>(context).appColors.primaryDark,
+                  color: Provider.of<AppColors>(context).appColors.primary,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -105,7 +105,7 @@ class _LeftSideState extends State<LeftSide> {
           height: 0.05 * height,
           // width: 0.15*width,
           decoration: BoxDecoration(
-            color: isActive ? Provider.of<AppColors>(context).appColors.secondaryDark : Colors.transparent,
+            color: isActive ? Provider.of<AppColors>(context).appColors.secondary : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Padding(
@@ -115,7 +115,7 @@ class _LeftSideState extends State<LeftSide> {
               children: [
                 Icon(
                   icon,
-                  color: isActive? Provider.of<AppColors>(context).appColors.IconDark :Provider.of<AppColors>(context).appColors.IconNotActiveDark,
+                  color: isActive? Provider.of<AppColors>(context).appColors.Icon :Provider.of<AppColors>(context).appColors.IconNotActive,
                 ),
                 if(fullMenu_wid )
                 SizedBox(
@@ -128,7 +128,7 @@ class _LeftSideState extends State<LeftSide> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: isActive? Provider.of<AppColors>(context).appColors.MenuActiveDark :Provider.of<AppColors>(context).appColors.MenuNotActiveDark,
+                        color: isActive? Provider.of<AppColors>(context).appColors.MenuActive :Provider.of<AppColors>(context).appColors.MenuNotActive,
                     ),
                   ),
                 )
@@ -164,7 +164,7 @@ class _LeftSideState extends State<LeftSide> {
                 "Recordex",
 
                 style: TextStyle(
-                  color: Provider.of<AppColors>(context).appColors.primaryTextDark,
+                  color: Provider.of<AppColors>(context).appColors.primaryText,
                   fontSize: 0.015 * width,
                   fontWeight: FontWeight.w700,
 

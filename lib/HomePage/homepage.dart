@@ -53,7 +53,7 @@ class _HomepageState extends State<Homepage> {
         builder: (context,appColors,child) {
           final colorsAPP = appColors.appColors;
           return MaterialApp(
-
+            theme: ThemeData.dark(),
             home: Scaffold(
               appBar: null,
               body: Container(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recordex/HomePage/color.dart';
+// import 'package:recordex/HomePage/color.dart';
 import '../../Provider/main_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +84,7 @@ class _TopsideState extends State<Topside> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: (){},
+                      onTap: Provider.of<AppColors>(context).toggleTheme,
                       child: Icon(
                           Icons.settings,
                         color: Provider.of<AppColors>(context).appColors.Icon,
