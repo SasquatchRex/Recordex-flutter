@@ -152,7 +152,9 @@ class Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
       width: 600,
       height: 250,
       decoration: BoxDecoration(
@@ -327,8 +329,8 @@ class ActiveUsers extends StatelessWidget {
             ),
             HalfCircleProgress(
               percentage: 78, // Fill 75% of the half-circle
-              backgroundColor: Colors.grey[900]!,
-              progressColor: Colors.blue.shade900,
+              backgroundColor: Provider.of<AppColors>(context).appColors.ActiveUsersBackground,
+              progressColor: Provider.of<AppColors>(context).appColors.ActiveUsersProgress,
               strokeWidth: 12,
               size: 110,
             ),
@@ -580,7 +582,9 @@ class BarChartWidget extends StatelessWidget {
                     style:  TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontSize: 12),
                   );
                 },
-                interval: 10),
+                interval: 10,
+
+            ),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(

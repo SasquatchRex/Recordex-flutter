@@ -35,7 +35,7 @@ class _LeftSideState extends State<LeftSide> {
     var height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
+      curve: Curves.linear,
       width: widget.fullMenu? 0.20 * width : 0.11*width,
       height: height,
       color: Provider.of<AppColors>(context).appColors.background,
@@ -101,7 +101,9 @@ class _LeftSideState extends State<LeftSide> {
             activeTileIndexMain = index;
           });
         },
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
           height: 0.05 * height,
           // width: 0.15*width,
           decoration: BoxDecoration(
@@ -157,39 +159,49 @@ class _LeftSideState extends State<LeftSide> {
         ),
         if(widget.fullMenu)
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Recordex",
-
-                style: TextStyle(
-                  color: Provider.of<AppColors>(context).appColors.primaryText,
-                  fontSize: 0.015 * width,
-                  fontWeight: FontWeight.w700,
-
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Container(
-                width: 0.1 * width,
-                child: Center(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.linear,
                   child: Text(
-                    "For Sasquatch Rex Pvt.ltd",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    "Recordex",
+
                     style: TextStyle(
-                      color: Provider.of<AppColors>(context).appColors.CompanyDesc,
-                      fontSize: 0.006 * width,
-                      fontWeight: FontWeight.w100,
-                      // overflow: TextOverflow.ellipsis,
+                      color: Provider.of<AppColors>(context).appColors.primaryText,
+                      fontSize: 0.015 * width,
+                      fontWeight: FontWeight.w700,
+
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 5,
+                ),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.linear,
+                  width: 0.1 * width,
+                  child: Center(
+                    child: Text(
+                      "For Sasquatch Rex Pvt.ltd",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Provider.of<AppColors>(context).appColors.CompanyDesc,
+                        fontSize: 0.006 * width,
+                        fontWeight: FontWeight.w100,
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         )
       ],

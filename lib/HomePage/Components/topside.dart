@@ -36,7 +36,9 @@ class _TopsideState extends State<Topside> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
       decoration: BoxDecoration(
         color: Provider.of<AppColors>(context).appColors.primary,
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -217,7 +219,7 @@ class _SearchBoxState extends State<SearchBox> {
       ),
       child: Row(
         children: [
-          Icon(Icons.search, color: Colors.white38),
+          Icon(Icons.search, color: Provider.of<AppColors>(context).appColors.Icon),
           SizedBox(width: 8),
           Expanded(// Ensures the TextField takes up the remaining space
 
