@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
+import '../Provider/main_provider.dart';
 import 'topside.dart';
-import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
+
+import 'Components/LineChart.dart';
+import 'Components/BarChart.dart';
+import 'Components/HalfCircleProgress.dart';
+import 'Components/PercentageLine.dart';
+import 'Components/ProfileDash.dart';
 
 class RightSide extends StatefulWidget {
   final VoidCallback onToggleMenu;
@@ -145,6 +149,7 @@ class _RightSideState extends State<RightSide> {
   }
 }
 
+
 class Welcome extends StatelessWidget {
   const Welcome({
     super.key,
@@ -176,8 +181,8 @@ class Welcome extends StatelessWidget {
                       Container(
                         // alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Provider.of<AppColors>(context).appColors.ProfileDecoration,
+                          shape: BoxShape.circle,
+                          color: Provider.of<AppColors>(context).appColors.ProfileDecoration,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(3.0),
@@ -199,7 +204,7 @@ class Welcome extends StatelessWidget {
                           Text(
                             "Prithak Lamsal!",
                             style:
-                                TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 28),
+                            TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 28),
                           )
                         ],
                       )
@@ -291,6 +296,8 @@ class Welcome extends StatelessWidget {
     );
   }
 }
+
+
 
 class ActiveUsers extends StatelessWidget {
   const ActiveUsers({
@@ -397,45 +404,7 @@ class TotalUsers extends StatelessWidget {
             Container(
               height: 100,
               width: 150,
-              child: LineChart(LineChartData(
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(show: false),
-                  borderData: FlBorderData(show: false),
-                  minX: 0,
-                  maxX: 10,
-                  minY: 0,
-                  maxY: 15,
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [
-                        FlSpot(0, 5),
-                        FlSpot(1, 6),
-                        FlSpot(2, 8),
-                        FlSpot(4, 5),
-                        FlSpot(5, 6),
-                        FlSpot(6, 8),
-                        FlSpot(7, 10),
-                        FlSpot(8, 7),
-                        FlSpot(9, 10),
-                        FlSpot(10, 12.5),
-                      ],
-                      isCurved: true, // To create a smooth curve
-                      color: Colors.green,
-                      gradient: LinearGradient(
-                        colors: gradientColors,
-                      ),
-
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        gradient: LinearGradient(
-                          colors: gradientColors
-                              .map((color) => color.withValues(alpha: 0.3))
-                              .toList(),
-                        ),
-                      ),
-                    )
-                  ])),
+              child: LineChartClass(gradientColors: gradientColors),
             ),
             SizedBox(
               height: 15,
@@ -459,6 +428,8 @@ class TotalUsers extends StatelessWidget {
     );
   }
 }
+
+
 
 class MonthlyRevenue extends StatelessWidget {
   const MonthlyRevenue({
@@ -550,262 +521,10 @@ class MonthlyRevenue extends StatelessWidget {
   }
 }
 
-class BarChartWidget extends StatelessWidget {
-  const BarChartWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        backgroundColor: Colors.transparent,
-        maxY: 70,
-        barGroups: _chartData(),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(
-          show: true,
-          drawVerticalLine: false, // Hide vertical grid lines
-          checkToShowHorizontalLine: (value) =>
-              true, // Show all horizontal lines
-          getDrawingHorizontalLine: (value) => FlLine(
-            color: Colors.white.withOpacity(0.2),
-            strokeWidth: 1,
-          ),
-        ),
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 40,
-                getTitlesWidget: (value, meta) {
-                  return Text(
-                    value.toInt().toString(),
-                    style:  TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontSize: 12),
-                  );
-                },
-                interval: 10,
 
-            ),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, meta) {
-                List<String> months = [
-                  'Jan',
-                  'Feb',
-                  'Mar',
-                  'Apr',
-                  'May',
-                  'Jun',
-                  'Jul',
-                  'Aug',
-                  'Sep'
-                ];
 
-                return Text(
-                  months[value.toInt()],
-                  style:  TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 12),
-                );
-              },
-              interval: 1,
-            ),
-          ),
-          topTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false)), // Remove top text
-          rightTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false)), // Remove right text
-        ),
-      ),
-    );
-  }
 
-  List<BarChartGroupData> _chartData() {
-    List<double> data = [10, 35, 40, 50, 25, 20, 15, 30, 18];
-    double maxYValue =
-        (data.reduce((a, b) => a > b ? a : b) / 10).ceil() * 10 + 10;
 
-    return List.generate(data.length, (index) {
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: data[index],
-            gradient: const LinearGradient(
-              colors: [Colors.cyan, Colors.greenAccent],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-            ),
-            width: 15,
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ],
-      );
-    });
-  }
-}
 
-class Profile_Dash extends StatelessWidget {
-  const Profile_Dash({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: Image.asset(
-            "assets/profile.png",
-            scale: 1.8,
-            fit: BoxFit.cover,
-          )),
-    );
-  }
-}
-
-class PercentageLine extends StatelessWidget {
-  final double percentage; // Percentage to fill (0 to 100)
-  final Color backgroundColor;
-  final Color fillColor;
-  final double height;
-  final double width;
-
-  const PercentageLine(
-      {Key? key,
-      required this.percentage,
-      this.backgroundColor = Colors.white60,
-      this.fillColor = Colors.blue,
-      this.height = 10.0,
-      this.width = 40})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Clamp percentage between 0 and 100
-    final clampedPercentage = percentage.clamp(0, 100);
-
-    return Stack(
-      children: [
-        // Background Line
-        Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(height / 2), // Rounded edges
-          ),
-        ),
-        // Filled Line
-        Container(
-          height: height,
-          width: width * (clampedPercentage / 100),
-          decoration: BoxDecoration(
-            color: fillColor,
-            borderRadius: BorderRadius.circular(height / 2), // Rounded edges
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class HalfCircleProgress extends StatelessWidget {
-  final double percentage; // Percentage to fill (0 to 100)
-  final Color backgroundColor;
-  final Color progressColor;
-  final double strokeWidth;
-  final double size;
-
-  const HalfCircleProgress({
-    Key? key,
-    required this.percentage,
-    this.backgroundColor = Colors.grey,
-    this.progressColor = Colors.blue,
-    this.strokeWidth = 10.0,
-    this.size = 200.0,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // final clampedPercentage = percentage.clamp(0, 100);
-    return SizedBox(
-      height: size,
-      width: size,
-      child: CustomPaint(
-        painter: _HalfCirclePainter(
-          percentage: percentage,
-          backgroundColor: backgroundColor,
-          progressColor: progressColor,
-          strokeWidth: strokeWidth,
-        ),
-        child: Center(
-          child: Text(
-            "${percentage.toInt()}%",
-            style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.primaryText,
-              fontSize: size * 0.2, // Scale font size based on size
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HalfCirclePainter extends CustomPainter {
-  final double percentage;
-  final Color backgroundColor;
-  final Color progressColor;
-  final double strokeWidth;
-
-  _HalfCirclePainter({
-    required this.percentage,
-    required this.backgroundColor,
-    required this.progressColor,
-    required this.strokeWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-
-    // Draw the background arc
-    final backgroundPaint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawArc(
-      rect,
-      pi * 3 / 4, // Start from left
-      pi, // Half-circle (pi radians)
-      false,
-      backgroundPaint,
-    );
-
-    // Draw the progress arc
-    final progressPaint = Paint()
-      ..color = progressColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    final sweepAngle = (percentage / 100) * pi; // Calculate progress angle
-    canvas.drawArc(
-      rect,
-      pi * 3 / 4, // Start from left
-      sweepAngle, // Progress arc
-      false,
-      progressPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
-}

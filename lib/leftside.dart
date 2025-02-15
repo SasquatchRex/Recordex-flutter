@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
-import 'topside.dart';
+import '../Provider/main_provider.dart';
+import 'HomePage/topside.dart';
 // import '../../Provider/color_provider.dart';
 
 int activeTileIndexMain = 0;

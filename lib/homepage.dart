@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
+import 'Provider/main_provider.dart';
 
-import 'Components/leftside.dart';
-import 'Components/rightside.dart';
+import 'leftside.dart';
+import 'HomePage/rightside.dart';
 
 
 class Homepage extends StatefulWidget {

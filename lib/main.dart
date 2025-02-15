@@ -4,7 +4,7 @@ import 'package:recordex/Provider/color_provider.dart';
 import 'package:recordex/Provider/main_provider.dart';
 
 import 'package:window_manager/window_manager.dart';
-import 'HomePage/homepage.dart';
+import 'homepage.dart';
 
 
 
