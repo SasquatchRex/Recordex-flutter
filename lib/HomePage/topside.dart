@@ -8,10 +8,7 @@ import 'package:provider/provider.dart';
 
 
 class Topside extends StatefulWidget {
-  final VoidCallback onToggleMenu;
-  final VoidCallback toggleNotification;
-
-  const Topside({required this.onToggleMenu,required this.toggleNotification});
+  const Topside({super.key});
 
 
   // const Topside({super.key});
@@ -55,7 +52,7 @@ class _TopsideState extends State<Topside> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: widget.onToggleMenu,
+                      onTap: Provider.of<General>(context).toggleMenu,
                         // print(fullMenu);
 
                       child: Icon(
@@ -96,7 +93,7 @@ class _TopsideState extends State<Topside> {
 
                     SizedBox(width: 20,),
                     GestureDetector(
-                      onTap: widget.toggleNotification,
+                      onTap: Provider.of<General>(context).toggleNotification,
                         child: Notification()
                     ),
 

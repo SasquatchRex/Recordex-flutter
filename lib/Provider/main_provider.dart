@@ -5,6 +5,18 @@ import '../HomePage/color.dart';
 
 
 class General with ChangeNotifier{
+  bool fullMenu = true;
+  bool notification = false;
+
+  void toggleMenu() {
+    fullMenu =!fullMenu;
+    notifyListeners();
+  }
+
+  void toggleNotification() {
+    notification =!notification;
+    notifyListeners();
+  }
 
   // bool _isDark = true; // Default to dark mode
   //

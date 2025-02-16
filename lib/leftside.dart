@@ -7,9 +7,8 @@ import 'HomePage/topside.dart';
 int activeTileIndexMain = 0;
 
 class LeftSide extends StatefulWidget {
-  final bool fullMenu;
 
-  const LeftSide({required this.fullMenu});
+  const LeftSide({super.key});
   //
   // const LeftSide({required this.fullMenu});
   // const LeftSide({super.key});
@@ -34,9 +33,9 @@ class _LeftSideState extends State<LeftSide> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 500),
       curve: Curves.linear,
-      width: widget.fullMenu? 0.20 * width : 0.11*width,
+      width: Provider.of<General>(context).fullMenu? 0.20 * width : 0.11*width,
       height: height,
       color: Provider.of<AppColors>(context).appColors.background,
       child: Padding(
@@ -62,15 +61,15 @@ class _LeftSideState extends State<LeftSide> {
                   children: [
 
 
-                    MenuTiles(context,widget.fullMenu, Icons.home, "Dashboard",0),
-                    MenuTiles(context,widget.fullMenu, Icons.monetization_on, "Salary Credits",1),
-                    MenuTiles(context,widget.fullMenu, Icons.attach_money, "Expense Category 1",2),
-                    MenuTiles(context,widget.fullMenu, Icons.attach_money, "Expense Category 2",3),
-                    MenuTiles(context,widget.fullMenu, Icons.attach_money, "Company 1 Credits",4),
-                    MenuTiles(context,widget.fullMenu, Icons.attach_money, "Company 2 Credits",5),
-                    MenuTiles(context,widget.fullMenu, Icons.auto_graph, "Assets",6),
-                    MenuTiles(context,widget.fullMenu, Icons.trending_down_outlined, "Liabilities",7),
-                    MenuTiles(context,widget.fullMenu, Icons.settings, "Settings",8),
+                    MenuTiles(context, Icons.home, "Dashboard",0),
+                    MenuTiles(context, Icons.monetization_on, "Salary Credits",1),
+                    MenuTiles(context, Icons.attach_money, "Expense Category 1",2),
+                    MenuTiles(context, Icons.attach_money, "Expense Category 2",3),
+                    MenuTiles(context, Icons.attach_money, "Company 1 Credits",4),
+                    MenuTiles(context, Icons.attach_money, "Company 2 Credits",5),
+                    MenuTiles(context, Icons.auto_graph, "Assets",6),
+                    MenuTiles(context, Icons.trending_down_outlined, "Liabilities",7),
+                    MenuTiles(context, Icons.settings, "Settings",8),
 
                   ],
                 ),
@@ -83,7 +82,7 @@ class _LeftSideState extends State<LeftSide> {
     );
   }
 
-  Padding MenuTiles(BuildContext context, bool fullMenu_wid, IconData icon, String text, int index) {
+  Padding MenuTiles(BuildContext context, IconData icon, String text, int index) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     Color tileColor=Colors.transparent;
@@ -119,11 +118,11 @@ class _LeftSideState extends State<LeftSide> {
                   icon,
                   color: isActive? Provider.of<AppColors>(context).appColors.Icon :Provider.of<AppColors>(context).appColors.IconNotActive,
                 ),
-                if(fullMenu_wid )
+                if(Provider.of<General>(context).fullMenu )
                 SizedBox(
                   width: 30,
                 ),
-                if(fullMenu_wid)
+                if(Provider.of<General>(context).fullMenu)
                 Expanded(
                   child: Text(
                     "${text}",
@@ -157,7 +156,7 @@ class _LeftSideState extends State<LeftSide> {
         SizedBox(
           width: 0.01 * width,
         ),
-        if(widget.fullMenu)
+        if(Provider.of<General>(context).fullMenu)
         Expanded(
           child: AnimatedContainer(
             duration: Duration(milliseconds: 400),

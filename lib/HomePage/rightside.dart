@@ -10,16 +10,8 @@ import 'Components/PercentageLine.dart';
 import 'Components/ProfileDash.dart';
 
 class RightSide extends StatefulWidget {
-  final VoidCallback onToggleMenu;
-  final VoidCallback toggleNotification;
-  final bool fullMenu;
-  final bool notification;
-
   const RightSide(
-      {required this.onToggleMenu,
-      required this.fullMenu,
-      required this.notification,
-      required this.toggleNotification});
+      {super.key});
 
   // const RightSide({super.key});
 
@@ -37,45 +29,60 @@ class _RightSideState extends State<RightSide> {
       height: MediaQuery.of(context).size.height,
       color: Provider.of<AppColors>(context).appColors.background,
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
+        // padding: const EdgeInsets.only(top: 20,bottom: 20),
         child: Stack(
           children: [
             Column(
+
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Topside(
-                    onToggleMenu: widget.onToggleMenu,
-                    toggleNotification: widget.toggleNotification,
-                  ),
+                  child: Topside(),
                 ),
                 Expanded(
                   child: Container(
-                    alignment: Alignment.topLeft,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          Wrap(
-                            spacing: 20, // Horizontal spacing
-                            runSpacing: 20, // Vertical spacing
-                            alignment: WrapAlignment.start,
-                            children: [
-                              Welcome(),
-                              ActiveUsers(),
-                              TotalUsers(),
-                              MonthlyRevenue(), // Will move to a new row if needed
-                            ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+                            // color: Colors.red,
+                            alignment: Alignment.topLeft,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [
+                                  Wrap(
+                                    spacing: 20, // Horizontal spacing
+                                    runSpacing: 20, // Vertical spacing
+                                    alignment: WrapAlignment.start,
+                                    children: [
+                                      Welcome(),
+                                      Trial(),
+                                      MonthlyRevenue(),
+                                      ActiveUsers(),
+                                      TotalUsers(),
+                                      ActiveUsers(),
+                                      TotalUsers(),
+
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
                           ),
-                        ],
-                      ),
-                    )
+                        ),
+                        EmployeeDash()
+                      ],
+                    ),
                   ),
                 ),
 
               ],
             ),
-            if (widget.notification)
+            if (Provider.of<General>(context).notification)
               Positioned(
                 right: 0,
                 top: 80,
@@ -140,11 +147,216 @@ class _RightSideState extends State<RightSide> {
                     ),
                   ),
                 ),
-              )
+              ),
+
+
+
           ],
         ),
       ),
       // child: Text("Hello"),
+    );
+  }
+}
+
+class EmployeeDash extends StatelessWidget {
+  const EmployeeDash({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 0.2 * MediaQuery.of(context).size.width,
+
+
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TopEmployeeDash(),
+            SizedBox(height: 20,),
+            ActiveEmployeeDash(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ActiveEmployeeDash extends StatelessWidget {
+  const ActiveEmployeeDash({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      width: 350,
+      decoration: BoxDecoration(
+        color: Provider.of<AppColors>(context).appColors.primary,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Text(
+                "Active Employees",
+                style: TextStyle(
+                    color: Provider.of<AppColors>(context).appColors.tertiaryText,
+                    fontSize: 20
+                ),
+
+              ),
+              SizedBox(height: 10,),
+              for(int i=1;i<=15;i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("Option 1");
+                    },
+                    child: Container(
+                      // color: Provider.of<AppColors>(context).appColors.secondary,
+
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    // child: Image.asset("assets/profile.png"),
+                                    backgroundColor: Colors.white24,
+                                    backgroundImage: AssetImage("assets/profile.png",),
+                                  ),
+                                  SizedBox(width: 20,),
+                                  Container(
+                                    // width: 150,
+                                    child: Text(
+                                      "Prithak Lamsal",
+                                      style: TextStyle(
+                                          color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                          fontSize: 14
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(width: 10,),
+                              Icon(
+                                Icons.circle,
+                                color: Colors.green,
+                                size: 12,
+                              )
+                            ],
+                          ),
+                        )
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TopEmployeeDash extends StatelessWidget {
+  const TopEmployeeDash({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      width: 350,
+      // height: 360,
+      decoration: BoxDecoration(
+        color: Provider.of<AppColors>(context).appColors.primary,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Column(
+          children: [
+            Text(
+              "Top Employees",
+              style: TextStyle(
+                  color: Provider.of<AppColors>(context).appColors.tertiaryText,
+                  fontSize: 20
+              ),
+
+            ),
+            SizedBox(height: 10,),
+            for(int i=1;i<=5;i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Option 1");
+                  },
+                  child: Container(
+                      // color: Provider.of<AppColors>(context).appColors.secondary,
+
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  // child: Image.asset("assets/profile.png"),
+                                  backgroundColor: Colors.white24,
+                                  backgroundImage: AssetImage("assets/profile.png",),
+                                ),
+                                SizedBox(width: 20,),
+                                Container(
+                                  // width: 150,
+                                  child: Text(
+                                    "Prithak Lamsal",
+                                    style: TextStyle(
+                                        color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                        fontSize: 14
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(width: 10,),
+                            Text(
+                              "${i} st",
+                              style: TextStyle(
+                                  color: Provider.of<AppColors>(context).appColors.NotificationBody,
+                                  fontSize: 14
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -160,7 +372,7 @@ class Welcome extends StatelessWidget {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
-      width: 600,
+      width: Provider.of<General>(context).fullMenu?600 : 700,
       height: 250,
       decoration: BoxDecoration(
         color: Provider.of<AppColors>(context).appColors.primary,
@@ -289,6 +501,102 @@ class Welcome extends StatelessWidget {
                 "assets/photo.png",
                 scale: 0.5,
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class Trial extends StatelessWidget {
+  const Trial({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      width:  Provider.of<General>(context).fullMenu?500 : 550,
+      height: 250,
+      decoration: BoxDecoration(
+        color: Provider.of<AppColors>(context).appColors.primary,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 20, right: 0, top: 15, bottom: 15),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      "Total operated days this month",
+                    style: TextStyle(
+                      color: Provider.of<AppColors>(context).appColors.QuaternaryText
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "18",
+                    style: TextStyle(
+                        color: Provider.of<AppColors>(context).appColors.tertiaryText,
+                      fontSize: 30
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Present Days : ",
+                    style: TextStyle(
+                        color: Provider.of<AppColors>(context).appColors.QuaternaryText
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    "18",
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 30
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Absent Days : ",
+                    style: TextStyle(
+                        color: Provider.of<AppColors>(context).appColors.QuaternaryText
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    "0",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 30
+                    ),
+                  ),
+                ],
+              ),
+              Image.asset(
+                  "assets/time.png",
+                scale: 8,
+              )
+
             ],
           ),
         ),
