@@ -29,6 +29,16 @@ class AppColors {
   Color get ProfileDecoration => colors['ProfileDecoration']!;
   Color get ActiveUsersBackground => colors['ActiveUsersBackground']!;
   Color get ActiveUsersProgress => colors['ActiveUsersProgress']!;
+
+
+  Color get PiechartColor1 => Colors.red;
+  Color get PiechartColor2 => Colors.blue;
+  Color get PiechartColor3 => Colors.green;
+  Color get PiechartColor4 => Colors.purple;
+  Color get PiechartColor5 => Colors.pink;
+  Color get PiechartColor6 => Colors.purpleAccent;
+  Color get PiechartColor7 => Colors.deepOrange;
+  Color get PiechartColor8 => Colors.lime;
 }
 
 // Dark theme colors

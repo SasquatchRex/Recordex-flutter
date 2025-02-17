@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:recordex/HomePage/color.dart';
-import '../../Provider/main_provider.dart';
+import '../Provider/main_provider.dart';
 import 'package:provider/provider.dart';
 
 

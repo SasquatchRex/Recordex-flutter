@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'Provider/main_provider.dart';
 
 import 'leftside.dart';
-import 'HomePage/rightside.dart';
+import 'HomePage/homepage_right.dart';
+import 'Expense Management/expense_rightside.dart';
+import 'Income and Revenue/Income_revenue_right.dart';
 
 
 class Homepage extends StatefulWidget {
@@ -21,12 +23,10 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     if(width<1500){
-
       Provider.of<General>(context).fullMenu = false;
     }
 
-
-    print(AppColors);
+    const pageList = [HomepageRightSide(),ExpenseRightside(),IncomeRevenueRightside()];
 
     return ChangeNotifierProvider<AppColors>(
       create: (_) => AppColors(),
@@ -42,7 +42,7 @@ class _HomepageState extends State<Homepage> {
                   children: [
                     LeftSide(),
                     Expanded(
-                      child: RightSide(),
+                      child: pageList[Provider.of<General>(context).activeTileMenuIndex],
                     ),
 
 

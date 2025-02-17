@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Provider/main_provider.dart';
-import 'HomePage/topside.dart';
+import 'topside.dart';
 // import '../../Provider/color_provider.dart';
 
 int activeTileIndexMain = 0;
@@ -33,7 +33,7 @@ class _LeftSideState extends State<LeftSide> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 400),
       curve: Curves.linear,
       width: Provider.of<General>(context).fullMenu? 0.20 * width : 0.11*width,
       height: height,
@@ -62,14 +62,14 @@ class _LeftSideState extends State<LeftSide> {
 
 
                     MenuTiles(context, Icons.home, "Dashboard",0),
-                    MenuTiles(context, Icons.monetization_on, "Salary Credits",1),
-                    MenuTiles(context, Icons.attach_money, "Expense Category 1",2),
-                    MenuTiles(context, Icons.attach_money, "Expense Category 2",3),
-                    MenuTiles(context, Icons.attach_money, "Company 1 Credits",4),
-                    MenuTiles(context, Icons.attach_money, "Company 2 Credits",5),
-                    MenuTiles(context, Icons.auto_graph, "Assets",6),
-                    MenuTiles(context, Icons.trending_down_outlined, "Liabilities",7),
-                    MenuTiles(context, Icons.settings, "Settings",8),
+                    MenuTiles(context, Icons.monetization_on, "Expense Management",1),
+                    MenuTiles(context, Icons.attach_money, "Income & Revenue Tracking",2),
+                    MenuTiles(context, Icons.category, "Category Management",3),
+                    MenuTiles(context, Icons.attach_money, "Invoices & payments",4),
+                    MenuTiles(context, Icons.group, "Team Collaboration",5),
+                    MenuTiles(context, Icons.report, "Reports & Analysis",6),
+                    MenuTiles(context, Icons.money, "Bank & Payment Integration",7),
+                    MenuTiles(context, Icons.settings, "Settings & Customization",8),
 
                   ],
                 ),
@@ -87,7 +87,7 @@ class _LeftSideState extends State<LeftSide> {
     var height = MediaQuery.of(context).size.height;
     Color tileColor=Colors.transparent;
 
-    bool isActive = activeTileIndexMain == index;
+    bool isActive = Provider.of<General>(context).activeTileMenuIndex == index;
 
 
 
@@ -96,10 +96,8 @@ class _LeftSideState extends State<LeftSide> {
       padding: EdgeInsets.only(left: 20, right: 20),
       child: InkWell(
         onTap: () {
-          setState(() {
-            activeTileIndexMain = index;
-          });
-        },
+          Provider.of<General>(context,listen: false).ChangeActiveTileMenuIndex(index);
+          },
         child: AnimatedContainer(
           duration: Duration(milliseconds: 400),
           curve: Curves.easeInOut,

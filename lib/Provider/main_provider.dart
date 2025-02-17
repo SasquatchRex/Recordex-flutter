@@ -7,9 +7,15 @@ import '../HomePage/color.dart';
 class General with ChangeNotifier{
   bool fullMenu = true;
   bool notification = false;
+  int activeTileMenuIndex = 0;
 
   void toggleMenu() {
     fullMenu =!fullMenu;
+    notifyListeners();
+  }
+
+  void ChangeActiveTileMenuIndex(int index){
+    activeTileMenuIndex = index;
     notifyListeners();
   }
 
@@ -18,37 +24,10 @@ class General with ChangeNotifier{
     notifyListeners();
   }
 
-  // bool _isDark = true; // Default to dark mode
-  //
-  // bool get isDark => _isDark;
-  //
-  //
-  //
-  // void toggleDarkMode() {
-  //   _isDark = !_isDark;
-  //   notifyListeners(); // Notify listeners when the theme changes
-  // }
-
-  // dynamic get colors => _isDark ? AppColorsDark() : AppColorsLight();
 
 
 }
-//
-// class ThemeColorsProvider extends ChangeNotifier {
-//   AppColorsDark _dark = AppColorsDark();
-//   AppColorsLight _light = AppColorsLight();
-//   bool _isDark = false;
-//
-//   AppColorsDark get dark => _dark;
-//   AppColorsLight get light => _light;
-//
-//   AppColorsDark get currentColors => _isDark ? _dark : _light;
-//
-//   void toggleTheme() {
-//     _isDark = !_isDark;
-//     notifyListeners();
-//   }
-// }
+
 
 // Singleton Theme Manager
 class AppColors extends ChangeNotifier {
