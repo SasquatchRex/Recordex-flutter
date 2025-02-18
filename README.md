@@ -1,6 +1,8 @@
 # recordex
 
-A new Flutter project.
+
+
+A new SaaS Flutter project.
 
 ## Getting Started
 
