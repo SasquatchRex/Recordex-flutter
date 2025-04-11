@@ -10,6 +10,7 @@ class AppColors {
   Color get primary => colors['primary']!;
   Color get secondary => colors['secondary']!;
   Color get tertiary => colors['tertiary']!;
+  Color get quaternary => colors['quaternary']!;
   Color get background => colors['background']!;
   Color get Icon => colors['Icon']!;
   Color get IconNotActive => colors['IconNotActive']!;
@@ -41,16 +42,51 @@ class AppColors {
   Color get PiechartColor8 => Colors.lime;
 }
 
+// Provider.of<AppColors>(context).appColors.background,
+
 // Dark theme colors
+// class AppColorsDark extends AppColors {
+//   AppColorsDark()
+//       : super({
+//     'primary': Colors.white.withOpacity(0.05),
+//     'background': Colors.black,
+//     // 'secondary': Colors.white.withOpacity(0.018),
+//     'secondary': Colors.white.withOpacity(0.018),
+//     'tertiary': Colors.white.withOpacity(0.05),
+//     'quaternary': Colors.white.withOpacity(0.1),
+//     'Icon': Colors.white70,
+//     'IconNotActive': Colors.white30,
+//     'primaryText': Colors.white,
+//     'secondaryText': Colors.white60,
+//     'tertiaryText': Colors.white70,
+//     'QuaternaryText': Colors.white30,
+//     'QuinaryText': Colors.white12,
+//     'NotificationPing': Colors.red, //Notification
+//     'MenuActive': Colors.white70, //Menu
+//     'MenuNotActive': Colors.white54, //Menu
+//     'CompanyDesc': Colors.white60, //Company Description
+//     'NotificationHeader': Colors.white54, //Notification
+//     'NotificationBody': Colors.white38, //Notification
+//     'BoxShadow': Colors.black26, //Search Box
+//     'SearchHint': Colors.white54, //Search Hint
+//     'ProfileDecoration': Colors.blue.withOpacity(0.5), //Profile Decoration
+//     'ActiveUsersBackground': Colors.grey.shade900,
+//     'ActiveUsersProgress': Colors.blue.shade900,
+//
+//   });
+// }
+
 class AppColorsDark extends AppColors {
   AppColorsDark()
       : super({
-    'primary': Colors.white.withOpacity(0.05),
+    'primary': Color(0xFF131313),
     'background': Colors.black,
-    'secondary': Colors.white.withOpacity(0.018),
-    'tertiary': Colors.white.withOpacity(0.05),
+    'secondary': Color(0xFF1A1A1A),
+    'tertiary': Color(0xFF1A1A1A),
+    'quaternary': Color(0xFF424243),
     'Icon': Colors.white70,
     'IconNotActive': Colors.white30,
+
     'primaryText': Colors.white,
     'secondaryText': Colors.white60,
     'tertiaryText': Colors.white70,
@@ -64,28 +100,30 @@ class AppColorsDark extends AppColors {
     'NotificationBody': Colors.white38, //Notification
     'BoxShadow': Colors.black26, //Search Box
     'SearchHint': Colors.white54, //Search Hint
-    'ProfileDecoration': Colors.blue.withOpacity(0.5), //Profile Decoration
+    'ProfileDecoration': Color(0xFF3D62EE), //Profile Decoration
     'ActiveUsersBackground': Colors.grey.shade900,
     'ActiveUsersProgress': Colors.blue.shade900,
 
   });
 }
+// Provider.of<AppColors>(context).appColors.background
 
 // Light theme colors
 class AppColorsLight extends AppColors {
   AppColorsLight()
       : super({
-    'primary': Colors.black.withOpacity(0.05),
+    'primary': Color(0xFFF3F3F3),
     'background': Colors.white,
-    'secondary': Colors.white,
-    'tertiary': Colors.black.withOpacity(0.05),
+    'secondary': Color(0xFFE0DFDF),
+    'tertiary': Colors.white.withOpacity(0.05),
+    'quaternary': Color(0xFFA4A5A8),
 
     'Icon': Colors.black54,
     'IconNotActive': Colors.black45,
 
     'primaryText': Colors.black,
     'secondaryText': Colors.black87,
-    'tertiaryText': Colors.black87,
+    'tertiaryText': Colors.black54,
     'QuaternaryText': Colors.black45,
     'QuinaryText': Colors.black12,
 
@@ -97,7 +135,7 @@ class AppColorsLight extends AppColors {
     'NotificationBody': Colors.black38, //Notification
     'BoxShadow': Colors.white24, //Search Box
     'SearchHint': Colors.black54, //Search Hint
-    'ProfileDecoration': Colors.blue.withOpacity(0.5), //Profile Decoration
+    'ProfileDecoration': Color(0xFF00B6EE), //Profile Decoration
     'ActiveUsersBackground': Colors.grey.shade500, //ActiveUsers
     'ActiveUsersProgress': Colors.blue.shade500, //ActiveUsers
 

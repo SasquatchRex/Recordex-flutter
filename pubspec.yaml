@@ -38,6 +38,9 @@ dependencies:
   window_manager: ^0.4.3
   fl_chart: ^0.70.2
   provider: ^6.1.2
+  nepali_date_picker: ^6.0.1
+  file_picker: ^10.0.0
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:

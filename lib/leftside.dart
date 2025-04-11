@@ -65,11 +65,12 @@ class _LeftSideState extends State<LeftSide> {
                     MenuTiles(context, Icons.monetization_on, "Expense Management",1),
                     MenuTiles(context, Icons.attach_money, "Income & Revenue Tracking",2),
                     MenuTiles(context, Icons.category, "Category Management",3),
-                    MenuTiles(context, Icons.attach_money, "Invoices & payments",4),
-                    MenuTiles(context, Icons.group, "Team Collaboration",5),
-                    MenuTiles(context, Icons.report, "Reports & Analysis",6),
-                    MenuTiles(context, Icons.money, "Bank & Payment Integration",7),
-                    MenuTiles(context, Icons.settings, "Settings & Customization",8),
+                    MenuTiles(context, Icons.attach_money, "Create Invoice",4),
+                    MenuTiles(context, Icons.manage_history, "Manage Invoice",5),
+                    MenuTiles(context, Icons.group, "Team Collaboration",6),
+                    MenuTiles(context, Icons.report, "Reports & Analysis",7),
+                    MenuTiles(context, Icons.money, "Bank & Payment Integration",8),
+                    MenuTiles(context, Icons.settings, "Settings & Customization",9),
 
                   ],
                 ),
@@ -104,7 +105,7 @@ class _LeftSideState extends State<LeftSide> {
           height: 0.05 * height,
           // width: 0.15*width,
           decoration: BoxDecoration(
-            color: isActive ? Provider.of<AppColors>(context).appColors.secondary : Colors.transparent,
+            color: isActive ? Provider.of<AppColors>(context).appColors.secondary : Provider.of<AppColors>(context).appColors.primary,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Padding(

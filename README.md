@@ -1,18 +1,29 @@
-# recordex
+
+# Recordex
+
+Recordex is an in-development application with a greater vision in mind. It is an application specially designed for the business owners helping them run business efficiently.
 
 
 
-A new SaaS Flutter project.
 
-## Getting Started
+## Tech Stack
 
-This project is a starting point for a Flutter application.
+**Client:** Flutter
 
-A few resources to get you started if this is your first Flutter project:
+**Server:** Django ( in future )
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
+
+## Screenshots
+
+![App Screenshot](https://i.ibb.co/R4C81Ytx/Screenshot-2025-02-10-173300.png)
+
+## Help
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Support
+
+For support, email contact@prithaklamsal.com.np
+

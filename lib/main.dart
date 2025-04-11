@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recordex/Authentication/login.dart';
 import 'package:recordex/Provider/color_provider.dart';
 import 'package:recordex/Provider/main_provider.dart';
 
@@ -30,14 +31,16 @@ void main() async{
     // await windowManager.setMovable(true);
 
   });
+  WidgetsFlutterBinding.ensureInitialized();
   runApp( MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => General()),
         ChangeNotifierProvider(create: (context) => AppColors()),
-        // ChangeNotifierProvider(create: (_) => AppColors()),
+        ChangeNotifierProvider(create: (context) => InvoicePayment()),
+        ChangeNotifierProvider(create: (_) => Login_Provider()),
 
       ],
-      child: Homepage()
+      child:(true)?Login(): Homepage()
   )
   );
 }

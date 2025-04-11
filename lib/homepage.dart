@@ -6,6 +6,10 @@ import 'leftside.dart';
 import 'HomePage/homepage_right.dart';
 import 'Expense Management/expense_rightside.dart';
 import 'Income and Revenue/Income_revenue_right.dart';
+import 'Category Management/category_management_rightside.dart';
+import 'CreateInvoice//invoice_and_payment_rightside.dart';
+import 'Invoice Management/invoice_management_right_side.dart';
+import 'Settings/settings.dart';
 
 
 class Homepage extends StatefulWidget {
@@ -26,7 +30,18 @@ class _HomepageState extends State<Homepage> {
       Provider.of<General>(context).fullMenu = false;
     }
 
-    const pageList = [HomepageRightSide(),ExpenseRightside(),IncomeRevenueRightside()];
+    const pageList = [
+      HomepageRightSide(),
+      ExpenseRightside(),
+      IncomeRevenueRightside(),
+      CategoryManagementRightSide(),
+      InvoicePaymentRightside(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      Settings()
+    ];
 
     return ChangeNotifierProvider<AppColors>(
       create: (_) => AppColors(),
