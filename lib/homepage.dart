@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recordex/Authentication/login.dart';
 import 'Provider/main_provider.dart';
 
 import 'leftside.dart';
@@ -10,7 +11,7 @@ import 'Category Management/category_management_rightside.dart';
 import 'CreateInvoice//invoice_and_payment_rightside.dart';
 import 'Invoice Management/invoice_management_right_side.dart';
 import 'Settings/settings.dart';
-
+import 'Authentication/login.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -45,28 +46,37 @@ class _HomepageState extends State<Homepage> {
 
     return ChangeNotifierProvider<AppColors>(
       create: (_) => AppColors(),
-      child: Consumer<AppColors>(
-        builder: (context,appColors,child) {
-          final colorsAPP = appColors.appColors;
-          return MaterialApp(
-            theme: ThemeData.dark(),
-            home: Scaffold(
-              appBar: null,
-              body: Container(
-                child: Row(
-                  children: [
-                    LeftSide(),
-                    Expanded(
-                      child: pageList[Provider.of<General>(context).activeTileMenuIndex],
-                    ),
+      child: Consumer2<AppColors,Login_Provider>(
+        builder: (context,appColors,login_Provider,child) {
+          // final colorsAPP = appColors.appColors;
 
 
+          if(Provider.of<Login_Provider>(context,listen: false).response_code == 200) {
 
-                  ],
+            return MaterialApp(
+
+              theme: ThemeData.dark(),
+              home: Scaffold(
+                appBar: null,
+                body: Container(
+                  child: Row(
+                    children: [
+                      LeftSide(),
+                      Expanded(
+                        child: pageList[Provider
+                            .of<General>(context)
+                            .activeTileMenuIndex],
+                      ),
+
+
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          }
+          else
+            return Login();
         }
       ),
     );

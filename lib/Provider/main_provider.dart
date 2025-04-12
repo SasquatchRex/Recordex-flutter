@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../HomePage/color.dart';
+import 'package:http/http.dart' as http;
 
+String url = "http://127.0.0.1:8000";
 
 
 class General with ChangeNotifier{
@@ -202,8 +206,10 @@ class Login_Provider extends ChangeNotifier{
   TextEditingController username= TextEditingController();
   TextEditingController password= TextEditingController();
 
+  int response_code = 0;
 
-  void login(TextEditingController username,TextEditingController password){
+
+  void login(TextEditingController username,TextEditingController password)async{
     String username_text = username.text;
     String password_text = password.text;
 
@@ -212,6 +218,17 @@ class Login_Provider extends ChangeNotifier{
       "username": username_text,
       "password": password_text
     };
-    print(request);
+    final response = await http.post(
+      Uri.parse(url + "/login/"),
+      body: jsonEncode(request),
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any additional headers if needed
+      },
+    );
+    response_code = response.statusCode;
+    print(response_code);
+    notifyListeners();
+
   }
 }

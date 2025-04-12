@@ -40,7 +40,8 @@ void main() async{
         ChangeNotifierProvider(create: (_) => Login_Provider()),
 
       ],
-      child:(true)?Login(): Homepage()
+      child:Homepage()
   )
   );
 }
+
