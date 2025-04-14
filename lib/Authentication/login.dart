@@ -246,8 +246,9 @@ class Login_Widget extends StatelessWidget {
                     ),
                   )),
             ),
-            if(false)
-            Container(
+            if(Provider.of<Login_Provider>(context).error_msg !=null)
+            AnimatedContainer(
+              duration: Duration(milliseconds: 400),
               alignment: Alignment.center,
 
               child:Row(
@@ -256,7 +257,25 @@ class Login_Widget extends StatelessWidget {
                   Icon(Icons.error,color: Colors.red,weight: 100,),
                   SizedBox(width: 10,),
                   Text(
-                      "Invalid Credentials. Please try again",
+                      "${Provider.of<Login_Provider>(context).error_msg}",
+                    style: TextStyle(
+                      color:  Provider.of<AppColors>(context).appColors.secondaryText
+                    ),
+                  )
+                ],
+              )
+            ),
+            if(Provider.of<Login_Provider>(context).loggedin !=null)
+            Container(
+              alignment: Alignment.center,
+
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.safety_check,color: Colors.green,weight: 100,),
+                  SizedBox(width: 10,),
+                  Text(
+                      "Successfully Logged in",
                     style: TextStyle(
                       color:  Provider.of<AppColors>(context).appColors.secondaryText
                     ),

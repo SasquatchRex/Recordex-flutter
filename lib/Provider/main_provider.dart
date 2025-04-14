@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recordex/Hive/hive_main.dart';
 import '../HomePage/color.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,20 +109,24 @@ class InvoicePayment extends ChangeNotifier{
   List<TextEditingController> HSCodeControllers = [];
   List<TextEditingController> nameControllers = [];
   List<TextEditingController> quantityControllers = [];
-  List<TextEditingController> unitPriceControllers = [];
-  List<TextEditingController> totalPriceControllers = [];
-  TextEditingController grandPriceControllers = TextEditingController();
-  TextEditingController totalPriceVATControllers = TextEditingController();
+  List<TextEditingController> rateControllers = [];
+  List<TextEditingController> unitControllers = [];
+  List<TextEditingController> amountPriceControllers = [];
+  TextEditingController totalPriceControllers = TextEditingController();
+  TextEditingController taxable_amount_PriceControllers = TextEditingController();
+  TextEditingController PriceVATControllers = TextEditingController();
   TextEditingController discountControllers = TextEditingController(text: "0");
-  TextEditingController finalAmountControllers = TextEditingController();
+  TextEditingController totalAmountControllers = TextEditingController();
+  TextEditingController RemarksController = TextEditingController();
 
   void addRow() {
-    invoiceItems.add({"name": "", "quantity": "", "unitPrice": "", "totalPrice": ""});
+    invoiceItems.add({"hs": "","name": "","unitPrice": "","unit" : "", "quantity": "",  "totalPrice": ""});
     HSCodeControllers.add(TextEditingController(text: "-"));
     nameControllers.add(TextEditingController());
     quantityControllers.add(TextEditingController());
-    unitPriceControllers.add(TextEditingController());
-    totalPriceControllers.add(TextEditingController());
+    rateControllers.add(TextEditingController());
+    unitControllers.add(TextEditingController());
+    amountPriceControllers.add(TextEditingController());
     notifyListeners();
   }
 
@@ -130,14 +135,16 @@ class InvoicePayment extends ChangeNotifier{
     nameControllers[index].dispose();
     HSCodeControllers[index].dispose();
     quantityControllers[index].dispose();
-    unitPriceControllers[index].dispose();
-    totalPriceControllers[index].dispose();
+    rateControllers[index].dispose();
+    unitControllers[index].dispose();
+    amountPriceControllers[index].dispose();
 
     HSCodeControllers.removeAt(index);
     nameControllers.removeAt(index);
     quantityControllers.removeAt(index);
-    unitPriceControllers.removeAt(index);
-    totalPriceControllers.removeAt(index);
+    rateControllers.removeAt(index);
+    unitControllers.removeAt(index);
+    amountPriceControllers.removeAt(index);
 
 
     grandTotal();
@@ -148,9 +155,9 @@ class InvoicePayment extends ChangeNotifier{
   // Calculate the total price for a row
   void calculateTotalPrice(int index) {
     double quantity = double.tryParse(quantityControllers[index].text) ?? 0;
-    double unitPrice = double.tryParse(unitPriceControllers[index].text) ?? 0;
+    double unitPrice = double.tryParse(rateControllers[index].text) ?? 0;
     double totalPrice = quantity * unitPrice;
-    totalPriceControllers[index].text = totalPrice.toStringAsFixed(2);
+    amountPriceControllers[index].text = totalPrice.toStringAsFixed(2);
     grandTotal();
     discountPercentage();
   }
@@ -158,22 +165,28 @@ class InvoicePayment extends ChangeNotifier{
 
   void grandTotal() {
     double total = 0.0;
-    for (var controller in totalPriceControllers) {
+    for (var controller in amountPriceControllers) {
       double value = double.tryParse(controller.text) ?? 0.0;
       total += value;
     }
-    grandPriceControllers.text = total.toStringAsFixed(2);
-    totalPriceVATControllers.text = (total + 0.13*total).toStringAsFixed(2);
+    totalPriceControllers.text = total.toStringAsFixed(2);
+    // totalamountPriceVATControllers.text = (total + 0.13*total).toStringAsFixed(2);
     notifyListeners();
   }
 
 
   void discountPercentage(){
-    double totalPriceVAT = double.tryParse(totalPriceVATControllers.text) ?? 0.0;
+    double totalPrice = double.tryParse(totalPriceControllers.text) ?? 0.0;
     double discountPer = double.tryParse(discountControllers.text) ?? 0.0;
 
 
-    finalAmountControllers.text = (totalPriceVAT-0.01*discountPer*totalPriceVAT).toStringAsFixed(2) ;
+    taxable_amount_PriceControllers.text = (totalPrice-0.01*discountPer*totalPrice).toStringAsFixed(2) ;
+    double taxable_amount = double.tryParse(taxable_amount_PriceControllers.text) ?? 0.0;
+    PriceVATControllers.text = (0.13*taxable_amount).toStringAsFixed(2);
+    double vat_amount = double.tryParse(PriceVATControllers.text) ?? 0.0;
+    totalAmountControllers.text = (vat_amount + taxable_amount).toStringAsFixed(2);
+
+    // taxable_amount_PriceControllers.text = totalPrice - double.tryParse(finalAmountControllers.text) ?? 0.0));
 
     notifyListeners();
 
@@ -181,17 +194,19 @@ class InvoicePayment extends ChangeNotifier{
 
   Map<String, dynamic> toJson() {
     return {
-      "invoiceItems": List.generate(invoiceItems.length, (index) => {
+      "Invoice Items": List.generate(invoiceItems.length, (index) => {
         "H.S Code" : HSCodeControllers[index].text,
-        "name": nameControllers[index].text,
-        "quantity": quantityControllers[index].text,
-        "unitPrice": unitPriceControllers[index].text,
-        "totalPrice": totalPriceControllers[index].text,
+        "Name": nameControllers[index].text,
+        "Rate": rateControllers[index].text,
+        "Unit": unitControllers[index].text,
+        "Quantity": quantityControllers[index].text,
+        "Amount": amountPriceControllers[index].text,
       }),
-      "grandTotal": grandPriceControllers.text,
-      "totalPriceVAT": totalPriceVATControllers.text,
-      "discount": discountControllers.text,
-      "finalAmount": finalAmountControllers.text,
+      "Total": totalPriceControllers.text,
+      "VAT amount": PriceVATControllers.text,
+      "Discount": discountControllers.text,
+      "Total Amount": totalAmountControllers.text,
+      "Remarks": RemarksController.text,
     };
   }
 
@@ -207,7 +222,9 @@ class Login_Provider extends ChangeNotifier{
   TextEditingController password= TextEditingController();
 
   int response_code = 0;
-
+  late String? error_msg = null;
+  late Map<String, dynamic> decoded_response;
+  late bool? loggedin=null;
 
   void login(TextEditingController username,TextEditingController password)async{
     String username_text = username.text;
@@ -218,6 +235,8 @@ class Login_Provider extends ChangeNotifier{
       "username": username_text,
       "password": password_text
     };
+    final tokens = await getAuthTokens();
+
     final response = await http.post(
       Uri.parse(url + "/login/"),
       body: jsonEncode(request),
@@ -227,8 +246,45 @@ class Login_Provider extends ChangeNotifier{
       },
     );
     response_code = response.statusCode;
-    print(response_code);
+    decoded_response = jsonDecode(response.body);
+    if(response_code !=200){
+      error_msg = decoded_response["error"];
+    }
+    else if(response_code == 200){
+      loggedin = true;
+      print(decoded_response);
+      String access_token = decoded_response['access'];
+
+      await saveAuthTokens(accessToken: access_token);
+    }
+    // print(error_msg);
     notifyListeners();
 
   }
+}
+
+class CheckToken extends ChangeNotifier{
+  late bool? is_valid = null;
+
+  Future <void> check() async{
+    final tokens = await getAuthTokens();
+    final accessToken = tokens['accessToken'];
+    print("Code has been executed");
+
+    final response = await http.get(
+      Uri.parse(url+"/checktoken/"),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      },
+    );
+    if(response.statusCode == 200){
+      is_valid = true;
+    }
+    else{
+      is_valid = false;
+    }
+    notifyListeners();
+  }
+
 }

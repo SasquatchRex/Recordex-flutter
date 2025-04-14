@@ -166,6 +166,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                           children: [
                                             // Intended for remarks of bill Custom Text
                                             Expanded(child: TextField(
+                                              controller: Provider.of<InvoicePayment>(context).RemarksController,
                                                 keyboardType: TextInputType.multiline,
                                               maxLines: 5,
                                               cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
@@ -244,7 +245,7 @@ class CreateInvoiceButton extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
-            "CreateInvoice",
+            "Create Invoice",
             style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText),
           )),
     );
@@ -262,16 +263,18 @@ class RightInvoiceTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).grandPriceControllers,text: 'Total Amount : '),
+        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).totalPriceControllers,text: 'Total : '),
         SizedBox(
           height: 10,
         ),
 
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).totalPriceVATControllers, text: "Total Amount after 13% VAT : ",),
-        SizedBox(height: 10,),
         RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).discountControllers, text: "Discount % : ",onChanged: Provider.of<InvoicePayment>(context, listen: false).discountPercentage,),
         SizedBox(height: 10,),
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).finalAmountControllers, text: "Final Amount : "),
+        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).taxable_amount_PriceControllers, text: "Taxable Amount : ",),
+        SizedBox(height: 10,),
+        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).PriceVATControllers, text: "13% VAT : ",),
+        SizedBox(height: 10,),
+        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).totalAmountControllers, text: "Total Amount : "),
       ],
     );
   }
@@ -381,6 +384,15 @@ class InvoiceHeader extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Text("Quantity",style: TextStyle(
+              color: Provider.of<AppColors>(context).appColors.secondaryText
+          ),),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Expanded(
+          flex: 2,
+          child: Text("Unit",style: TextStyle(
               color: Provider.of<AppColors>(context).appColors.secondaryText
           ),),
         ),
@@ -505,7 +517,26 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).unitPriceControllers[index],
+                          controller: Provider.of<InvoicePayment>(context).unitControllers[index],
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: Provider.of<AppColors>(context).appColors.primary,
+                              border: OutlineInputBorder(borderSide: BorderSide.none),
+                              // Change focus border color here
+                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller: Provider.of<InvoicePayment>(context).rateControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
@@ -529,7 +560,7 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).totalPriceControllers[index],
+                          controller: Provider.of<InvoicePayment>(context).amountPriceControllers[index],
                           onChanged: (value) {
                             Provider.of<InvoicePayment>(context, listen: false).grandTotal();
                           },

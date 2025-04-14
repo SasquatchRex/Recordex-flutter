@@ -23,6 +23,16 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   // final GlobalKey<_LeftSideMenuState> menuKey = GlobalKey<_LeftSideMenuState>();
 
+  @override
+  void initState() {
+    super.initState();
+
+    // This is where you call your provider method
+    Future.microtask(() {
+      Provider.of<CheckToken>(context,listen: false).check();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +53,17 @@ class _HomepageState extends State<Homepage> {
       InvoiceManagementRightSide(),
       Settings()
     ];
-
+    // Provider.of<CheckToken>(context,listen: false).check();
     return ChangeNotifierProvider<AppColors>(
+
       create: (_) => AppColors(),
-      child: Consumer2<AppColors,Login_Provider>(
-        builder: (context,appColors,login_Provider,child) {
+      child: Consumer3<AppColors,Login_Provider,CheckToken>(
+        builder: (context,appColors,login_Provider,check_token,child) {
           // final colorsAPP = appColors.appColors;
 
 
-          if(Provider.of<Login_Provider>(context,listen: false).response_code == 200) {
+          if(Provider.of<Login_Provider>(context,listen: false).response_code == 200 || Provider.of<CheckToken>(context,listen: false).is_valid == true ) {
+
 
             return MaterialApp(
 

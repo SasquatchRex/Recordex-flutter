@@ -140,69 +140,73 @@ class _LeftSideState extends State<LeftSide> {
     );
   }
 
-  Row CompanyDesc(double width) {
+  AnimatedContainer CompanyDesc(double width) {
 
-    return Row(
-      children: [
-        SizedBox(width: 0.01*width,),
-        Container(
-          child: Image.asset(
-            "assets/logo.png",
-            width: 0.035 * width,
+    return AnimatedContainer(
+      duration: Duration(seconds: 1),
+
+      child: Row(
+        children: [
+          SizedBox(width: 0.01*width,),
+          Container(
+            child: Image.asset(
+              "assets/logo.png",
+              width: 0.035 * width,
+            ),
+            // alignment: Alignment.topRight,
           ),
-          // alignment: Alignment.topRight,
-        ),
-        SizedBox(
-          width: 0.01 * width,
-        ),
-        if(Provider.of<General>(context).fullMenu)
-        Expanded(
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.ease,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.linear,
-                  child: Text(
-                    "Recordex",
-
-                    style: TextStyle(
-                      color: Provider.of<AppColors>(context).appColors.primaryText,
-                      fontSize: 0.015 * width,
-                      fontWeight: FontWeight.w700,
-
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.linear,
-                  width: 0.1 * width,
-                  child: Center(
+          SizedBox(
+            width: 0.01 * width,
+          ),
+          if(Provider.of<General>(context).fullMenu)
+          Expanded(
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 400),
+              curve: Curves.ease,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.linear,
                     child: Text(
-                      "For Sasquatch Rex Pvt.ltd",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      "Recordex",
+
                       style: TextStyle(
-                        color: Provider.of<AppColors>(context).appColors.CompanyDesc,
-                        fontSize: 0.006 * width,
-                        fontWeight: FontWeight.w100,
-                        // overflow: TextOverflow.ellipsis,
+                        color: Provider.of<AppColors>(context).appColors.primaryText,
+                        fontSize: 0.015 * width,
+                        fontWeight: FontWeight.w700,
+
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 5,
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 400),
+                    curve: Curves.linear,
+                    width: 0.1 * width,
+                    child: Center(
+                      child: Text(
+                        "For Sasquatch Rex Pvt.ltd",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Provider.of<AppColors>(context).appColors.CompanyDesc,
+                          fontSize: 0.006 * width,
+                          fontWeight: FontWeight.w100,
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
