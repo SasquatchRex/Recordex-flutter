@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recordex/Hive/hive_main.dart';
 import '../HomePage/color.dart';
@@ -102,6 +103,16 @@ class InvoicePayment extends ChangeNotifier{
     }
   }
 
+  TextEditingController From_Name = TextEditingController();
+  TextEditingController From_PAN = TextEditingController();
+  TextEditingController To_Name = TextEditingController();
+  TextEditingController To_PAN = TextEditingController();
+  NepaliDateTime selectedDate = NepaliDateTime.now();
+
+  void update_date(NepaliDateTime date){
+    selectedDate = date;
+    notifyListeners();
+  }
 
 
 
@@ -203,13 +214,38 @@ class InvoicePayment extends ChangeNotifier{
         "Amount": amountPriceControllers[index].text,
       }),
       "Total": totalPriceControllers.text,
-      "VAT amount": PriceVATControllers.text,
-      "Discount": discountControllers.text,
+      "Taxable Amount":taxable_amount_PriceControllers.text,
+      "VAT Amount": PriceVATControllers.text,
+      "Discount Percentage": discountControllers.text,
       "Total Amount": totalAmountControllers.text,
       "Remarks": RemarksController.text,
+
+      "From Name": From_Name.text,
+      "From PAN": From_PAN.text,
+
+      "To Name": To_Name.text,
+      "To PAN" : To_PAN.text,
+
+      "Date" :  NepaliDateFormat('yyyy-MM-dd').format(selectedDate)
+
+
     };
   }
 
+  Future <void> createInvoicePost() async{
+    final tokens = await getAuthTokens();
+    final accessToken = tokens['accessToken'];
+    final response = await http.post(
+      Uri.parse(url + "/create/invoice/"),
+      body: jsonEncode(toJson()),
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      }
+    );
+    print(jsonEncode(toJson()));
+    print(response.statusCode);
+  }
 
 }
 

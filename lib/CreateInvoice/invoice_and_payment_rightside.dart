@@ -16,20 +16,18 @@ class InvoicePaymentRightside extends StatefulWidget {
 }
 
 class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
-  NepaliDateTime? selectedDate;
+  // NepaliDateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
     final NepaliDateTime? picked = await picker.showMaterialDatePicker(
       context: context,
-      initialDate: selectedDate ?? NepaliDateTime.now(),
+      initialDate: Provider.of<InvoicePayment>(context,listen: false).selectedDate ?? NepaliDateTime.now(),
       firstDate: NepaliDateTime(2000),
       lastDate: NepaliDateTime(2100),
     );
 
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+    if (picked != null && picked != Provider.of<InvoicePayment>(context,listen: false).selectedDate) {
+      Provider.of<InvoicePayment>(context,listen: false).update_date(picked);
     }
   }
 
@@ -77,12 +75,14 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             def_val: "Gandaki Drilling and Construction",
                                             valueText: "From",
                                             border: false,
+                                            Controller: Provider.of<InvoicePayment>(context).From_Name,
                                           ),
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).name_data,
                                             def_val: "",
                                             valueText: "To",
                                             border: true,
+                                              Controller: Provider.of<InvoicePayment>(context).To_Name
                                           )
                                         ],
                                       ),
@@ -97,12 +97,14 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             def_val: "101112123423",
                                             valueText: "PAN",
                                             border: false,
+                                            Controller: Provider.of<InvoicePayment>(context).From_PAN ,
                                           ),
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).pan_data,
                                             def_val: Provider.of<InvoicePayment>(context).final_pan,
                                             valueText: "PAN",
                                             border: true,
+                                            Controller: Provider.of<InvoicePayment>(context).To_PAN,
                                           )
                                         ],
                                       ),
@@ -113,7 +115,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(selectedDate!)}",
+                                            Provider.of<InvoicePayment>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePayment>(context,listen: false).selectedDate!)}",
                                             style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
                                           ),
                                           SizedBox(width: 20),
@@ -239,7 +241,9 @@ class CreateInvoiceButton extends StatelessWidget {
       right: 20,
       child: ElevatedButton(
           onPressed: () {
-            print(Provider.of<InvoicePayment>(context, listen: false).toJson());
+            Provider.of<InvoicePayment>(context, listen: false).toJson();
+            Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+
           },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
@@ -593,8 +597,9 @@ class NameAutocomplete extends StatelessWidget {
   final List<String> names;
   final String def_val, valueText;
   final bool border;
+  final TextEditingController Controller;
 
-  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border});
+  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller});
 
   @override
   Widget build(BuildContext context) {
@@ -617,7 +622,7 @@ class NameAutocomplete extends StatelessWidget {
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
           textEditingController.text = '${def_val}'; // Set default value
           return TextField(
-            controller: textEditingController,
+            controller: Controller,
             focusNode: focusNode,
             style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
             decoration: InputDecoration(
