@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 // import 'package:recordex/HomePage/color.dart';
 import '../Provider/main_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
+import 'Common Components/notification.dart';
 
 // bool fullMenu = true;
 
@@ -82,6 +84,18 @@ class _TopsideState extends State<Topside> {
                 ),
                 Row(
                   children: [
+                    FlutterSwitch(
+                      value: Provider.of<AppColors>(context).isDark,
+                      onToggle:(_) => Provider.of<AppColors>(context,listen: false).toggleTheme(),
+                      borderRadius: 20,
+                      toggleSize: 25,
+                      activeIcon: Icon(Icons.dark_mode, color: Colors.deepPurpleAccent.shade700),
+                      inactiveIcon: Icon(Icons.light_mode, color: Colors.yellow[700]),
+                      activeColor: Colors.white12,
+                      inactiveColor: Colors.black12,
+
+                    ),
+                    SizedBox(width: 20,),
                     GestureDetector(
                       onTap: Provider.of<AppColors>(context).toggleTheme,
                       child: Icon(
@@ -91,9 +105,11 @@ class _TopsideState extends State<Topside> {
                       ),
                     ),
 
+
+
                     SizedBox(width: 20,),
                     GestureDetector(
-                      onTap: Provider.of<General>(context).toggleNotification,
+                      onTap: () => notificationOverlay(context),
                         child: Notification()
                     ),
 
@@ -204,7 +220,7 @@ class _SearchBoxState extends State<SearchBox> {
 
       decoration: BoxDecoration(
         // color: Colors.grey[200],
-        color: Provider.of<AppColors>(context).appColors.primary,
+        color: Provider.of<AppColors>(context).appColors.SearchField,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(

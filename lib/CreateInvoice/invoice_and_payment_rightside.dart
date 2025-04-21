@@ -172,7 +172,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                                 keyboardType: TextInputType.multiline,
                                               maxLines: 5,
                                               cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-
+                                              style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
                                               decoration: InputDecoration(
                                                   isDense: true,
                                                   filled: true,
@@ -352,73 +352,77 @@ class InvoiceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Text(
-              "SN",
-            style: TextStyle(
-                color: Provider.of<AppColors>(context).appColors.secondaryText
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text(
+                "SN",
+              style: TextStyle(
+                  color: Provider.of<AppColors>(context).appColors.secondaryText
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text("HS Code",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 7,
-          child: Text("Name",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text("Quantity",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text("Unit",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text("Unit Price",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text("Total Price",style: TextStyle(
-              color: Provider.of<AppColors>(context).appColors.secondaryText
-          ),),
-        ),
-      ],
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text("HS Code",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 8,
+            child: Text("Name",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text("Quantity",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text("Unit",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text("Unit Price",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text("Total Price",style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.secondaryText
+            ),),
+          ),
+
+        ],
+      ),
     );
   }
 }
@@ -458,7 +462,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).HSCodeControllers[index],
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
@@ -477,7 +481,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 7,
+                        flex: 8,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).nameControllers[index],
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
@@ -495,7 +499,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).quantityControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -519,7 +523,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).unitControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -538,7 +542,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).rateControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -562,7 +566,7 @@ class InvoiceCreate extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).amountPriceControllers[index],
                           onChanged: (value) {

@@ -113,9 +113,12 @@ class _LeftSideState extends State<LeftSide> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  color: isActive? Provider.of<AppColors>(context).appColors.Icon :Provider.of<AppColors>(context).appColors.IconNotActive,
+                Expanded(
+                  flex: 1,
+                  child: Icon(
+                    icon,
+                    color: isActive? Provider.of<AppColors>(context).appColors.Icon :Provider.of<AppColors>(context).appColors.IconNotActive,
+                  ),
                 ),
                 if(Provider.of<General>(context).fullMenu )
                 SizedBox(
@@ -123,6 +126,7 @@ class _LeftSideState extends State<LeftSide> {
                 ),
                 if(Provider.of<General>(context).fullMenu)
                 Expanded(
+                  flex: 7,
                   child: Text(
                     "${text}",
                     maxLines: 1,

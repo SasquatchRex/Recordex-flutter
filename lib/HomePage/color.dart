@@ -31,6 +31,8 @@ class AppColors {
   Color get ActiveUsersBackground => colors['ActiveUsersBackground']!;
   Color get ActiveUsersProgress => colors['ActiveUsersProgress']!;
 
+  Color get SearchField => colors['searchField']!;
+
 
   Color get PiechartColor1 => Colors.red;
   Color get PiechartColor2 => Colors.blue;
@@ -40,6 +42,8 @@ class AppColors {
   Color get PiechartColor6 => Colors.purpleAccent;
   Color get PiechartColor7 => Colors.deepOrange;
   Color get PiechartColor8 => Colors.lime;
+
+
 }
 
 // Provider.of<AppColors>(context).appColors.background,
@@ -104,6 +108,8 @@ class AppColorsDark extends AppColors {
     'ActiveUsersBackground': Colors.grey.shade900,
     'ActiveUsersProgress': Colors.blue.shade900,
 
+    'searchField': Color(0xFF1A1A1A),
+
   });
 }
 // Provider.of<AppColors>(context).appColors.background
@@ -116,7 +122,7 @@ class AppColorsLight extends AppColors {
     'background': Colors.white,
     'secondary': Color(0xFFE0DFDF),
     'tertiary': Colors.white.withOpacity(0.05),
-    'quaternary': Color(0xFFA4A5A8),
+    'quaternary': Color(0xFFDBDCDD),
 
     'Icon': Colors.black54,
     'IconNotActive': Colors.black45,
@@ -138,6 +144,9 @@ class AppColorsLight extends AppColors {
     'ProfileDecoration': Color(0xFF00B6EE), //Profile Decoration
     'ActiveUsersBackground': Colors.grey.shade500, //ActiveUsers
     'ActiveUsersProgress': Colors.blue.shade500, //ActiveUsers
+
+
+    'searchField': Color(0xFFFFFFFF),
 
   });
 }

@@ -136,26 +136,45 @@ class InvoicePayment extends ChangeNotifier{
     nameControllers.add(TextEditingController());
     quantityControllers.add(TextEditingController());
     rateControllers.add(TextEditingController());
-    unitControllers.add(TextEditingController());
+    unitControllers.add(TextEditingController(text: "-"));
     amountPriceControllers.add(TextEditingController());
     notifyListeners();
   }
 
-  void removeRow(int index) {
-    invoiceItems.removeAt(index);
-    nameControllers[index].dispose();
-    HSCodeControllers[index].dispose();
-    quantityControllers[index].dispose();
-    rateControllers[index].dispose();
-    unitControllers[index].dispose();
-    amountPriceControllers[index].dispose();
+  void removeRow([int? index]) {
+    if (index == null) {
+      // Clear all rows
+      for (var controller in [
+        nameControllers,
+        HSCodeControllers,
+        quantityControllers,
+        rateControllers,
+        unitControllers,
+        amountPriceControllers
+      ]) {
+        for (var c in controller) {
+          c.dispose();
+        }
+        controller.clear();
+      }
+      invoiceItems.clear();
+    } else {
+      // Remove single row
+      invoiceItems.removeAt(index);
+      nameControllers[index].dispose();
+      HSCodeControllers[index].dispose();
+      quantityControllers[index].dispose();
+      rateControllers[index].dispose();
+      unitControllers[index].dispose();
+      amountPriceControllers[index].dispose();
 
-    HSCodeControllers.removeAt(index);
-    nameControllers.removeAt(index);
-    quantityControllers.removeAt(index);
-    rateControllers.removeAt(index);
-    unitControllers.removeAt(index);
-    amountPriceControllers.removeAt(index);
+      nameControllers.removeAt(index);
+      HSCodeControllers.removeAt(index);
+      quantityControllers.removeAt(index);
+      rateControllers.removeAt(index);
+      unitControllers.removeAt(index);
+      amountPriceControllers.removeAt(index);
+    }
 
 
     grandTotal();
@@ -243,10 +262,40 @@ class InvoicePayment extends ChangeNotifier{
         'Authorization':'Bearer ${accessToken}'
       }
     );
+    if(response.statusCode == 200){
+      removeRow();
+    }
     print(jsonEncode(toJson()));
     print(response.statusCode);
   }
 
+}
+
+
+class invoiceManagementProvider extends ChangeNotifier{
+  late List<dynamic> decoded_response = [];
+  bool filtermenu = false;
+
+  void filtermenuchange(){
+    filtermenu = !filtermenu;
+    notifyListeners();
+  }
+  
+  void getInvoices() async{
+    final tokens = await getAuthTokens();
+    final accessToken = tokens['accessToken'];
+    final response = await http.get(
+      Uri.parse(url+"/invoices/"),
+      headers : {
+          'Content-Type' : 'application/json',
+          'Authorization':'Bearer ${accessToken}'
+        }
+    );
+    if(response.statusCode == 200) {
+      decoded_response = jsonDecode(response.body);
+      notifyListeners();
+    }
+  }
 }
 
 

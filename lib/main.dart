@@ -45,6 +45,7 @@ void main() async{
         ChangeNotifierProvider(create: (context) => InvoicePayment()),
         ChangeNotifierProvider(create: (_) => Login_Provider()),
         ChangeNotifierProvider(create: (_) => CheckToken()),
+        ChangeNotifierProvider(create: (_) => invoiceManagementProvider()),
 
       ],
       child:Homepage()
