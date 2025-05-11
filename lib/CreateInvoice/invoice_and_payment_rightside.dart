@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import '../../Provider/main_provider.dart';
 import '../../topside.dart';
@@ -225,8 +228,173 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
       ),
       // child: Text("Hello"),
     );
-    ;
   }
+
+}
+
+late OverlayEntry _overlayEntry;
+void showOverlay(BuildContext context) {
+  var width = MediaQuery.of(context).size.width;
+  var height = MediaQuery.of(context).size.height;
+  _overlayEntry = OverlayEntry(
+    builder: (context) => Stack(
+      children: [
+        GestureDetector(
+          onTap: hideOverlay ,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              color: Colors.black.withOpacity(0.3), // Optional darken layer
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
+        ),
+
+        Center(
+          child: Material( // Needed to make it look like a normal widget
+            elevation: 4.0,
+            color: Colors.transparent,
+            
+            child: Container(
+                width: 0.55*width,
+                height: 0.75*height,
+                padding: EdgeInsets.all(20),
+
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  color: Provider.of<AppColors>(context).appColors.primary,
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        onPressed: hideOverlay,
+                        icon: Icon(Icons.close, color: Colors.red),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: ElevatedButton(
+                          onPressed:() {
+                            Provider.of<InvoicePayment>(context, listen: false).toJson();
+                            Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+                              backgroundColor: Provider.of<AppColors>(context).appColors.success),
+                          child: Text(
+                            "Create Invoice",
+                            style: TextStyle(fontSize: 22, color: Colors.white),
+                          )),
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 0.69*height,
+                          child: InteractiveViewer(
+                            panEnabled: true, // Allow panning
+                            scaleEnabled: true, // Allow zooming
+                            minScale: 1.0,
+                            maxScale: 4.0,
+
+                            child: Image.network(
+                              "http://127.0.0.1:8000/invoice/preview/",
+                              // "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
+                              height: 0.69 * height,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 50,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+
+                              children: [
+                                Text(
+                                    "Total Amount : ",
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                    "Rs. 999",
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 250,
+                              width: 250,
+                              child: Container(
+                                // color: Colors.white54,
+                                child: Image.network("https://user-images.githubusercontent.com/11562076/103693127-140e3c80-4f99-11eb-9be1-0aebd6b133bb.png",width: 300,)
+                              ),
+                            ),
+                            SizedBox(height: 30,),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "Payment Status : ",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                FlutterSwitch(
+                                  value: Provider.of<InvoicePayment>(context).Paid,
+                                  onToggle:(_) => Provider.of<InvoicePayment>(context,listen: false).togglePaid(),
+                                  borderRadius: 15,
+                                  toggleSize: 25,
+                                  height: 30,
+                                  width: 60,
+                                  activeIcon: Icon(Icons.check, color: Colors.green),
+
+                                  inactiveIcon: Icon(Icons.close, color: Colors.red[700]),
+                                  activeColor: Colors.green.shade700,
+                                  inactiveColor: Colors.red,
+
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+
+                      ],
+                    ),
+                  ],
+                )
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  Overlay.of(context).insert(_overlayEntry);
+}
+
+void hideOverlay() {
+  _overlayEntry.remove();
 }
 
 class CreateInvoiceButton extends StatelessWidget {
@@ -240,16 +408,39 @@ class CreateInvoiceButton extends StatelessWidget {
       bottom: 20,
       right: 20,
       child: ElevatedButton(
-          onPressed: () {
-            Provider.of<InvoicePayment>(context, listen: false).toJson();
-            Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+          onPressed: () async{
+            if(Provider.of<InvoicePayment>(context, listen: false).isFormComplete()) {
+              Provider.of<InvoicePayment>(context, listen: false).toJson();
+              await Provider.of<InvoicePayment>(context, listen: false).previewInvoice();
+              showOverlay(context);
+            }
+            else{
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Please fill all required fields.',
+                    style: TextStyle(
+                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                    ),
+                  ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.fail,
 
-          },
+                ),
+              );
+
+            }
+            },
+        // () {
+          //   Provider.of<InvoicePayment>(context, listen: false).toJson();
+          //   Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+          //
+          // },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
-            "Create Invoice",
+            "Preview Invoice",
             style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText),
           )),
     );
@@ -672,6 +863,7 @@ class NameAutocomplete extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class notificationbox extends StatelessWidget {

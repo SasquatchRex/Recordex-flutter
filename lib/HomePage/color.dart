@@ -42,6 +42,8 @@ class AppColors {
   Color get PiechartColor6 => Colors.purpleAccent;
   Color get PiechartColor7 => Colors.deepOrange;
   Color get PiechartColor8 => Colors.lime;
+  Color get success => Colors.green;
+  Color get fail => Colors.redAccent;
 
 
 }
