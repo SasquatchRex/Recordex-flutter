@@ -60,8 +60,15 @@ class InvoicePayment extends ChangeNotifier{
   List <dynamic> data =[];
   List <String> name_data =[];
   List <String> pan_data = [];
+  List <String> address_data = [];
   String? selectedName = null;
   bool Paid = false;
+  TextEditingController From_Name = TextEditingController(text: "Gandaki Drilling and Construction Pvt. Ltd");
+  TextEditingController From_PAN = TextEditingController(text: "100011010");
+  TextEditingController To_Name = TextEditingController();
+  TextEditingController To_PAN = TextEditingController();
+  TextEditingController To_Address = TextEditingController();
+  NepaliDateTime selectedDate = NepaliDateTime.now();
 
   void togglePaid(){
     Paid = !Paid;
@@ -95,25 +102,23 @@ class InvoicePayment extends ChangeNotifier{
 
   void load(){
     selectedName = null;
-   data.clear();
-   name_data.clear();
-   pan_data.clear();
+    data.clear();
+    name_data.clear();
+    pan_data.clear();
+
     data = [
-      { "name" : "Gandaki Drilling and Construction", "pan": 10001},
-      { "name" : "Aankura Pvt ltd", "pan": 10101},
+      { "name" : "Gandaki Drilling and Construction", "pan": 10001,"address":"Baneshwor"},
+      { "name" : "Aankura Pvt ltd", "pan": 10101,"address":"Buddhanagar"},
     ];
 
     for(var i in data){
       name_data.add(i["name"].toString());
       pan_data.add(i["pan"].toString());
+      address_data.add(i["address"].toString());
     }
   }
 
-  TextEditingController From_Name = TextEditingController();
-  TextEditingController From_PAN = TextEditingController();
-  TextEditingController To_Name = TextEditingController();
-  TextEditingController To_PAN = TextEditingController();
-  NepaliDateTime selectedDate = NepaliDateTime.now();
+
 
   void update_date(NepaliDateTime date){
     selectedDate = date;
@@ -134,7 +139,7 @@ class InvoicePayment extends ChangeNotifier{
   TextEditingController PriceVATControllers = TextEditingController();
   TextEditingController discountControllers = TextEditingController(text: "0");
   TextEditingController totalAmountControllers = TextEditingController();
-  TextEditingController RemarksController = TextEditingController();
+  TextEditingController RemarksController = TextEditingController(text: "-");
 
   void addRow() {
     invoiceItems.add({"hs": "","name": "","unitPrice": "","unit" : "", "quantity": "",  "totalPrice": ""});
@@ -164,6 +169,11 @@ class InvoicePayment extends ChangeNotifier{
         controller.clear();
       }
       invoiceItems.clear();
+      To_Address.clear();
+      To_PAN.clear();
+      To_Name.clear();
+      discountControllers.text = "0";
+      RemarksController.text ="-";
     } else {
       // Remove single row
       invoiceItems.removeAt(index);
@@ -250,7 +260,8 @@ class InvoicePayment extends ChangeNotifier{
 
       "To Name": To_Name.text,
       "To PAN" : To_PAN.text,
-
+      "Payment Paid":Paid,
+      "Address":To_Address.text,
       "Date" :  NepaliDateFormat('yyyy-MM-dd').format(selectedDate)
 
 
@@ -312,23 +323,26 @@ class InvoicePayment extends ChangeNotifier{
     print(jsonEncode(toJson()));
     print(response.statusCode);
   }
-
+  int? post_response;
   Future <void> createInvoicePost() async{
     final tokens = await getAuthTokens();
     final accessToken = tokens['accessToken'];
     final response = await http.post(
-        Uri.parse(url + "/invoice/preview/"),
+        Uri.parse(url + "/create/invoice/"),
         body: jsonEncode(toJson()),
         headers: {
           'Content-Type' : 'application/json',
           'Authorization':'Bearer ${accessToken}'
         }
     );
-    // if(response.statusCode == 200){
-    //   removeRow();
-    // }
+    if(response.statusCode == 200){
+      removeRow();
+    }
     print(jsonEncode(toJson()));
     print(response.statusCode);
+    post_response = response.statusCode;
+    notifyListeners();
+
   }
 
 }

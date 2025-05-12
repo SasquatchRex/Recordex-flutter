@@ -75,7 +75,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                         children: [
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).name_data,
-                                            def_val: "Gandaki Drilling and Construction",
+                                            def_val: Provider.of<InvoicePayment>(context).From_Name.text,
                                             valueText: "From",
                                             border: false,
                                             Controller: Provider.of<InvoicePayment>(context).From_Name,
@@ -97,7 +97,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                         children: [
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).pan_data,
-                                            def_val: "101112123423",
+                                            def_val: Provider.of<InvoicePayment>(context).From_PAN.text,
                                             valueText: "PAN",
                                             border: false,
                                             Controller: Provider.of<InvoicePayment>(context).From_PAN ,
@@ -108,32 +108,43 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             valueText: "PAN",
                                             border: true,
                                             Controller: Provider.of<InvoicePayment>(context).To_PAN,
-                                          )
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                Provider.of<InvoicePayment>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePayment>(context,listen: false).selectedDate!)}",
+                                                style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              ),
+                                              SizedBox(width: 20),
+                                              ElevatedButton(
+                                                onPressed: () => _selectDate(context),
+                                                style: ElevatedButton.styleFrom(
+                                                    // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+                                                    backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
+                                                child: Text(
+                                                  'Pick a Date',
+                                                  style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          NameAutocomplete(names: Provider.of<InvoicePayment>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePayment>(context).To_Address)
                                         ],
                                       ),
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Provider.of<InvoicePayment>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePayment>(context,listen: false).selectedDate!)}",
-                                            style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                          ),
-                                          SizedBox(width: 20),
-                                          ElevatedButton(
-                                            onPressed: () => _selectDate(context),
-                                            style: ElevatedButton.styleFrom(
-                                                // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
-                                                backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
-                                            child: Text(
-                                              'Pick a Date',
-                                              style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+
                                       SizedBox(
                                         height: 20,
                                       ),
@@ -282,6 +293,37 @@ void showOverlay(BuildContext context) {
                           onPressed:() {
                             Provider.of<InvoicePayment>(context, listen: false).toJson();
                             Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+                            hideOverlay();
+                            if(Provider.of<InvoicePayment>(context, listen: false).post_response == 200){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Invoice Successfully Created',
+                                    style: TextStyle(
+                                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 4),
+                                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.success,
+
+                                ),
+                              );
+                            }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Invoice Creation Failed. Contact Admin',
+                                    style: TextStyle(
+                                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 4),
+                                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.fail,
+
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
@@ -304,7 +346,9 @@ void showOverlay(BuildContext context) {
                             maxScale: 4.0,
 
                             child: Image.network(
-                              "http://127.0.0.1:8000/invoice/preview/",
+                              "http://127.0.0.1:8000/invoice/preview/?t=${DateTime.now().millisecondsSinceEpoch}",
+                              headers: {"Cache-Control": "no-cache"},
+
                               // "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
                               height: 0.69 * height,
                             ),
@@ -327,7 +371,7 @@ void showOverlay(BuildContext context) {
                                   ),
                                 ),
                                 Text(
-                                    "Rs. 999",
+                                    "Rs. ${Provider.of<InvoicePayment>(context).totalAmountControllers.text}",
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
                                     fontSize: 22,
@@ -799,7 +843,7 @@ class NameAutocomplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: 320,
       child: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
@@ -819,6 +863,8 @@ class NameAutocomplete extends StatelessWidget {
           return TextField(
             controller: Controller,
             focusNode: focusNode,
+            readOnly: !border,
+            // enabled: border,
             style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
             decoration: InputDecoration(
               labelText: '${valueText}',

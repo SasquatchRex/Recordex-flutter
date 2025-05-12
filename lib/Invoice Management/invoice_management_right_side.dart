@@ -278,7 +278,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                               shrinkWrap: true,
                                               itemBuilder: (context, index) {
                                                 dynamic item = Provider.of<invoiceManagementProvider>(context).decoded_response[index];
-
+                                                bool paid = item["Payment Paid"];
                                                 return GestureDetector(
                                                   onTap: () {
                                                     showOverlay(context, item["id"]);
@@ -340,11 +340,11 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                               flex: 1,
                                                               child: Container(
                                                                 decoration: BoxDecoration(
-                                                                    color: index % 2 == 0 ? Colors.green : Colors.red, borderRadius: BorderRadius.circular(5)),
+                                                                    color: paid ? Colors.green : Colors.red, borderRadius: BorderRadius.circular(5)),
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                                                                   child: Text(
-                                                                    index % 2 == 0 ? "Paid" : "Due",
+                                                                    paid ? "Paid" : "Due",
                                                                     textAlign: TextAlign.center,
                                                                     maxLines: 1,
                                                                     overflow: TextOverflow.ellipsis,
