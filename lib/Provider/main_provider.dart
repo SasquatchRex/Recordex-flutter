@@ -7,7 +7,7 @@ import 'package:recordex/Hive/hive_main.dart';
 import '../HomePage/color.dart';
 import 'package:http/http.dart' as http;
 
-String url = "http://127.0.0.1:8000";
+String url = "http://127.0.0.1:8000/";
 
 
 class General with ChangeNotifier{
@@ -66,7 +66,7 @@ class InvoicePayment extends ChangeNotifier{
   TextEditingController From_Name = TextEditingController(text: "Gandaki Drilling and Construction Pvt. Ltd");
   TextEditingController From_PAN = TextEditingController(text: "100011010");
   TextEditingController To_Name = TextEditingController();
-  TextEditingController To_PAN = TextEditingController();
+  TextEditingController To_PAN = TextEditingController(text: '-');
   TextEditingController To_Address = TextEditingController();
   NepaliDateTime selectedDate = NepaliDateTime.now();
 
@@ -255,8 +255,8 @@ class InvoicePayment extends ChangeNotifier{
       "Total Amount": totalAmountControllers.text,
       "Remarks": RemarksController.text,
 
-      "From Name": From_Name.text,
-      "From PAN": From_PAN.text,
+      // "From Name": From_Name.text,
+      // "From PAN": From_PAN.text,
 
       "To Name": To_Name.text,
       "To PAN" : To_PAN.text,
@@ -338,8 +338,8 @@ class InvoicePayment extends ChangeNotifier{
     if(response.statusCode == 200){
       removeRow();
     }
-    print(jsonEncode(toJson()));
-    print(response.statusCode);
+    // print(jsonEncode(toJson()));
+    // print(response.statusCode);
     post_response = response.statusCode;
     notifyListeners();
 
@@ -354,6 +354,7 @@ class ExpenseProvider extends ChangeNotifier{
   List <String> name_data =[];
   List <String> pan_data = [];
   String? selectedName = null;
+  bool Paid = false;
 
   String final_pan = "";
   int numcount = 1;
@@ -369,6 +370,11 @@ class ExpenseProvider extends ChangeNotifier{
     }
     print("result is ${result}");
     return result;
+  }
+
+  void togglePaid(){
+    Paid = !Paid;
+    notifyListeners();
   }
 
   void updateSelectedName(String name) {
@@ -398,8 +404,8 @@ class ExpenseProvider extends ChangeNotifier{
 
   TextEditingController From_Name = TextEditingController();
   TextEditingController From_PAN = TextEditingController();
-  TextEditingController To_Name = TextEditingController();
-  TextEditingController To_PAN = TextEditingController();
+  TextEditingController To_Name = TextEditingController(text: "Gandaki Drilling and Construction");
+  TextEditingController To_PAN = TextEditingController(text: "1000001");
   NepaliDateTime selectedDate = NepaliDateTime.now();
 
   void update_date(NepaliDateTime date){
@@ -409,7 +415,7 @@ class ExpenseProvider extends ChangeNotifier{
 
 
 
-  List<Map<String, dynamic>> invoiceItems = [];
+  List<Map<String, dynamic>> expenseItems = [];
   List<TextEditingController> HSCodeControllers = [];
   List<TextEditingController> nameControllers = [];
   List<TextEditingController> quantityControllers = [];
@@ -424,7 +430,7 @@ class ExpenseProvider extends ChangeNotifier{
   TextEditingController RemarksController = TextEditingController();
 
   void addRow() {
-    invoiceItems.add({"hs": "","name": "","unitPrice": "","unit" : "", "quantity": "",  "totalPrice": ""});
+    expenseItems.add({"hs": "","name": "","unitPrice": "","unit" : "", "quantity": "",  "totalPrice": ""});
     HSCodeControllers.add(TextEditingController(text: "-"));
     nameControllers.add(TextEditingController());
     quantityControllers.add(TextEditingController());
@@ -450,10 +456,10 @@ class ExpenseProvider extends ChangeNotifier{
         }
         controller.clear();
       }
-      invoiceItems.clear();
+      expenseItems.clear();
     } else {
       // Remove single row
-      invoiceItems.removeAt(index);
+      expenseItems.removeAt(index);
       nameControllers[index].dispose();
       HSCodeControllers[index].dispose();
       quantityControllers[index].dispose();
@@ -517,7 +523,7 @@ class ExpenseProvider extends ChangeNotifier{
 
   Map<String, dynamic> toJson() {
     return {
-      "Invoice Items": List.generate(invoiceItems.length, (index) => {
+      "Expense Items": List.generate(expenseItems.length, (index) => {
         "H.S Code" : HSCodeControllers[index].text,
         "Name": nameControllers[index].text,
         "Rate": rateControllers[index].text,
@@ -535,20 +541,21 @@ class ExpenseProvider extends ChangeNotifier{
       "From Name": From_Name.text,
       "From PAN": From_PAN.text,
 
-      "To Name": To_Name.text,
-      "To PAN" : To_PAN.text,
+      // "To Name": To_Name.text,
+      // "To PAN" : To_PAN.text,
 
+      "Payment Paid":Paid,
       "Date" :  NepaliDateFormat('yyyy-MM-dd').format(selectedDate)
 
 
     };
   }
 
-  Future <void> createInvoicePost() async{
+  Future <void> createExpensePost() async{
     final tokens = await getAuthTokens();
     final accessToken = tokens['accessToken'];
     final response = await http.post(
-      Uri.parse(url + "/invoice/preview/"),
+      Uri.parse(url + "/create/expense/"),
       body: jsonEncode(toJson()),
       headers: {
         'Content-Type' : 'application/json',
@@ -575,8 +582,8 @@ class invoiceManagementProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  String Imageurl(int id){
-    return url+"/invoice/bill/${id}/";
+  String Imageurl(String InvoiceNumber){
+    return url+"/invoice/bill/${InvoiceNumber}/";
   }
   
   void getInvoices() async{
@@ -654,7 +661,8 @@ class CheckToken extends ChangeNotifier{
   Future <void> check() async{
     final tokens = await getAuthTokens();
     final accessToken = tokens['accessToken'];
-    print("Code has been executed");
+    // print("Code has been executed");
+    print("Access token: $accessToken");
 
     final response = await http.get(
       Uri.parse(url+"/checktoken/"),

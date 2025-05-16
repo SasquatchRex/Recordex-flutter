@@ -207,7 +207,7 @@ class _PdfUploadContainerState extends State<PdfUploadContainer> {
           ElevatedButton.icon(
             onPressed: pickPdf,
             icon:  Icon(Icons.upload_file,
-            color: Provider.of<AppColors>(context).appColors.secondaryText,
+            color: Provider.of<AppColors>(context).appColors.primaryText,
             ),
             label:  Text(
                 "Upload PDF Bill",
@@ -220,6 +220,7 @@ class _PdfUploadContainerState extends State<PdfUploadContainer> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
+              backgroundColor: Provider.of<AppColors>(context).appColors.secondary
             ),
           ),
         ],

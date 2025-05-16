@@ -281,7 +281,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                 bool paid = item["Payment Paid"];
                                                 return GestureDetector(
                                                   onTap: () {
-                                                    showOverlay(context, item["id"]);
+                                                    showOverlay(context, item["Invoice Number"]);
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -396,7 +396,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
     ;
   }
 
-  void showOverlay(BuildContext context, int id) {
+  void showOverlay(BuildContext context, String InvoiceNumber) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     _overlayEntry = OverlayEntry(
@@ -446,7 +446,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                               maxScale: 4.0,
 
                               child: Image.network(
-                                Provider.of<invoiceManagementProvider>(context).Imageurl(id),
+                                Provider.of<invoiceManagementProvider>(context).Imageurl(InvoiceNumber),
                                 height: 0.69 * height,
                               ),
                             ),

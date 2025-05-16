@@ -6,6 +6,7 @@ import '../topside.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_utils/nepali_utils.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class ExpenseRightside extends StatefulWidget {
   const ExpenseRightside({super.key});
@@ -69,17 +70,19 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                         children: [
                                           NameAutocomplete(
                                             names: Provider.of<ExpenseProvider>(context).name_data,
-                                            def_val: "Gandaki Drilling and Construction",
+                                            def_val: "",
                                             valueText: "From",
-                                            border: false,
+                                            border: true,
                                             Controller: Provider.of<ExpenseProvider>(context).From_Name,
+                                            inputformatter: false,
                                           ),
                                           NameAutocomplete(
-                                              names: Provider.of<ExpenseProvider>(context).name_data,
-                                              def_val: "",
-                                              valueText: "To",
-                                              border: true,
-                                              Controller: Provider.of<ExpenseProvider>(context).To_Name
+                                            names: Provider.of<ExpenseProvider>(context).name_data,
+                                            def_val: Provider.of<ExpenseProvider>(context).To_Name.text,
+                                            valueText: "To",
+                                            border: false,
+                                            Controller: Provider.of<ExpenseProvider>(context).To_Name,
+                                            inputformatter: false,
                                           )
                                         ],
                                       ),
@@ -90,19 +93,21 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           NameAutocomplete(
-                                            names: Provider.of<ExpenseProvider>(context).pan_data,
-                                            def_val: "101112123423",
-                                            valueText: "PAN",
-                                            border: false,
-                                            Controller: Provider.of<ExpenseProvider>(context).From_PAN ,
+                                              names: Provider.of<ExpenseProvider>(context).pan_data,
+                                              def_val: "",
+                                              valueText: "PAN",
+                                              border: true,
+                                              Controller: Provider.of<ExpenseProvider>(context).From_PAN ,
+                                              inputformatter: false
                                           ),
                                           NameAutocomplete(
-                                            names: Provider.of<ExpenseProvider>(context).pan_data,
-                                            def_val: Provider.of<ExpenseProvider>(context).final_pan,
-                                            valueText: "PAN",
-                                            border: true,
-                                            Controller: Provider.of<ExpenseProvider>(context).To_PAN,
-                                          )
+                                              names: Provider.of<ExpenseProvider>(context).pan_data,
+                                              def_val: Provider.of<ExpenseProvider>(context).To_PAN.text,
+                                              valueText: "VAT",
+                                              border: false,
+                                              Controller: Provider.of<ExpenseProvider>(context).To_PAN,
+                                              inputformatter: true
+                                          ),
                                         ],
                                       ),
                                       SizedBox(
@@ -249,20 +254,165 @@ void showOverlay(BuildContext context) {
           child: Material( // Needed to make it look like a normal widget
             elevation: 4.0,
             color: Colors.transparent,
-            shape: RoundedRectangleBorder(),
+
             child: Container(
-                width: 0.75*width,
+                width: 0.55*width,
                 height: 0.75*height,
                 padding: EdgeInsets.all(20),
-                color: Provider.of<AppColors>(context).appColors.primary,
-                child: Column(
+
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Provider.of<AppColors>(context).appColors.primary,
+                ),
+                child: Stack(
                   children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        onPressed: hideOverlay,
+                        icon: Icon(Icons.close, color: Colors.red),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: ElevatedButton(
+                          onPressed:() {
+                            Provider.of<ExpenseProvider>(context, listen: false).toJson();
+                            Provider.of<ExpenseProvider>(context, listen: false).createExpensePost();
+                            hideOverlay();
+                            if(Provider.of<InvoicePayment>(context, listen: false).post_response == 200){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Expense Successfully Created',
+                                    style: TextStyle(
+                                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 4),
+                                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.success,
+
+                                ),
+                              );
+                            }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Expense Creation Failed. Contact Admin',
+                                    style: TextStyle(
+                                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 4),
+                                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.fail,
+
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+                              backgroundColor: Provider.of<AppColors>(context).appColors.success),
+                          child: Text(
+                            "Create Expense",
+                            style: TextStyle(fontSize: 22, color: Colors.white),
+                          )),
+                    ),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(onPressed: hideOverlay, icon: Icon(Icons.close,color: Colors.red,),alignment: Alignment.topRight,),
+                        // SizedBox(
+                        //   height: 0.69*height,
+                        //   child: InteractiveViewer(
+                        //     panEnabled: true, // Allow panning
+                        //     scaleEnabled: true, // Allow zooming
+                        //     minScale: 1.0,
+                        //     maxScale: 4.0,
+                        //
+                        //     child: Image.network(
+                        //       "http://127.0.0.1:8000/invoice/preview/?t=${DateTime.now().millisecondsSinceEpoch}",
+                        //       headers: {"Cache-Control": "no-cache"},
+                        //
+                        //       // "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
+                        //       height: 0.69 * height,
+                        //     ),
+                        //   ),
+                        // ),
+                        SizedBox(width: 50,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+
+                              children: [
+                                Text(
+                                  "Total Amount : ",
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "Rs. ${Provider.of<InvoicePayment>(context).totalAmountControllers.text}",
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 250,
+                              width: 250,
+                              child: Container(
+                                // color: Colors.white54,
+                                  child: Image.network("https://user-images.githubusercontent.com/11562076/103693127-140e3c80-4f99-11eb-9be1-0aebd6b133bb.png",width: 300,)
+                              ),
+                            ),
+                            SizedBox(height: 30,),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Payment Status : ",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                FlutterSwitch(
+                                  value: Provider.of<InvoicePayment>(context).Paid,
+                                  onToggle:(_) => Provider.of<InvoicePayment>(context,listen: false).togglePaid(),
+                                  borderRadius: 15,
+                                  toggleSize: 25,
+                                  height: 30,
+                                  width: 60,
+                                  activeIcon: Icon(Icons.check, color: Colors.green),
+
+                                  inactiveIcon: Icon(Icons.close, color: Colors.red[700]),
+                                  activeColor: Colors.green.shade700,
+                                  inactiveColor: Colors.red,
+
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+
                       ],
-                    )
+                    ),
                   ],
                 )
             ),
@@ -293,7 +443,7 @@ class CreateInvoiceButton extends StatelessWidget {
           onPressed: () => showOverlay(context),
           // () {
           //   Provider.of<ExpenseProvider>(context, listen: false).toJson();
-          //   Provider.of<ExpenseProvider>(context, listen: false).createInvoicePost();
+          //   Provider.of<ExpenseProvider>(context, listen: false).createExpensePost();
           //
           // },
           style: ElevatedButton.styleFrom(
@@ -494,7 +644,7 @@ class InvoiceCreate extends StatelessWidget {
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: Provider.of<ExpenseProvider>(context).invoiceItems.length,
+              itemCount: Provider.of<ExpenseProvider>(context).expenseItems.length,
               itemBuilder: (context, index) {
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 1000),
@@ -652,14 +802,15 @@ class NameAutocomplete extends StatelessWidget {
   final List<String> names;
   final String def_val, valueText;
   final bool border;
+  final bool inputformatter;
   final TextEditingController Controller;
 
-  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller});
+  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller,required this.inputformatter});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: 320,
       child: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
@@ -679,6 +830,13 @@ class NameAutocomplete extends StatelessWidget {
           return TextField(
             controller: Controller,
             focusNode: focusNode,
+            readOnly: !border,
+            inputFormatters:inputformatter? [
+              LengthLimitingTextInputFormatter(9), // max 5 digits
+              // FilteringTextInputFormatter.digitsOnly, // only digits
+
+            ]: [],
+            // enabled: border,
             style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
             decoration: InputDecoration(
               labelText: '${valueText}',

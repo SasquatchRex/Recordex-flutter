@@ -79,13 +79,15 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             valueText: "From",
                                             border: false,
                                             Controller: Provider.of<InvoicePayment>(context).From_Name,
+                                            inputformatter: false,
                                           ),
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).name_data,
                                             def_val: "",
                                             valueText: "To",
                                             border: true,
-                                              Controller: Provider.of<InvoicePayment>(context).To_Name
+                                              Controller: Provider.of<InvoicePayment>(context).To_Name,
+                                            inputformatter: false,
                                           )
                                         ],
                                       ),
@@ -101,13 +103,15 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             valueText: "PAN",
                                             border: false,
                                             Controller: Provider.of<InvoicePayment>(context).From_PAN ,
+                                            inputformatter: false
                                           ),
                                           NameAutocomplete(
                                             names: Provider.of<InvoicePayment>(context).pan_data,
                                             def_val: Provider.of<InvoicePayment>(context).final_pan,
-                                            valueText: "PAN",
+                                            valueText: "VAT",
                                             border: true,
                                             Controller: Provider.of<InvoicePayment>(context).To_PAN,
+                                              inputformatter: true
                                           ),
                                         ],
                                       ),
@@ -138,7 +142,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                               ),
                                             ],
                                           ),
-                                          NameAutocomplete(names: Provider.of<InvoicePayment>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePayment>(context).To_Address)
+                                          NameAutocomplete(names: Provider.of<InvoicePayment>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePayment>(context).To_Address,inputformatter: false,)
                                         ],
                                       ),
                                       SizedBox(
@@ -836,9 +840,10 @@ class NameAutocomplete extends StatelessWidget {
   final List<String> names;
   final String def_val, valueText;
   final bool border;
+  final bool inputformatter;
   final TextEditingController Controller;
 
-  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller});
+  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller,required this.inputformatter});
 
   @override
   Widget build(BuildContext context) {
@@ -864,6 +869,11 @@ class NameAutocomplete extends StatelessWidget {
             controller: Controller,
             focusNode: focusNode,
             readOnly: !border,
+            inputFormatters:inputformatter? [
+              LengthLimitingTextInputFormatter(9), // max 5 digits
+              // FilteringTextInputFormatter.digitsOnly, // only digits
+
+              ]: [],
             // enabled: border,
             style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
             decoration: InputDecoration(

@@ -122,7 +122,7 @@ class AppColorsLight extends AppColors {
       : super({
     'primary': Color(0xFFF3F3F3),
     'background': Colors.white,
-    'secondary': Color(0xFFE0DFDF),
+    'secondary': Color(0xFFFFFFFF),
     'tertiary': Colors.white.withOpacity(0.05),
     'quaternary': Color(0xFFDBDCDD),
 
