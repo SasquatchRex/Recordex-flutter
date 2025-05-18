@@ -62,9 +62,16 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                  padding: EdgeInsets.only(left: 50,right: 50, top: 20,bottom:80),
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+                                      Text(
+                                        "Create Expense",
+                                        style: TextStyle(
+                                            fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(height: 40,),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [

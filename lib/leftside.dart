@@ -32,6 +32,40 @@ class _LeftSideState extends State<LeftSide> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    final List<MenuItem> menuItemsConstruction = [
+      MenuItem(icon: Icons.home, text: "Dashboard"),
+      MenuItem(icon: Icons.add_box,text: "Add Stocks"),
+      MenuItem(icon: Icons.folder,text: "Manage Stocks"),
+      MenuItem(icon: Icons.create_new_folder, text: "Create Expense"),
+      MenuItem(icon: Icons.monetization_on, text: "Expense Management"),
+      MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
+      MenuItem(icon: Icons.category, text: "Category Management"),
+      MenuItem(icon: Icons.create_new_folder_outlined, text: "Create Invoice"),
+      MenuItem(icon: Icons.manage_history, text: "Manage Invoice"),
+      MenuItem(icon: Icons.group, text: "Team Collaboration"),
+      MenuItem(icon: Icons.report, text: "Reports & Analysis"),
+      MenuItem(icon: Icons.money, text: "Bank & Payment Integration"),
+      MenuItem(icon: Icons.settings, text: "Settings & Customization"),
+    ];
+    final List<MenuItem> menuItemsShop = [
+      MenuItem(icon: Icons.home, text: "Dashboard"),
+      MenuItem(icon: Icons.create_new_folder, text: "Create Expense"),
+      MenuItem(icon: Icons.monetization_on, text: "Expense Management"),
+      MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
+      MenuItem(icon: Icons.category, text: "Category Management"),
+      MenuItem(icon: Icons.create_new_folder_outlined, text: "Create Invoice"),
+      MenuItem(icon: Icons.manage_history, text: "Manage Invoice"),
+      MenuItem(icon: Icons.group, text: "Team Collaboration"),
+      MenuItem(icon: Icons.report, text: "Reports & Analysis"),
+      MenuItem(icon: Icons.money, text: "Bank & Payment Integration"),
+      MenuItem(icon: Icons.settings, text: "Settings & Customization"),
+    ];
+
+    var menuItems = Provider.of<Data>(context,listen: false).Company_Type == "Construction"? menuItemsConstruction
+        :Provider.of<Data>(context,listen: false).Company_Type == "Shop"? menuItemsShop
+        : [];
+
+
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
       curve: Curves.linear,
@@ -58,21 +92,20 @@ class _LeftSideState extends State<LeftSide> {
                 padding: const EdgeInsets.only(
                     top: 20, bottom: 20,),
                 child: Column(
-                  children: [
+                  children: menuItems.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
 
+                    return MenuTiles(
+                      item: item,
+                      isActive: Provider.of<General>(context).activeTileMenuIndex == index,
+                      onTap: () {
+                        Provider.of<General>(context, listen: false)
+                            .ChangeActiveTileMenuIndex(index);
+                      },
+                    );
+                  }).toList(),
 
-                    MenuTiles(context, Icons.home, "Dashboard",0),
-                    MenuTiles(context, Icons.monetization_on, "Expense Management",1),
-                    MenuTiles(context, Icons.attach_money, "Income & Revenue Tracking",2),
-                    MenuTiles(context, Icons.category, "Category Management",3),
-                    MenuTiles(context, Icons.attach_money, "Create Invoice",4),
-                    MenuTiles(context, Icons.manage_history, "Manage Invoice",5),
-                    MenuTiles(context, Icons.group, "Team Collaboration",6),
-                    MenuTiles(context, Icons.report, "Reports & Analysis",7),
-                    MenuTiles(context, Icons.money, "Bank & Payment Integration",8),
-                    MenuTiles(context, Icons.settings, "Settings & Customization",9),
-
-                  ],
                 ),
               ),
             )
@@ -83,66 +116,7 @@ class _LeftSideState extends State<LeftSide> {
     );
   }
 
-  Padding MenuTiles(BuildContext context, IconData icon, String text, int index) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    Color tileColor=Colors.transparent;
 
-    bool isActive = Provider.of<General>(context).activeTileMenuIndex == index;
-
-
-
-    return Padding(
-      // padding:  EdgeInsets.only(bottom:0.005*height),
-      padding: EdgeInsets.only(left: 20, right: 20),
-      child: InkWell(
-        onTap: () {
-          Provider.of<General>(context,listen: false).ChangeActiveTileMenuIndex(index);
-          },
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-          height: 0.05 * height,
-          // width: 0.15*width,
-          decoration: BoxDecoration(
-            color: isActive ? Provider.of<AppColors>(context).appColors.secondary : Provider.of<AppColors>(context).appColors.primary,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left:10,right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Icon(
-                    icon,
-                    color: isActive? Provider.of<AppColors>(context).appColors.Icon :Provider.of<AppColors>(context).appColors.IconNotActive,
-                  ),
-                ),
-                if(Provider.of<General>(context).fullMenu )
-                SizedBox(
-                  width: 30,
-                ),
-                if(Provider.of<General>(context).fullMenu)
-                Expanded(
-                  flex: 7,
-                  child: Text(
-                    "${text}",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: isActive? Provider.of<AppColors>(context).appColors.MenuActive :Provider.of<AppColors>(context).appColors.MenuNotActive,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   AnimatedContainer CompanyDesc(double width) {
 
@@ -193,7 +167,7 @@ class _LeftSideState extends State<LeftSide> {
                     width: 0.1 * width,
                     child: Center(
                       child: Text(
-                        "For Sasquatch Rex Pvt.ltd",
+                        "${Provider.of<Data>(context,listen: false).Company}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -210,6 +184,75 @@ class _LeftSideState extends State<LeftSide> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class MenuItem {
+  final IconData icon;
+  final String text;
+
+  const MenuItem({required this.icon, required this.text});
+}
+
+class MenuTiles extends StatelessWidget {
+  final MenuItem item;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const MenuTiles({
+    Key? key,
+    required this.item,
+    required this.isActive,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final fullMenu = Provider.of<General>(context).fullMenu;
+    final appColors = Provider.of<AppColors>(context).appColors;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: InkWell(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          height: 0.05 * MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: isActive ? appColors.secondary : appColors.primary,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  item.icon,
+                  color: isActive ? appColors.Icon : appColors.IconNotActive,
+                ),
+                if (fullMenu) ...[
+                  const SizedBox(width: 30),
+                  Expanded(
+                    child: Text(
+                      item.text,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: isActive
+                            ? appColors.MenuActive
+                            : appColors.MenuNotActive,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

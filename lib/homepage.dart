@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordex/Authentication/login.dart';
+import 'package:recordex/Expense%20Management/expense_management_right_side.dart';
+import 'package:recordex/Stock/add%20stock.dart';
+import 'package:recordex/Stock/manage%20stocks.dart';
 import 'Provider/main_provider.dart';
 
 import 'leftside.dart';
 import 'HomePage/homepage_right.dart';
-import 'Expense Management/expense_rightside.dart';
+import 'Create Expense/expense_rightside.dart';
 import 'Income and Revenue/Income_revenue_right.dart';
 import 'Category Management/category_management_rightside.dart';
 import 'CreateInvoice//invoice_and_payment_rightside.dart';
@@ -28,8 +31,12 @@ class _HomepageState extends State<Homepage> {
     super.initState();
 
     // This is where you call your provider method
-    Future.microtask(() {
-      Provider.of<CheckToken>(context,listen: false).check();
+    Future.microtask(() async{
+      await Provider.of<CheckToken>(context,listen: false).check();
+      if(Provider.of<CheckToken>(context,listen: false).is_valid == true || Provider.of<Login_Provider>(context,listen: false).response_code == 200){
+        print("Code goes to if");
+        Provider.of<Data>(context,listen: false).get_data();
+      }
     });
   }
 
@@ -41,9 +48,12 @@ class _HomepageState extends State<Homepage> {
       Provider.of<General>(context).fullMenu = false;
     }
 
-    const pageList = [
+    const pageList_construction = [
       HomepageRightSide(),
+      AddStocks(),
+      ManageStocks(),
       ExpenseRightside(),
+      ExpenseManagementRightSide(),
       IncomeRevenueRightside(),
       CategoryManagementRightSide(),
       InvoicePaymentRightside(),
@@ -53,6 +63,36 @@ class _HomepageState extends State<Homepage> {
       InvoiceManagementRightSide(),
       Settings()
     ];
+    const pageList_shop = [
+      HomepageRightSide(),
+      ExpenseRightside(),
+      ExpenseManagementRightSide(),
+      IncomeRevenueRightside(),
+      CategoryManagementRightSide(),
+      InvoicePaymentRightside(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      Settings()
+    ];
+    const pageList_default= [
+      HomepageRightSide(),
+      ExpenseRightside(),
+      ExpenseManagementRightSide(),
+      IncomeRevenueRightside(),
+      CategoryManagementRightSide(),
+      InvoicePaymentRightside(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      InvoiceManagementRightSide(),
+      Settings()
+    ];
+
+    var pageList = Provider.of<Data>(context,listen: false).Company_Type == "Construction"? pageList_construction
+        :Provider.of<Data>(context,listen: false).Company_Type == "Shop"? pageList_shop
+        : pageList_default;
     // Provider.of<CheckToken>(context,listen: false).check();
     return ChangeNotifierProvider<AppColors>(
 
@@ -62,7 +102,7 @@ class _HomepageState extends State<Homepage> {
           // final colorsAPP = appColors.appColors;
 
 
-          if(Provider.of<Login_Provider>(context,listen: false).response_code == 200 || Provider.of<CheckToken>(context,listen: false).is_valid == true ) {
+          if(Provider.of<Login_Provider>(context,listen: false).response_code == 200 || Provider.of<CheckToken>(context,listen: false).is_valid == true || Provider.of<Login_Provider>(context,listen: false).loggedout ==false ) {
 
 
             return MaterialApp(

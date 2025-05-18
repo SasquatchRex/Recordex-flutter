@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recordex/HomePage/homepage_right.dart';
+import 'package:recordex/homepage.dart';
 import '../../Provider/main_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -174,8 +176,15 @@ class Login_Widget extends StatelessWidget {
               width: 300,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  Provider.of<Login_Provider>(context,listen: false).login(Provider.of<Login_Provider>(context,listen: false).username,Provider.of<Login_Provider>(context,listen: false).password);
+                onPressed: ()async{
+
+                  await Provider.of<Login_Provider>(context,listen: false).login(Provider.of<Login_Provider>(context,listen: false).username,Provider.of<Login_Provider>(context,listen: false).password);
+                  if(Provider.of<Login_Provider>(context,listen: false).loggedin){
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Homepage()),
+                          (Route<dynamic> route) => false,
+                    );
+                  }
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -265,7 +274,7 @@ class Login_Widget extends StatelessWidget {
                 ],
               )
             ),
-            if(Provider.of<Login_Provider>(context).loggedin !=null)
+            if(Provider.of<Login_Provider>(context).loggedin ==true)
             Container(
               alignment: Alignment.center,
 

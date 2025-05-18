@@ -22,3 +22,11 @@ Future<Map<String, String?>> getAuthTokens() async {
 
   };
 }
+
+Future<void> clearAuthTokens() async {
+  final box = await Hive.openBox('authBox');
+  await box.delete('access_token');
+  // Add any other tokens you want to clear here
+  // For example, if you had a refresh token:
+  // await box.delete('refresh_token');
+}

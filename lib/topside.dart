@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 import 'Common Components/notification.dart';
+import 'Authentication/login.dart';
 
 // bool fullMenu = true;
 
@@ -87,8 +88,8 @@ class _TopsideState extends State<Topside> {
                     FlutterSwitch(
                       value: Provider.of<AppColors>(context).isDark,
                       onToggle:(_) => Provider.of<AppColors>(context,listen: false).toggleTheme(),
-                      borderRadius: 20,
-                      toggleSize: 25,
+                      borderRadius: 15,
+                      toggleSize: 22,
                       activeIcon: Icon(Icons.dark_mode, color: Colors.deepPurpleAccent.shade700),
                       inactiveIcon: Icon(Icons.light_mode, color: Colors.yellow[700]),
                       activeColor: Colors.white12,
@@ -96,14 +97,7 @@ class _TopsideState extends State<Topside> {
 
                     ),
                     SizedBox(width: 20,),
-                    GestureDetector(
-                      onTap: Provider.of<AppColors>(context).toggleTheme,
-                      child: Icon(
-                          Icons.settings,
-                        color: Provider.of<AppColors>(context).appColors.Icon,
 
-                      ),
-                    ),
 
 
 
@@ -115,6 +109,26 @@ class _TopsideState extends State<Topside> {
 
                     SizedBox(width: 20,),
                     Profile(),
+                    SizedBox(width: 20,),
+                    GestureDetector(
+                      onTap:()async{
+
+                        await Provider.of<Login_Provider>(context,listen: false).logout();
+                        if(Provider.of<Login_Provider>(context,listen: false).loggedout){
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => Login()),
+                                (Route<dynamic> route) => false,
+                          );
+                        }
+                      },
+                      child: Icon(
+                        Icons.logout,
+                        color: Provider.of<AppColors>(context).appColors.Icon,
+
+
+                      ),
+                    ),
                   ],
                 ),
               ],
