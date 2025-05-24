@@ -34,8 +34,6 @@ class _LeftSideState extends State<LeftSide> {
     var height = MediaQuery.of(context).size.height;
     final List<MenuItem> menuItemsConstruction = [
       MenuItem(icon: Icons.home, text: "Dashboard"),
-      MenuItem(icon: Icons.add_box,text: "Add Stocks"),
-      MenuItem(icon: Icons.folder,text: "Manage Stocks"),
       MenuItem(icon: Icons.create_new_folder, text: "Create Expense"),
       MenuItem(icon: Icons.monetization_on, text: "Expense Management"),
       MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
@@ -49,8 +47,8 @@ class _LeftSideState extends State<LeftSide> {
     ];
     final List<MenuItem> menuItemsShop = [
       MenuItem(icon: Icons.home, text: "Dashboard"),
-      MenuItem(icon: Icons.create_new_folder, text: "Create Expense"),
-      MenuItem(icon: Icons.monetization_on, text: "Expense Management"),
+      MenuItem(icon: Icons.add_box,text: "Add Stocks"),
+      MenuItem(icon: Icons.folder,text: "Manage Stocks"),
       MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
       MenuItem(icon: Icons.category, text: "Category Management"),
       MenuItem(icon: Icons.create_new_folder_outlined, text: "Create Invoice"),

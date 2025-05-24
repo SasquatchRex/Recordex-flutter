@@ -20,6 +20,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
     // This is where you call your provider method
     Future.microtask(() {
       Provider.of<invoiceManagementProvider>(context, listen: false).getInvoices();
+      Provider.of<invoiceManagementProvider>(context, listen: false).get_invoice_data();
     });
   }
 
@@ -121,7 +122,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                       width: 10,
                                                     ),
                                                     Text(
-                                                      "13.2k",
+                                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
                                                       style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
@@ -140,7 +141,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                       width: 10,
                                                     ),
                                                     Text(
-                                                      "10.2k",
+                                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).paidInvoice}",
                                                       style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
@@ -158,14 +159,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        "Total Inoives Created this month : ",
+                                                        "Total Invoices Created this month : ",
                                                         style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
-                                                        "13.2k",
+                                                        "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
                                                         style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
@@ -184,7 +185,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                         width: 10,
                                                       ),
                                                       Text(
-                                                        "10.2k",
+                                                        "${Provider.of<invoiceManagementProvider>(context, listen: false).unpaidInvoice}",
                                                         style: TextStyle(fontSize: 28, color: Colors.red, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
@@ -447,6 +448,9 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
 
                               child: Image.network(
                                 Provider.of<invoiceManagementProvider>(context).Imageurl(InvoiceNumber),
+                                headers: {
+                                  'Authorization':'Bearer ${Provider.of<Data>(context).access_token}'
+                                },
                                 height: 0.69 * height,
                               ),
                             ),

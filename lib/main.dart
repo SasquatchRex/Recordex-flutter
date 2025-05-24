@@ -43,6 +43,7 @@ void main() async{
         ChangeNotifierProvider(create: (context) => General()),
         ChangeNotifierProvider(create: (context) => AppColors()),
         ChangeNotifierProvider(create: (context) => InvoicePayment()),
+        ChangeNotifierProvider(create: (context) => InvoicePaymentShop()),
         ChangeNotifierProvider(create: (_) => Login_Provider()),
         ChangeNotifierProvider(create: (_) => CheckToken()),
         ChangeNotifierProvider(create: (_) => invoiceManagementProvider()),

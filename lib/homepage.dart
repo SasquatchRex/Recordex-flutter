@@ -12,6 +12,7 @@ import 'Create Expense/expense_rightside.dart';
 import 'Income and Revenue/Income_revenue_right.dart';
 import 'Category Management/category_management_rightside.dart';
 import 'CreateInvoice//invoice_and_payment_rightside.dart';
+import 'CreateInvoice//invoice_create_shop.dart';
 import 'Invoice Management/invoice_management_right_side.dart';
 import 'Settings/settings.dart';
 import 'Authentication/login.dart';
@@ -50,8 +51,6 @@ class _HomepageState extends State<Homepage> {
 
     const pageList_construction = [
       HomepageRightSide(),
-      AddStocks(),
-      ManageStocks(),
       ExpenseRightside(),
       ExpenseManagementRightSide(),
       IncomeRevenueRightside(),
@@ -65,11 +64,11 @@ class _HomepageState extends State<Homepage> {
     ];
     const pageList_shop = [
       HomepageRightSide(),
-      ExpenseRightside(),
-      ExpenseManagementRightSide(),
+      AddStocks(),
+      ManageStocks(),
       IncomeRevenueRightside(),
       CategoryManagementRightSide(),
-      InvoicePaymentRightside(),
+      InvoiceCreateShop(),
       InvoiceManagementRightSide(),
       InvoiceManagementRightSide(),
       InvoiceManagementRightSide(),

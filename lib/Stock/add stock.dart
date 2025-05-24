@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:provider/provider.dart';
@@ -75,23 +76,64 @@ class _AddStocksState extends State<AddStocks> {
 
                                     SizedBox(height: 40,),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          Provider.of<ExpenseProvider>(context,listen: false).selectedDate == null ? "Added Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<ExpenseProvider>(context,listen: false).selectedDate!)}",
-                                          style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  Provider.of<ExpenseProvider>(context,listen: false).selectedDate == null ? "Added Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<ExpenseProvider>(context,listen: false).selectedDate!)}",
+                                                  style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                ),
+                                                SizedBox(width: 20),
+                                                ElevatedButton(
+                                                  onPressed: () => _selectDate(context),
+                                                  style: ElevatedButton.styleFrom(
+                                                    // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+                                                      backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
+                                                  child: Text(
+                                                    'Pick a Date',
+                                                    style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 20,),
+                                            NameAutocomplete(
+                                              names: [],
+                                              def_val: Provider.of<Stocks>(context).BillNo.text,
+                                              valueText: "Bill No",
+                                              border: true,
+                                              Controller: Provider.of<Stocks>(context).BillNo,
+                                              inputformatter: false,
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(width: 20),
-                                        ElevatedButton(
-                                          onPressed: () => _selectDate(context),
-                                          style: ElevatedButton.styleFrom(
-                                            // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
-                                              backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
-                                          child: Text(
-                                            'Pick a Date',
-                                            style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                          ),
-                                        ),
+
+                                        Column(
+                                          children: [
+                                            NameAutocomplete(
+                                              names: Provider.of<InvoicePaymentShop>(context).name_data,
+                                              def_val: "",
+                                              valueText: "Dealer's Name",
+                                              border: true,
+                                              Controller: Provider.of<Stocks>(context).From_Name,
+                                              inputformatter: false,
+                                            ),
+                                            SizedBox(height: 20,),
+                                            NameAutocomplete(
+                                                names: Provider.of<InvoicePaymentShop>(context).pan_data,
+                                                def_val: Provider.of<Stocks>(context).From_PAN.text,
+                                                valueText: "Dealer's PAN",
+                                                border: true,
+                                                Controller: Provider.of<Stocks>(context).From_PAN,
+                                                inputformatter: true
+                                            ),
+                                          ],
+                                        )
                                       ],
                                     ),
                                     SizedBox(height: 40,),
@@ -110,7 +152,37 @@ class _AddStocksState extends State<AddStocks> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Container(),
+                                        Expanded(child: TextField(
+                                          controller: Provider.of<Stocks>(context).RemarksController,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 5,
+                                          cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                          decoration: InputDecoration(
+                                              isDense: true,
+                                              filled: true,
+                                              fillColor: Provider.of<AppColors>(context).appColors.primary,
+                                              border: OutlineInputBorder(borderSide: BorderSide.none),
+                                              // Change focus border color here
+                                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                              labelText: "Remarks",
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
+                                              alignLabelWithHint: true,
+                                              labelStyle: TextStyle(
+                                                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w400
+
+
+                                              )
+                                          ),
+
+
+                                        )),
+
+                                        // SizedBox(
+                                        //   width: 50,
+                                        // ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,10 +190,14 @@ class _AddStocksState extends State<AddStocks> {
                                             RightStockCPTotal(),
                                             RightStockSPTotal(),
                                           ],
-                                        )
+                                        ),
 
                                       ],
-                                    )
+                                    ),
+                                    SizedBox(height: 20,),
+
+
+                                    SizedBox(height: 40,)
                                   ],
                                 ),
                               )
@@ -135,6 +211,7 @@ class _AddStocksState extends State<AddStocks> {
 
               ],
             ),
+            CreateInvoiceButton()
 
 
 
@@ -567,7 +644,42 @@ class RightStockSPTotal extends StatelessWidget {
         SizedBox(height: 20,),
 
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalSPPriceControllers,text: 'Total : '),
+        SizedBox(height: 40,),
+        Text(
+          "Payment to Dealer",
+          style: TextStyle(
+              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(height: 20,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Payment Status : ",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.primaryText,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(width: 10,),
+            FlutterSwitch(
+              value: Provider.of<Stocks>(context).Paid,
+              onToggle:(_) => Provider.of<Stocks>(context,listen: false).togglePaid(),
+              borderRadius: 15,
+              toggleSize: 25,
+              height: 30,
+              width: 60,
+              activeIcon: Icon(Icons.check, color: Colors.green),
 
+              inactiveIcon: Icon(Icons.close, color: Colors.red[700]),
+              activeColor: Colors.green.shade700,
+              inactiveColor: Colors.red,
+
+            ),
+          ],
+        ),
 
 
       ],
@@ -632,6 +744,144 @@ class RightInvoiceComp extends StatelessWidget {
           SizedBox(width: 10,)
         ],
       ),
+    );
+  }
+}
+
+class NameAutocomplete extends StatelessWidget {
+  final List<String> names;
+  final String def_val, valueText;
+  final bool border;
+  final bool inputformatter;
+  final TextEditingController Controller;
+
+  NameAutocomplete({super.key, required this.names, required this.def_val, required this.valueText, required this.border,required this.Controller,required this.inputformatter});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 320,
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return const Iterable<String>.empty();
+          }
+          return names.where((name) => name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+        },
+        displayStringForOption: (String option) => option,
+        onSelected: (String selection) {
+          print(Provider.of<InvoicePaymentShop>(context, listen: false).selectedName);
+          Provider.of<InvoicePaymentShop>(context, listen: false).updateSelectedName(selection);
+          print(Provider.of<InvoicePaymentShop>(context, listen: false).selectedName);
+          print('Selected: $selection');
+        },
+        fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+          textEditingController.text = '${def_val}'; // Set default value
+          return TextField(
+            controller: Controller,
+            focusNode: focusNode,
+            readOnly: !border,
+            inputFormatters:inputformatter? [
+              LengthLimitingTextInputFormatter(9), // max 5 digits
+              // FilteringTextInputFormatter.digitsOnly, // only digits
+
+            ]: [],
+            // enabled: border,
+            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+            decoration: InputDecoration(
+              labelText: '${valueText}',
+              labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+              border: border
+                  ? OutlineInputBorder(
+                borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+              )
+                  : InputBorder.none,
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+              ),
+            ),
+          );
+        },
+        optionsViewBuilder: (context, onSelected, options) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              elevation: 4.0,
+              child: Container(
+                margin: EdgeInsets.only(top: 0),
+                width: 300, // Set custom width for the dropdown
+                height: 200,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: options.length,
+                  itemBuilder: (context, index) {
+                    final option = options.elementAt(index);
+                    return ListTile(
+                      title: Text(option),
+                      onTap: () {
+                        onSelected(option);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+}
+
+class CreateInvoiceButton extends StatelessWidget {
+  const CreateInvoiceButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 20,
+      right: 20,
+      child: ElevatedButton(
+          onPressed: () async{
+            if(Provider.of<Stocks>(context, listen: false).isFormComplete()) {
+              Provider.of<Stocks>(context, listen: false).toJson();
+              Provider.of<Stocks>(context, listen: false).addStockPost();
+
+              // await Provider.of<InvoicePaymentShop>(context, listen: false).previewInvoice();
+              // showOverlay(context);
+            }
+            else{
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Please fill all required fields.',
+                    style: TextStyle(
+                      color: Provider.of<AppColors>(context,listen: false).appColors.primaryText,
+                    ),
+                  ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Provider.of<AppColors>(context,listen: false).appColors.fail,
+
+                ),
+              );
+
+            }
+          },
+          // () {
+          //   Provider.of<InvoicePaymentShop>(context, listen: false).toJson();
+          //   Provider.of<InvoicePaymentShop>(context, listen: false).createInvoicePost();
+          //
+          // },
+          style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+              backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
+          child: Text(
+            "Add Stocks",
+            style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText,),
+          )),
     );
   }
 }
