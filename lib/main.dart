@@ -51,6 +51,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => ExpenseManagementProvider()),
         ChangeNotifierProvider(create: (_) => Data()),
         ChangeNotifierProvider(create: (_) => Stocks()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
 
       ],
       child:Homepage()

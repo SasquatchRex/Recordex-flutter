@@ -7,10 +7,13 @@ import 'package:recordex/Create%20Expense/expense_rightside.dart';
 import 'package:recordex/Hive/hive_main.dart';
 import '../HomePage/color.dart';
 import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
 
 String url = "http://127.0.0.1:8000/";
 
 String? accessToken;
+
 
 
 
@@ -942,6 +945,7 @@ class invoiceManagementProvider extends ChangeNotifier{
       totalInvoice = decoded_response["Total This Month"] ;
       paidInvoice = decoded_response["Paid This Month"];
       unpaidInvoice = decoded_response["Unpaid This Month"] ;
+      notifyListeners();
       // print(decoded_response["Company"]);
     }
     else{
@@ -1416,6 +1420,50 @@ class   Data extends ChangeNotifier{
     }
 
   }
+}
 
+class SettingsProvider extends ChangeNotifier{
+  String? fileName;
+  Uint8List? bytes;
+  int? responseCode;
 
+  Future<void> pickPdf() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png'],
+      withData: true,
+    );
+
+    if (result != null) {
+      fileName = result.files.single.name;
+
+      final file = result.files.single;
+      bytes =file.bytes;
+    }
+    else{
+      // print(null);
+    }
+    notifyListeners();
+  }
+
+  Future <void> sendRequest() async{
+    print("request going");
+    final request = http.MultipartRequest('POST', Uri.parse(url+'setting/bill'));
+    request.headers.addAll({
+      'Authorization': 'Bearer ${accessToken}',
+    });
+
+    request.files.add(http.MultipartFile.fromBytes('png', bytes!, filename: fileName));
+    final response = await request.send();
+    responseCode = response.statusCode;
+    if(response.statusCode==200){
+      print("done");
+
+    }
+    else{
+      print("problem");
+    }
+    notifyListeners();
+
+  }
 }

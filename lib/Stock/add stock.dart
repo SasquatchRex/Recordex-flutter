@@ -220,7 +220,7 @@ class _AddStocksState extends State<AddStocks> {
         ),
       ),
       // child: Text("Hello"),
-    );;
+    );
   }
 }
 
