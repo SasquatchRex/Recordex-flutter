@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
 import '../../Provider/main_provider.dart';
@@ -280,9 +281,11 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                               itemBuilder: (context, index) {
                                                 dynamic item = Provider.of<invoiceManagementProvider>(context).decoded_response[index];
                                                 bool paid = item["Payment Paid"];
+
                                                 return GestureDetector(
                                                   onTap: () {
-                                                    showOverlay(context, item["Invoice Number"]);
+                                                    Provider.of<invoiceManagementProvider>(context,listen: false).updated_paid = paid;
+                                                    showOverlay(context, item["Invoice Number"],paid);
                                                   },
                                                   child: Padding(
                                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -397,7 +400,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
     ;
   }
 
-  void showOverlay(BuildContext context, String InvoiceNumber) {
+  void showOverlay(BuildContext context, String InvoiceNumber,bool paid) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     _overlayEntry = OverlayEntry(
@@ -436,7 +439,48 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                         ),
                       ),
 
-                      Column(
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: (){},
+                              child: Text(
+                                  "Print ",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white
+                                  ),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(Colors.orange),
+                              ),
+
+                            ),
+                            SizedBox(width: 20,),
+                            ElevatedButton(
+                              onPressed: (paid == Provider.of<invoiceManagementProvider>(context).updated_paid)? (){} : ()=> Provider.of<invoiceManagementProvider>(context,listen: false).updatepaid(InvoiceNumber),
+                              child: Text(
+                                "Save ",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(Colors.green),
+                              ),
+
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Row(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                         children: [
                           SizedBox(
                             height: 0.69*height,
@@ -455,6 +499,34 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                               ),
                             ),
                           ),
+                          SizedBox(width: 40,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Payment status : ",
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    color: Provider.of<AppColors>(context).appColors.primaryText
+                                ),
+                              ),
+                              SizedBox(width: 30,),
+                              FlutterSwitch(
+                                value: Provider.of<invoiceManagementProvider>(context,listen: false).updated_paid,
+                                onToggle:(_) => Provider.of<invoiceManagementProvider>(context,listen: false).togglePaid(),
+                                borderRadius: 15,
+                                toggleSize: 25,
+                                height: 30,
+                                width: 60,
+                                activeIcon: Icon(Icons.check, color: Colors.green),
+
+                                inactiveIcon: Icon(Icons.close, color: Colors.red[700]),
+                                activeColor: Colors.green.shade700,
+                                inactiveColor: Colors.red,
+
+                              ),
+                            ],
+                          )
 
                         ],
                       ),

@@ -16,6 +16,8 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   await Hive.initFlutter();
+  await WidgetsFlutterBinding.ensureInitialized();
+
 
   final tokenProviderAPP = CheckToken();
   await tokenProviderAPP.check();
@@ -52,6 +54,7 @@ void main() async{
         ChangeNotifierProvider(create: (_) => Data()),
         ChangeNotifierProvider(create: (_) => Stocks()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => EmployeesProvider()),
 
       ],
       child:Homepage()

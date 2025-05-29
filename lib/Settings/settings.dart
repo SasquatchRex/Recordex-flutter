@@ -310,6 +310,17 @@ class PngUploadContainer extends StatelessWidget {
               backgroundColor: Provider.of<AppColors>(context).appColors.secondary
             ),
           ),
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: ()=> Provider.of<SettingsProvider>(context,listen: false).openLink("https://pdf2png.com/"),
+            child: Text(
+                "Converter here!",
+                style: TextStyle(
+                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                  fontSize: 16
+                ),
+            ),
+          )
         ],
       ),
     );

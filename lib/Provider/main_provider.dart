@@ -9,6 +9,10 @@ import '../HomePage/color.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
+import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:url_launcher/url_launcher.dart';
+
 
 String url = "http://127.0.0.1:8000/";
 
@@ -43,7 +47,24 @@ class General with ChangeNotifier{
   }
 
 
+  void printNetworkImage(String InvoiceNumber) async {
+    final doc = pw.Document();
+    String imageUrl = url + '/invoice/bill/${InvoiceNumber}/';
+    final image = await networkImage(
+        imageUrl,
+      headers: {
+          'Authorization': "Bearer $accessToken"
+      }
+    );
 
+    doc.addPage(
+      pw.Page(
+        build: (context) => pw.Center(child: pw.Image(image)),
+      ),
+    );
+
+    await Printing.layoutPdf(onLayout: (format) => doc.save());
+  }
 
 }
 
@@ -646,6 +667,7 @@ class InvoicePaymentShop extends ChangeNotifier{
     print(response.statusCode);
   }
   int? post_response;
+  String? InvoiceNumber;
   Future <void> createInvoicePost() async{
     final tokens = await getAuthTokens();
     final accessToken = tokens['accessToken'];
@@ -658,6 +680,9 @@ class InvoicePaymentShop extends ChangeNotifier{
         }
     );
     if(response.statusCode == 200){
+      final decoded =jsonDecode(response.body);
+      InvoiceNumber = decoded['Invoice Number'];
+      print(InvoiceNumber);
       removeRow();
     }
     else{
@@ -954,6 +979,26 @@ class invoiceManagementProvider extends ChangeNotifier{
     }
 
   }
+  late bool updated_paid;
+  void togglePaid(){
+    updated_paid = !updated_paid;
+    notifyListeners();
+  }
+
+  void updatepaid(String InvoiceNumebr)async{
+
+    print("updated");
+    final response = await http.post(
+      Uri.parse(url+"/invoice/togglepaid/${InvoiceNumebr}/"),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      },
+    );
+    print(response.statusCode);
+    notifyListeners();
+  }
+
 
 
 }
@@ -1121,7 +1166,7 @@ class Stocks extends ChangeNotifier{
   TextEditingController From_Name = TextEditingController();
   TextEditingController From_PAN = TextEditingController(text: '-');
   TextEditingController BillNo = TextEditingController(text: '-');
-  NepaliDateTime selectedDate = NepaliDateTime.now();
+
 
   void togglePaid(){
     Paid = !Paid;
@@ -1129,7 +1174,7 @@ class Stocks extends ChangeNotifier{
   }
 
 
-
+  NepaliDateTime selectedDate = NepaliDateTime.now();
 
   void update_date(NepaliDateTime date){
     selectedDate = date;
@@ -1464,6 +1509,111 @@ class SettingsProvider extends ChangeNotifier{
       print("problem");
     }
     notifyListeners();
-
   }
+
+
+  void openLink(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+}
+
+class EmployeesProvider extends ChangeNotifier{
+  bool add_employee_space = false;
+  TextEditingController name = TextEditingController();
+  TextEditingController position = TextEditingController();
+  TextEditingController salary = TextEditingController();
+  TextEditingController contact = TextEditingController();
+  List<dynamic> decoded_response = [];
+  List<dynamic> decoded_response_logs = [];
+
+
+  void toggle_employee_space(){
+    add_employee_space = !add_employee_space;
+    notifyListeners();
+  }
+
+  Future <void> addEmployee() async{
+    final nepaliDate = DateTime.now().toNepaliDateTime(); // already local
+    // final nepaliDate = NepaliDateTime.fromDateTime(now);
+    // final dateOnly = NepaliDateTime(nepaliDate.year, nepaliDate.month, nepaliDate.day );
+    final data = {
+      "name": name.text,
+      "position":position.text,
+      "monthlySalary":salary.text,
+      "contact":contact.text,
+      "lastUpdated": NepaliDateFormat('yyyy-MM-dd').format(nepaliDate),
+      "joinedDate": NepaliDateFormat('yyyy-MM-dd').format(nepaliDate),
+    };
+    final response = await http.post(
+      Uri.parse(url+"/create/employees/"),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      },
+      body: jsonEncode(data)
+    );
+    print(response.statusCode);
+    notifyListeners();
+  }
+
+  Future <void> getEmployee()async{
+    final response= await http.get(
+      Uri.parse(url+'/employees/'),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      },
+    );
+    print("got request");
+
+    if(response.statusCode == 200) {
+      decoded_response = jsonDecode(response.body);
+      print(decoded_response);
+    }
+    notifyListeners();
+  }
+  Future <void> getEmployeelogs(int id)async{
+    final response= await http.get(
+      Uri.parse(url+'/employee/logs/${id}/'),
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ${accessToken}'
+      },
+    );
+    print("got request");
+    print(response.statusCode);
+    if(response.statusCode == 200) {
+      decoded_response_logs = jsonDecode(response.body);
+      print(decoded_response_logs);
+    }
+    notifyListeners();
+  }
+
+  TextEditingController amount = TextEditingController();
+  TextEditingController reason = TextEditingController();
+
+  TextEditingController dateController = TextEditingController(text: NepaliDateFormat('yyyy-MM-dd').format(DateTime.now().toNepaliDateTime()).toString());
+  Future<void> postLog(int id) async{
+    final data = {
+      "amount": amount.text,
+      "reason":reason.text,
+      "date": dateController.text,
+      "id": id
+    };
+    final response = await http.post(
+        Uri.parse(url+"/create/employeelogs/"),
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization':'Bearer ${accessToken}'
+        },
+        body: jsonEncode(data)
+    );
+    print(response.statusCode);
+    // print(data);
+    notifyListeners();
+  }
+
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recordex/Authentication/login.dart';
+import 'package:recordex/Employees/employees.dart';
 import 'package:recordex/Expense%20Management/expense_management_right_side.dart';
 import 'package:recordex/Stock/add%20stock.dart';
 import 'package:recordex/Stock/manage%20stocks.dart';
@@ -51,6 +52,7 @@ class _HomepageState extends State<Homepage> {
 
     const pageList_construction = [
       HomepageRightSide(),
+      Employees(),
       ExpenseRightside(),
       ExpenseManagementRightSide(),
       IncomeRevenueRightside(),
@@ -64,6 +66,7 @@ class _HomepageState extends State<Homepage> {
     ];
     const pageList_shop = [
       HomepageRightSide(),
+      Employees(),
       AddStocks(),
       ManageStocks(),
       IncomeRevenueRightside(),
@@ -77,6 +80,7 @@ class _HomepageState extends State<Homepage> {
     ];
     const pageList_default= [
       HomepageRightSide(),
+      Employees(),
       ExpenseRightside(),
       ExpenseManagementRightSide(),
       IncomeRevenueRightside(),

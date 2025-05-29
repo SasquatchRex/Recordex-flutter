@@ -329,6 +329,24 @@ void showOverlay(BuildContext context) {
 
                                 ),
                               );
+                              final General_Provider = Provider.of<General>(context, listen: false);
+                              final InvoicePayment_Provider = Provider.of<InvoicePaymentShop>(context, listen: false);
+
+                              bool result = await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Invoice Created!'),
+                                  content: Text('Do you want to print this Invoice?'),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context, false), child: Text('No, I will do it later')),
+                                    TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Yes')),
+                                  ],
+                                ),
+                              );
+                              if(result && InvoicePayment_Provider.InvoiceNumber != null){
+                                General_Provider.printNetworkImage(InvoicePayment_Provider.InvoiceNumber!);
+                              }
+                              print(result);
                             }
                             else{
                               ScaffoldMessenger.of(context).showSnackBar(
