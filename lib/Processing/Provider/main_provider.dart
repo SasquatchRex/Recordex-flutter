@@ -954,6 +954,7 @@ class invoiceManagementProvider extends ChangeNotifier{
   late int totalInvoice=0;
   late int paidInvoice=0;
   late int unpaidInvoice = 0;
+  late double totalSales = 0.0;
   String? access_token = accessToken;
   void get_invoice_data()async{
     final response = await http.get(
@@ -970,6 +971,7 @@ class invoiceManagementProvider extends ChangeNotifier{
       totalInvoice = decoded_response["Total This Month"] ;
       paidInvoice = decoded_response["Paid This Month"];
       unpaidInvoice = decoded_response["Unpaid This Month"] ;
+      totalSales = decoded_response["total sale"] ;
       notifyListeners();
       // print(decoded_response["Company"]);
     }

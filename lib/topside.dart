@@ -6,6 +6,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'Common Components/notification.dart';
 import 'Authentication/login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 // bool fullMenu = true;
 
@@ -44,96 +45,80 @@ class _TopsideState extends State<Topside> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Padding(
-        padding:
-             EdgeInsets.only(top: 10.h, bottom: 10.h, right: 20.w, left: 20.w),
+        padding: EdgeInsets.only(top: 10.h, bottom: 10.h, right: 20.w, left: 20.w),
         child: Stack(
-          clipBehavior: Clip.none,
           children: [
+            // Draggable background area
+            Positioned.fill(
+              child: MoveWindow(
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+
+            // Your interactive content
             Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: Provider.of<General>(context).toggleMenu,
-                    // print(fullMenu);
-
                   child: Icon(
                     Icons.menu,
                     color: Provider.of<AppColors>(context).appColors.Icon,
                   ),
                 ),
-                SizedBox(width: 25.w,),
+                SizedBox(width: 25.w),
                 Expanded(
-                  // width:  width*0.6.w,
-                  // height: 50.h,
                   child: SearchBox(
                     controller: _searchController,
                     hintText: "Search",
-                    onChanged: (query) {
-                      // Handle search query changes
-                      print("Search query: $query");
-                    },
-                    onClear: () {
-                      setState(() {
-                        _searchController.clear();
-                      });
-                    },
+                    onChanged: (query) => print("Search query: $query"),
+                    onClear: () => setState(() => _searchController.clear()),
                   ),
                 ),
-                SizedBox(width: 50.w,),
-                Row(
-                  children: [
-                    FlutterSwitch(
-                      value: Provider.of<AppColors>(context).isDark,
-                      onToggle:(_) => Provider.of<AppColors>(context,listen: false).toggleTheme(),
-                      borderRadius: 15.r,
-                      // toggleSize: 22.w,
-                      activeIcon: Icon(Icons.dark_mode, color: Colors.deepPurpleAccent.shade700),
-                      inactiveIcon: Icon(Icons.light_mode, color: Colors.yellow[700]),
-                      activeColor: Colors.white12,
-                      inactiveColor: Colors.black12,
-
-                    ),
-                    SizedBox(width: 20.w,),
-
-
-
-
-                    SizedBox(width: 20.w,),
-                    GestureDetector(
-                      onTap: () => notificationOverlay(context),
-                        child: Notification()
-                    ),
-
-                    SizedBox(width: 20.w,),
-                    Profile(),
-                    SizedBox(width: 20.w,),
-                    GestureDetector(
-                      onTap:()async{
-
-                        await Provider.of<Login_Provider>(context,listen: false).logout();
-                        if(Provider.of<Login_Provider>(context,listen: false).loggedout){
-
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => Login()),
-                                (Route<dynamic> route) => false,
-                          );
-                        }
-                      },
-                      child: Icon(
-                        Icons.logout,
-                        color: Provider.of<AppColors>(context).appColors.Icon,
-
-
-                      ),
-                    ),
-                  ],
+                SizedBox(width: 50.w),
+                FlutterSwitch(
+                  value: Provider.of<AppColors>(context).isDark,
+                  onToggle: (_) => Provider.of<AppColors>(context, listen: false).toggleTheme(),
+                  borderRadius: 15,
+                  toggleSize: 25.r,
+                  height: 40.h,
+                  width: 75.w,
+                  activeIcon: Icon(Icons.dark_mode, color: Colors.deepPurpleAccent.shade700),
+                  inactiveIcon: Icon(Icons.light_mode, color: Colors.yellow[700]),
+                  activeColor: Colors.white12,
+                  inactiveColor: Colors.black12,
                 ),
+                SizedBox(width: 20.w),
+                GestureDetector(
+                  onTap: () => notificationOverlay(context),
+                  child: Notification(),
+                ),
+                SizedBox(width: 20.w),
+                Profile(),
+                SizedBox(width: 20.w),
+                GestureDetector(
+                  onTap: () async {
+                    await Provider.of<Login_Provider>(context, listen: false).logout();
+                    if (Provider.of<Login_Provider>(context, listen: false).loggedout) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Login()),
+                            (Route<dynamic> route) => false,
+                      );
+                    }
+                  },
+                  child: Icon(
+                    Icons.logout,
+                    color: Provider.of<AppColors>(context).appColors.Icon,
+                  ),
+                ),
+                SizedBox(width: 20.w),
+                const WindowButtons(),
               ],
             ),
           ],
         ),
       ),
     );
+
   }
 }
 
@@ -276,6 +261,53 @@ class _SearchBoxState extends State<SearchBox> {
             ),
         ],
       ),
+    );
+  }
+}
+
+final buttonColors = WindowButtonColors(
+    iconNormal: const Color(0xFF805306),
+    mouseOver: const Color(0xFFF6A00C),
+    mouseDown: const Color(0xFF805306),
+    iconMouseOver: const Color(0xFF805306),
+    iconMouseDown: const Color(0xFFFFD500));
+
+final closeButtonColors = WindowButtonColors(
+    mouseOver: const Color(0xFFD32F2F),
+    mouseDown: const Color(0xFFB71C1C),
+    iconNormal: const Color(0xFFEE0000),
+    iconMouseOver: Colors.white);
+
+class WindowButtons extends StatefulWidget {
+  const WindowButtons({super.key});
+
+  @override
+  State<WindowButtons> createState() => _WindowButtonsState();
+}
+
+class _WindowButtonsState extends State<WindowButtons> {
+  void maximizeOrRestore() {
+    setState(() {
+      appWindow.maximizeOrRestore();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MinimizeWindowButton(colors: buttonColors),
+        appWindow.isMaximized
+            ? RestoreWindowButton(
+          colors: buttonColors,
+          onPressed: maximizeOrRestore,
+        )
+            : MaximizeWindowButton(
+          colors: buttonColors,
+          onPressed: maximizeOrRestore,
+        ),
+        CloseWindowButton(colors: closeButtonColors),
+      ],
     );
   }
 }

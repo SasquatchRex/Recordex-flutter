@@ -26,170 +26,136 @@ class _ManageStocksState extends State<ManageStocks> {
 
   @override
   Widget build(BuildContext context) {
-    return  AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      // width: widget.fullMenu
-      //     ? 0.80 * MediaQuery.of(context).size.width
-      //     : 0.89 * MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
-          children: [
-            Column(
-
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 20.h),
-                  child: Topside(),
-                ),
-                Expanded(
+    return  Container(
+      // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+      // color: Colors.red,
+      padding: EdgeInsets.only(right: 30).w,
+        alignment: Alignment.topLeft,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Manage Stocks",
+                style: TextStyle(
+                    fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 40.h,),
+              GridView.extent(
+                maxCrossAxisExtent: 200, // number of items per row
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 20.w,
+                crossAxisSpacing: 25.h,
+                children: Provider.of<Stocks>(context).decoded_response['stocks']
+                    .map<Widget>((item) => GestureDetector(
+                  onTap: () {
+                    // print(item);
+                    showOverlay(context, item);
+                  },
                   child: Container(
-                    // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
-                    // color: Colors.red,
-                    padding: EdgeInsets.only(right: 30).w,
-                      alignment: Alignment.topLeft,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    // width: 50.w,
+                    // height: 50.h,
+                    padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 10.w),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Provider.of<AppColors>(context).appColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                      // border: Border.all(color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green),
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green, // shadow color
+                      //     spreadRadius: 2,  // how wide the shadow spreads
+                      //     blurRadius: 15,    // how blurry the shadow is
+                      //     offset: Offset(0, 2), // position of shadow: x (right), y (down)
+                      //   ),
+                      // ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(" ${item['name']}",
+                            textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                            fontWeight: FontWeight.w700
+                          ),
+                        ),
+                        // SizedBox(height: 10.h,),
+                        Text(
+                          "H.S Code : ${item['HSCode'].length}",
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        Text(
+                          "Entries : ${item['stock_entries'].length}",
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        Text(
+                          "No. of unpaid Stock : ${item['No of unpaid']}",
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Manage Stocks",
+                            Text("Unit :  ${item['unit']}",
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               style: TextStyle(
-                                  fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                  fontSize: 13.sp,
+                                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                  fontWeight: FontWeight.w500
+                              ),
                             ),
-                            SizedBox(height: 40.h,),
-                            GridView.extent(
-                              maxCrossAxisExtent: 200, // number of items per row
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              mainAxisSpacing: 20.w,
-                              crossAxisSpacing: 25.h,
-                              children: Provider.of<Stocks>(context).decoded_response['stocks']
-                                  .map<Widget>((item) => GestureDetector(
-                                onTap: () {
-                                  // print(item);
-                                  showOverlay(context, item);
-                                },
-                                child: Container(
-                                  // width: 50.w,
-                                  // height: 50.h,
-                                  padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 10.w),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Provider.of<AppColors>(context).appColors.primary,
-                                    borderRadius: BorderRadius.circular(10),
-                                    // border: Border.all(color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green),
-                                    // boxShadow: [
-                                    //   BoxShadow(
-                                    //     color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green, // shadow color
-                                    //     spreadRadius: 2,  // how wide the shadow spreads
-                                    //     blurRadius: 15,    // how blurry the shadow is
-                                    //     offset: Offset(0, 2), // position of shadow: x (right), y (down)
-                                    //   ),
-                                    // ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(" ${item['name']}",
-                                          textAlign: TextAlign.left,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 3,
-                                        style: TextStyle(
-                                          fontSize: 15.sp,
-                                            color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                          fontWeight: FontWeight.w700
-                                        ),
-                                      ),
-                                      // SizedBox(height: 10.h,),
-                                      Text(
-                                        "H.S Code : ${item['HSCode'].length}",
-                                        style: TextStyle(
-                                            fontSize: 13.sp,
-                                            color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                      ),
-                                      Text(
-                                        "Entries : ${item['stock_entries'].length}",
-                                        style: TextStyle(
-                                            fontSize: 13.sp,
-                                            color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                      ),
-                                      Text(
-                                        "No. of unpaid Stock : ${item['No of unpaid']}",
-                                        style: TextStyle(
-                                            fontSize: 13.sp,
-                                            color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Unit :  ${item['unit']}",
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                fontSize: 13.sp,
-                                                color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                                fontWeight: FontWeight.w500
-                                            ),
-                                          ),
-                                          Text("${item['Remaining Quantity']} left",
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.ellipsis,
+                            Text("${item['Remaining Quantity']} left",
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
 
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              color:item['Remaining Quantity'] ==null? Colors.black
-                                                  :item['Remaining Quantity'] < 5? Colors.redAccent
-                                                  : item['Remaining Quantity'] < 10? Colors.orange
-                                                  : Colors.green,
-                                              fontSize: 18.sp,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color:item['Remaining Quantity'] ==null? Colors.black
+                                    :item['Remaining Quantity'] < 5? Colors.redAccent
+                                    : item['Remaining Quantity'] < 10? Colors.orange
+                                    : Colors.green,
+                                fontSize: 18.sp,
 
 
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      // SizedBox(height: 10.h,),
-
-                                      // SizedBox(height: 10.h,),
-
-                                    ],
-                                  ),
-                                ),
-                              ))
-                                  .toList(),
-                            )
-
+                              ),
+                            ),
                           ],
                         ),
-                      )
+
+                        // SizedBox(height: 10.h,),
+
+                        // SizedBox(height: 10.h,),
+
+                      ],
+                    ),
                   ),
-                ),
+                ))
+                    .toList(),
+              )
 
-              ],
-            ),
-
-
-
-
-          ],
-        ),
-      ),
-      // child: Text("Hello"),
+            ],
+          ),
+        )
     );
   }
   late OverlayEntry _overlayEntry;

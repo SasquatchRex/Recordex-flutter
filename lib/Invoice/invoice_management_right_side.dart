@@ -30,374 +30,344 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      // width: widget.fullMenu
-      //     ? 0.80 * MediaQuery.of(context).size.width
-      //     : 0.89 * MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, bottom: 20, right: 0, left: 20),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Topside(),
-                ),
-                Expanded(
-                  child: Container(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+          child: Container(
+              // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+              // color: Colors.red,
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 70.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Container(
-                              // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
-                              // color: Colors.red,
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 70.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Manage Invoices",
-                                          style: TextStyle(
-                                              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
-                                        ),
-                                        IconButton(
-                                            onPressed: Provider.of<invoiceManagementProvider>(context).filtermenuchange,
-                                            icon: Icon(Icons.filter_alt, color: Provider.of<AppColors>(context).appColors.primaryText))
-                                      ],
-                                    ),
-                                  ),
-
-                                  // if(Provider.of<invoiceManagementProvider>(context).filtermenu)
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 40.0, top: 10, bottom: 2),
-                                    child: AnimatedContainer(
-                                      duration: Duration(milliseconds: 200),
-                                      curve: Curves.linear,
-                                      height: Provider.of<invoiceManagementProvider>(context).filtermenu ? 50 : 0,
-                                      decoration:
-                                          BoxDecoration(color: Provider.of<AppColors>(context).appColors.primary, borderRadius: BorderRadius.circular(5)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                        child: Row(
-                                          children: [
-                                            Text("Filter with Date : "),
-                                            SizedBox(
-                                              width: 20.w,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 40.0),
-                                    child: Container(
-                                      // height: 150,
-                                      color: Provider.of<AppColors>(context).appColors.primary,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "Total Inoives Created this month : ",
-                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10.w,
-                                                    ),
-                                                    Text(
-                                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
-                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
-                                                    )
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "Total Paid Invoices this month : ",
-                                                      textAlign: TextAlign.left,
-                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).paidInvoice}",
-                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 40,
-                                            ),
-                                            Container(
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Total Invoices Created this month : ",
-                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
-                                                        style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "Total Unpaid Invoices this month : ",
-                                                        textAlign: TextAlign.left,
-                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        "${Provider.of<invoiceManagementProvider>(context, listen: false).unpaidInvoice}",
-                                                        style: TextStyle(fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.w300),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20.0, bottom: 10, right: 40, left: 10),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "S.N",
-                                            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 4,
-                                          child: Text(
-                                            "To",
-                                            style: TextStyle(
-                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              "Created Date",
-                                              style: TextStyle(
-                                                  fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                            )),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            "Total Amount",
-                                            style: TextStyle(
-                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 3,
-                                          child: Text(
-                                            "Remarks",
-                                            style: TextStyle(
-                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            "Status",
-                                            // textAlign: TextAlign.end,
-                                            style: TextStyle(
-                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 40,
-                                        ),
-                                        // Expanded(
-                                        //   flex: 1,
-                                        //     child: Container()
-                                        // )
-                                      ],
-                                    ),
-                                  ),
-
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0, bottom: 10, right: 40),
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(maxHeight: 400),
-                                        child: Container(
-                                          color: Provider.of<AppColors>(context).appColors.primary,
-                                          padding: EdgeInsets.symmetric(vertical: 6),
-                                          child: ListView.builder(
-                                              itemCount: Provider.of<invoiceManagementProvider>(context).decoded_response.length,
-                                              // itemCount: 100,
-                                              shrinkWrap: true,
-                                              itemBuilder: (context, index) {
-                                                dynamic item = Provider.of<invoiceManagementProvider>(context).decoded_response[index];
-                                                bool paid = item["Payment Paid"];
-
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Provider.of<invoiceManagementProvider>(context,listen: false).updated_paid = paid;
-                                                    showOverlay(context, item["Invoice Number"],paid);
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        // color: Provider.of<AppColors>(context).appColors.secondary ,
-                                                        color: Provider.of<AppColors>(context).appColors.secondary,
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                                                        child: Row(
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Text(
-                                                                "${index + 1}",
-                                                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 4,
-                                                              child: Text(
-                                                                "${item["To Name"]}",
-                                                                maxLines: 1,
-                                                                overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 16.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                  "${item["date"]}",
-                                                                  style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                                )),
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Text(
-                                                                "${item["Total Amount"]}",
-                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                              ),
-                                                            ),
-
-                                                            Expanded(
-                                                              flex: 3,
-                                                              child: Text(
-                                                                "${item["Remarks"]}",
-                                                                maxLines: 1,
-                                                                overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10,
-                                                            ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                    color: paid ? Colors.green : Colors.red, borderRadius: BorderRadius.circular(5)),
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                                                                  child: Text(
-                                                                    paid ? "Paid" : "Due",
-                                                                    textAlign: TextAlign.center,
-                                                                    maxLines: 1,
-                                                                    overflow: TextOverflow.ellipsis,
-                                                                    style: TextStyle(
-                                                                      fontSize: 14.sp,
-                                                                      color: Colors.white
-                                                                      // color: index %2 == 0? Colors.green : Colors.red
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 20,
-                                                            ),
-                                                            IconButton(
-                                                                onPressed: () {},
-                                                                icon: Icon(Icons.menu),
-                                                                color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                            // Icon(Icons.menu)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
-                              )),
+                        Text(
+                          "Manage Invoices",
+                          style: TextStyle(
+                              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                         ),
-                        // EmployeeDash()
+                        IconButton(
+                            onPressed: Provider.of<invoiceManagementProvider>(context).filtermenuchange,
+                            icon: Icon(Icons.filter_alt, color: Provider.of<AppColors>(context).appColors.primaryText))
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+
+                  // if(Provider.of<invoiceManagementProvider>(context).filtermenu)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40.0, top: 10, bottom: 2),
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                      height: Provider.of<invoiceManagementProvider>(context).filtermenu ? 50 : 0,
+                      decoration:
+                          BoxDecoration(color: Provider.of<AppColors>(context).appColors.primary, borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          children: [
+                            Text("Filter with Date : "),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40.0),
+                    child: Container(
+                      // height: 150,
+                      color: Provider.of<AppColors>(context).appColors.primary,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Total Inoives Created this month : ",
+                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                    ),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Text(
+                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
+                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Total Paid Invoices this month : ",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "${Provider.of<invoiceManagementProvider>(context, listen: false).paidInvoice}",
+                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 40,
+                            ),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Total Sales this month : ",
+                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Rs. ${Provider.of<invoiceManagementProvider>(context, listen: false).totalSales}",
+                                        style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Total Unpaid Invoices this month : ",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "${Provider.of<invoiceManagementProvider>(context, listen: false).unpaidInvoice}",
+                                        style: TextStyle(fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.w300),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 10, right: 40, left: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "S.N",
+                            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            "To",
+                            style: TextStyle(
+                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 2,
+                            child: Text(
+                              "Created Date",
+                              style: TextStyle(
+                                  fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                            )),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Total Amount",
+                            style: TextStyle(
+                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            "Remarks",
+                            style: TextStyle(
+                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            "Status",
+                            // textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 40,
+                        ),
+                        // Expanded(
+                        //   flex: 1,
+                        //     child: Container()
+                        // )
+                      ],
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10, right: 40),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 400),
+                        child: Container(
+                          color: Provider.of<AppColors>(context).appColors.primary,
+                          padding: EdgeInsets.symmetric(vertical: 6),
+                          child: ListView.builder(
+                              itemCount: Provider.of<invoiceManagementProvider>(context).decoded_response.length,
+                              // itemCount: 100,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                dynamic item = Provider.of<invoiceManagementProvider>(context).decoded_response[index];
+                                bool paid = item["Payment Paid"];
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    Provider.of<invoiceManagementProvider>(context,listen: false).updated_paid = paid;
+                                    showOverlay(context, item["Invoice Number"],paid);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        // color: Provider.of<AppColors>(context).appColors.secondary ,
+                                        color: Provider.of<AppColors>(context).appColors.secondary,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                "${index + 1}",
+                                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 4,
+                                              child: Text(
+                                                "${item["To Name"]}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 16.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  "${item["date"]}",
+                                                  style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                )),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                "${item["Total Amount"]}",
+                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              ),
+                                            ),
+
+                                            Expanded(
+                                              flex: 3,
+                                              child: Text(
+                                                "${item["Remarks"]}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: paid ? Colors.green : Colors.red, borderRadius: BorderRadius.circular(5)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                                                  child: Text(
+                                                    paid ? "Paid" : "Due",
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: Colors.white
+                                                      // color: index %2 == 0? Colors.green : Colors.red
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.menu),
+                                                color: Provider.of<AppColors>(context).appColors.primaryText),
+                                            // Icon(Icons.menu)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              )),
         ),
-      ),
-      // child: Text("Hello"),
+        // EmployeeDash()
+      ],
     );
     ;
   }

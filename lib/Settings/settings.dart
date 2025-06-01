@@ -17,185 +17,149 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return  AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      // width: widget.fullMenu
-      //     ? 0.80 * MediaQuery.of(context).size.width
-      //     : 0.89 * MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
-          children: [
-            Column(
-
-              children: [
-                Padding(
-                  padding:  EdgeInsets.only(bottom: 20.h),
-                  child: Topside(),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+          child: Container(
+            // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+            // color: Colors.red,
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Wrap(
+                      spacing: 20, // Horizontal spacing
+                      runSpacing: 20, // Vertical spacing
+                      alignment: WrapAlignment.start,
                       children: [
-                        Expanded(
-                          child: Container(
-                            // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
-                            // color: Colors.red,
-                              alignment: Alignment.topLeft,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Column(
-                                  children: [
-                                    Wrap(
-                                      spacing: 20, // Horizontal spacing
-                                      runSpacing: 20, // Vertical spacing
-                                      alignment: WrapAlignment.start,
-                                      children: [
-                                        PngUploadContainer(
-                                          onpressed: () => Provider.of<SettingsProvider>(context,listen: false).pickPdf(),
-                                          name: "Tax Invoice Bill",
+                        PngUploadContainer(
+                          onpressed: () => Provider.of<SettingsProvider>(context,listen: false).pickPdf(),
+                          name: "Tax Invoice Bill",
 
-                                        ),
-
-
-                                       Container(
-                                         width: 250.w,
-                            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 24),
-                            decoration: BoxDecoration(
-                              // border: Border.all(color: Colors.grey.shade400, width: 1.5),
-                              borderRadius: BorderRadius.circular(12),
-                              color: Provider.of<AppColors>(context).appColors.primary,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Starting Invoice Number",
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: Provider.of<SettingsProvider>(context).fileName == null ? Colors.grey : Provider.of<AppColors>(context).appColors.secondaryText,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 14.h),
-                                Container(
-                                  width: 150,
-                                    child: TextField(
-                                      cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                                      style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(5),
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      decoration: InputDecoration(
-                                          isDense: true,
-                                          filled: true,
-                                          fillColor: Provider.of<AppColors>(context).appColors.primary,
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primaryText), // Change focus border color here
-                                          ),
-                                          // Change focus border color here
-                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                          labelText: "YY-XXX",
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
-                                          alignLabelWithHint: true,
-                                          labelStyle: TextStyle(
-                                              color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.w400
-                                          )
-                                      ),
-                                    )
-                                ),
-                                SizedBox(height: 16.h),
-                                ElevatedButton.icon(
-                                  onPressed: () async{
-                                    final General_Provider = Provider.of<General>(context, listen: false);
-                                    final InvoicePayment_Provider = Provider.of<InvoicePaymentShop>(context, listen: false);
-                                    bool result = await showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text('Invoice Created!'),
-                                        content: Text('Do you want to print this Invoice?'),
-                                        actions: [
-                                          TextButton(onPressed: () => Navigator.pop(context, false), child: Text('No, I will do it later')),
-                                          TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Yes')),
-                                        ],
-                                      ),
-                                    );
-                                    if(result && InvoicePayment_Provider.InvoiceNumber != null){
-                                      General_Provider.printNetworkImage(InvoicePayment_Provider.InvoiceNumber!);
-                                    }
-
-                                  },
-                                  icon:  Icon(Icons.save,
-                                    color: Provider.of<AppColors>(context).appColors.primaryText,
-                                  ),
-                                  label:  Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        color: Provider.of<AppColors>(context).appColors.secondaryText
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      backgroundColor: Provider.of<AppColors>(context).appColors.secondary
-                                  ),
-                                ),
-                                SizedBox(height: 16.h),
-                                Text(
-                                  "Note: Enter 2 starting digits and 3 zeros",
-                                  maxLines: 3,
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: Provider.of<AppColors>(context).appColors.secondaryText
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-
-
-                                        // Welcome(),
-                                        // Trial(),
-                                        // MonthlyRevenue(),
-                                        // ActiveUsers(),
-                                        // TotalUsers(),
-                                        // ActiveUsers(),
-                                        // TotalUsers(),
-
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                          ),
                         ),
-                        // EmployeeDash()
+
+
+                       Container(
+                         width: 250.w,
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 24),
+            decoration: BoxDecoration(
+              // border: Border.all(color: Colors.grey.shade400, width: 1.5),
+              borderRadius: BorderRadius.circular(12),
+              color: Provider.of<AppColors>(context).appColors.primary,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Starting Invoice Number",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Provider.of<SettingsProvider>(context).fileName == null ? Colors.grey : Provider.of<AppColors>(context).appColors.secondaryText,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 14.h),
+                Container(
+                  width: 150,
+                    child: TextField(
+                      cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                      style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(5),
+                        FilteringTextInputFormatter.digitsOnly
                       ],
+                      decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: Provider.of<AppColors>(context).appColors.primary,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primaryText), // Change focus border color here
+                          ),
+                          // Change focus border color here
+                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                          labelText: "YY-XXX",
+                          contentPadding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
+                          alignLabelWithHint: true,
+                          labelStyle: TextStyle(
+                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w400
+                          )
+                      ),
+                    )
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton.icon(
+                  onPressed: () async{
+                    final General_Provider = Provider.of<General>(context, listen: false);
+                    final InvoicePayment_Provider = Provider.of<InvoicePaymentShop>(context, listen: false);
+                    bool result = await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Invoice Created!'),
+                        content: Text('Do you want to print this Invoice?'),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(context, false), child: Text('No, I will do it later')),
+                          TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Yes')),
+                        ],
+                      ),
+                    );
+                    if(result && InvoicePayment_Provider.InvoiceNumber != null){
+                      General_Provider.printNetworkImage(InvoicePayment_Provider.InvoiceNumber!);
+                    }
+
+                  },
+                  icon:  Icon(Icons.save,
+                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                  ),
+                  label:  Text(
+                    "Save",
+                    style: TextStyle(
+                        color: Provider.of<AppColors>(context).appColors.secondaryText
                     ),
                   ),
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: Provider.of<AppColors>(context).appColors.secondary
+                  ),
                 ),
-
+                SizedBox(height: 16.h),
+                Text(
+                  "Note: Enter 2 starting digits and 3 zeros",
+                  maxLines: 3,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Provider.of<AppColors>(context).appColors.secondaryText
+                  ),
+                )
               ],
             ),
+          ),
 
 
+                        // Welcome(),
+                        // Trial(),
+                        // MonthlyRevenue(),
+                        // ActiveUsers(),
+                        // TotalUsers(),
+                        // ActiveUsers(),
+                        // TotalUsers(),
 
-
-          ],
+                      ],
+                    ),
+                  ],
+                ),
+              )
+          ),
         ),
-      ),
-      // child: Text("Hello"),
+        // EmployeeDash()
+      ],
     );
   }
 

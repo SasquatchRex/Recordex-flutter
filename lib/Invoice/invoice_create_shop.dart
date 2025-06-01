@@ -48,217 +48,201 @@ class _InvoiceCreateShopState extends State<InvoiceCreateShop> {
   Widget build(BuildContext context) {
     Provider.of<InvoicePaymentShop>(context).load();
 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, bottom: 20, right: 0, left: 20),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
+    return Stack(
+      children: [
+        Column(
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Topside(),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: Container(
+            Expanded(
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Container(
 
-                              // color: Colors.white10,
-                              alignment: Alignment.topLeft,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 50,right: 50, top: 20,bottom:80),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                          // color: Colors.white10,
+                          alignment: Alignment.topLeft,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 50,right: 50, top: 20,bottom:80),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Expense ( Shop )",
+                                    style: TextStyle(
+                                        fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(height: 40.h,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Expense ( Shop )",
-                                        style: TextStyle(
-                                            fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                      NameAutocomplete(
+                                        names: Provider.of<InvoicePaymentShop>(context).name_data,
+                                        def_val: Provider.of<InvoicePaymentShop>(context).From_Name.text,
+                                        valueText: "From",
+                                        border: false,
+                                        Controller: Provider.of<InvoicePaymentShop>(context).From_Name,
+                                        inputformatter: false,
                                       ),
-                                      SizedBox(height: 40.h,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          NameAutocomplete(
-                                            names: Provider.of<InvoicePaymentShop>(context).name_data,
-                                            def_val: Provider.of<InvoicePaymentShop>(context).From_Name.text,
-                                            valueText: "From",
-                                            border: false,
-                                            Controller: Provider.of<InvoicePaymentShop>(context).From_Name,
-                                            inputformatter: false,
-                                          ),
-                                          NameAutocomplete(
-                                            names: Provider.of<InvoicePaymentShop>(context).name_data,
-                                            def_val: "",
-                                            valueText: "To",
-                                            border: true,
-                                            Controller: Provider.of<InvoicePaymentShop>(context).To_Name,
-                                            inputformatter: false,
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          NameAutocomplete(
-                                            names: Provider.of<InvoicePaymentShop>(context).pan_data,
-                                            def_val: Provider.of<InvoicePaymentShop>(context).From_PAN.text,
-                                            valueText: "PAN",
-                                            border: false,
-                                            Controller: Provider.of<InvoicePaymentShop>(context).From_PAN ,
-                                            inputformatter: false
-                                          ),
-                                          NameAutocomplete(
-                                            names: Provider.of<InvoicePaymentShop>(context).pan_data,
-                                            def_val: Provider.of<InvoicePaymentShop>(context).final_pan,
-                                            valueText: "VAT",
-                                            border: true,
-                                            Controller: Provider.of<InvoicePaymentShop>(context).To_PAN,
-                                              inputformatter: true
-                                          ),
-                                        ],
-                                      ),
-
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate!)}",
-                                                style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                              ),
-                                              SizedBox(width: 20.w),
-                                              ElevatedButton(
-                                                onPressed: () => _selectDate(context),
-                                                style: ElevatedButton.styleFrom(
-                                                    // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
-                                                    backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
-                                                child: Text(
-                                                  'Pick a Date',
-                                                  style: TextStyle(fontSize: 15.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          NameAutocomplete(names: Provider.of<InvoicePaymentShop>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePaymentShop>(context).To_Address,inputformatter: false,)
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-
-                                      // Header of Invoice
-                                      InvoiceHeader(),
-
-                                      SizedBox(height: 20.h),
-
-                                      // Actual Loop for the items
-                                      InvoiceCreate(),
-
-                                      SizedBox(height: 20.h),
-
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(color: Provider.of<AppColors>(context).appColors.quaternary, shape: BoxShape.circle),
-                                            child: IconButton(
-                                              onPressed: Provider.of<InvoicePaymentShop>(context).addRow,
-                                              icon: Icon(Icons.add),
-                                              color: Provider.of<AppColors>(context).appColors.primaryText,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: 20.h,),
-                                      Container(
-                                        // alignment: Alignment.centerRight,
-                                        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-                                        color: Colors.white.withOpacity(0.04),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            // Intended for remarks of bill Custom Text
-                                            Expanded(child: TextField(
-                                              controller: Provider.of<InvoicePaymentShop>(context).RemarksController,
-                                                keyboardType: TextInputType.multiline,
-                                              maxLines: 5,
-                                              cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                                              style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  filled: true,
-                                                  fillColor: Provider.of<AppColors>(context).appColors.primary,
-                                                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                                                  // Change focus border color here
-                                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                                labelText: "Remarks",
-                                                  contentPadding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
-                                                alignLabelWithHint: true,
-                                                  labelStyle: TextStyle(
-                                                  color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                                    fontSize: 20.sp,
-                                                    fontWeight: FontWeight.w400
-
-
-                                                )
-                                              ),
-
-
-                                            )),
-
-                                            SizedBox(
-                                              width: 100.w,
-                                            ),
-
-                                            // This is right invoice total with VAT discount and all
-                                            RightInvoiceTotal(),
-                                          ],
-                                        ),
+                                      NameAutocomplete(
+                                        names: Provider.of<InvoicePaymentShop>(context).name_data,
+                                        def_val: "",
+                                        valueText: "To",
+                                        border: true,
+                                        Controller: Provider.of<InvoicePaymentShop>(context).To_Name,
+                                        inputformatter: false,
                                       ),
                                     ],
                                   ),
-                                ),
-                              )),
-                        ),
-                        // EmployeeDash()
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      NameAutocomplete(
+                                        names: Provider.of<InvoicePaymentShop>(context).pan_data,
+                                        def_val: Provider.of<InvoicePaymentShop>(context).From_PAN.text,
+                                        valueText: "PAN",
+                                        border: false,
+                                        Controller: Provider.of<InvoicePaymentShop>(context).From_PAN ,
+                                        inputformatter: false
+                                      ),
+                                      NameAutocomplete(
+                                        names: Provider.of<InvoicePaymentShop>(context).pan_data,
+                                        def_val: Provider.of<InvoicePaymentShop>(context).final_pan,
+                                        valueText: "VAT",
+                                        border: true,
+                                        Controller: Provider.of<InvoicePaymentShop>(context).To_PAN,
+                                          inputformatter: true
+                                      ),
+                                    ],
+                                  ),
 
-            // Final Button for creating invoice
-            CreateInvoiceButton(),
-            if (Provider.of<General>(context).notification) notificationbox(),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate!)}",
+                                            style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                          ),
+                                          SizedBox(width: 20.w),
+                                          ElevatedButton(
+                                            onPressed: () => _selectDate(context),
+                                            style: ElevatedButton.styleFrom(
+                                                // padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+                                                backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
+                                            child: Text(
+                                              'Pick a Date',
+                                              style: TextStyle(fontSize: 15.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      NameAutocomplete(names: Provider.of<InvoicePaymentShop>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePaymentShop>(context).To_Address,inputformatter: false,)
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+
+                                  // Header of Invoice
+                                  InvoiceHeader(),
+
+                                  SizedBox(height: 20.h),
+
+                                  // Actual Loop for the items
+                                  InvoiceCreate(),
+
+                                  SizedBox(height: 20.h),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(color: Provider.of<AppColors>(context).appColors.quaternary, shape: BoxShape.circle),
+                                        child: IconButton(
+                                          onPressed: Provider.of<InvoicePaymentShop>(context).addRow,
+                                          icon: Icon(Icons.add),
+                                          color: Provider.of<AppColors>(context).appColors.primaryText,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 20.h,),
+                                  Container(
+                                    // alignment: Alignment.centerRight,
+                                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                                    color: Colors.white.withOpacity(0.04),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        // Intended for remarks of bill Custom Text
+                                        Expanded(child: TextField(
+                                          controller: Provider.of<InvoicePaymentShop>(context).RemarksController,
+                                            keyboardType: TextInputType.multiline,
+                                          maxLines: 5,
+                                          cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                          decoration: InputDecoration(
+                                              isDense: true,
+                                              filled: true,
+                                              fillColor: Provider.of<AppColors>(context).appColors.primary,
+                                              border: OutlineInputBorder(borderSide: BorderSide.none),
+                                              // Change focus border color here
+                                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                            labelText: "Remarks",
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
+                                            alignLabelWithHint: true,
+                                              labelStyle: TextStyle(
+                                              color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                                fontSize: 20.sp,
+                                                fontWeight: FontWeight.w400
+
+
+                                            )
+                                          ),
+
+
+                                        )),
+
+                                        SizedBox(
+                                          width: 100.w,
+                                        ),
+
+                                        // This is right invoice total with VAT discount and all
+                                        RightInvoiceTotal(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ),
+                    // EmployeeDash()
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-      ),
-      // child: Text("Hello"),
+
+        // Final Button for creating invoice
+        CreateInvoiceButton(),
+      ],
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:recordex/Employees/employees.dart';
 import 'package:recordex/Expense/expense_management_right_side.dart';
 import 'package:recordex/Stock/add%20stock.dart';
 import 'package:recordex/Stock/manage%20stocks.dart';
+import 'package:recordex/topside.dart';
 import 'Processing/Provider/main_provider.dart';
 
 import 'leftside.dart';
@@ -133,9 +134,24 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               LeftSide(),
                               Expanded(
-                                child: pageList[
-                                Provider.of<General>(context).activeTileMenuIndex
-                                ],
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.linear,
+                                  color: Provider.of<AppColors>(context).appColors.background,
+                                  child: Padding(
+                                    padding:  EdgeInsets.only(bottom:20.h,right: 0,left: 20.w),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:  EdgeInsets.only(bottom: 20.h),
+                                          child: Topside()
+                                        ),
+                                        Expanded(
+                                            child:pageList[Provider.of<General>(context).activeTileMenuIndex], )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),

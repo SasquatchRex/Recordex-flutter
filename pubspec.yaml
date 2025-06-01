@@ -49,6 +49,7 @@ dependencies:
   pdf: ^3.11.3
   url_launcher: ^6.3.1
   flutter_screenutil: ^5.9.3
+  bitsdojo_window: ^0.1.6
 
 dev_dependencies:
   flutter_test:

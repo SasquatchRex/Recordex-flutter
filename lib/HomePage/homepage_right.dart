@@ -25,79 +25,45 @@ class HomepageRightSide extends StatefulWidget {
 class _HomepageRightSideState extends State<HomepageRightSide> {
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      // width: widget.fullMenu
-      //     ? 0.80 * MediaQuery.of(context).size.width
-      //     : 0.89 * MediaQuery.of(context).size.width,
-      // height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding:  EdgeInsets.only(top: 20.h,bottom:20.h,right: 0,left: 20.w),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
-          children: [
-            Column(
-
-              children: [
-                Padding(
-                  padding:  EdgeInsets.only(bottom: 20.h),
-                  child: Topside(),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Expanded(
+            child: Container(
+              // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+              // color: Colors.red,
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Wrap(
+                      spacing: 20.w, // Horizontal spacing
+                      runSpacing: 20.h, // Vertical spacing
+                      alignment: WrapAlignment.start,
                       children: [
-                        Expanded(
-                          child: Container(
-                            // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
-                            // color: Colors.red,
-                            alignment: Alignment.topLeft,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                children: [
-                                  Wrap(
-                                    spacing: 20.w, // Horizontal spacing
-                                    runSpacing: 20.h, // Vertical spacing
-                                    alignment: WrapAlignment.start,
-                                    children: [
-                                      Welcome(),
-                                      Trial(),
-                                      ActiveUsers(),
-                                      TotalUsers(),
-                                      ActiveUsers(),
-                                      TotalUsers(),
-                                      MonthlyRevenue(),
-                                      Expenditure(),
-                                      Income(),
+                        Welcome(),
+                        Trial(),
+                        ActiveUsers(),
+                        TotalUsers(),
+                        ActiveUsers(),
+                        TotalUsers(),
+                        MonthlyRevenue(),
+                        Expenditure(),
+                        Income(),
 
 
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ),
-                        ),
-                        EmployeeDash()
                       ],
                     ),
-                  ),
+                  ],
                 ),
-
-              ],
+              )
             ),
-
-
-
-
-          ],
-        ),
+          ),
+          EmployeeDash()
+        ],
       ),
-      // child: Text("Hello"),
     );
   }
 }
@@ -357,7 +323,7 @@ class Welcome extends StatelessWidget {
   });
 
   String formatK(num value) {
-    if (value >= 1000) {
+    if (value >= 1000 ) {
       return "${(value / 1000).toStringAsFixed(1)}K";
     }
     return value.toString();
@@ -432,7 +398,7 @@ class Welcome extends StatelessWidget {
                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Rs. ${formatK(Provider.of<Data>(context).decodedResponse['total sale this month'])}",
+                            "Rs. ${formatK(Provider.of<Data>(context).decodedResponse['total sale this month'] != null?Provider.of<Data>(context).decodedResponse['total sale this month'] : 0 )  }",
                             style: TextStyle(
                                 color: Provider.of<AppColors>(context).appColors.tertiaryText,
                                 fontSize: 20.sp,
