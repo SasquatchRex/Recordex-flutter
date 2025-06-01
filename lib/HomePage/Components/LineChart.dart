@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
-import '../../topside.dart';
-import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 
 

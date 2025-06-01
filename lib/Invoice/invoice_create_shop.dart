@@ -3,40 +3,50 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
+import '../../Processing/Provider/main_provider.dart';
 import '../../topside.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_utils/nepali_utils.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 
-
-class InvoicePaymentRightside extends StatefulWidget {
-  const InvoicePaymentRightside({super.key});
+class InvoiceCreateShop extends StatefulWidget {
+  const InvoiceCreateShop({super.key});
 
   @override
-  State<InvoicePaymentRightside> createState() => _InvoicePaymentRightsideState();
+  State<InvoiceCreateShop> createState() => _InvoiceCreateShopState();
 }
 
-class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
+class _InvoiceCreateShopState extends State<InvoiceCreateShop> {
+
+  void initState() {
+    super.initState();
+
+    // This is where you call your provider method
+    Future.microtask(()async {
+      await Provider.of<Stocks>(context, listen: false).getStocks();
+      Provider.of<InvoicePaymentShop>(context, listen: false).initializer(context);
+    });
+  }
   // NepaliDateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
     final NepaliDateTime? picked = await picker.showMaterialDatePicker(
       context: context,
-      initialDate: Provider.of<InvoicePayment>(context,listen: false).selectedDate ?? NepaliDateTime.now(),
+      initialDate: Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate ?? NepaliDateTime.now(),
       firstDate: NepaliDateTime(2000),
       lastDate: NepaliDateTime(2100),
     );
 
-    if (picked != null && picked != Provider.of<InvoicePayment>(context,listen: false).selectedDate) {
-      Provider.of<InvoicePayment>(context,listen: false).update_date(picked);
+    if (picked != null && picked != Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate) {
+      Provider.of<InvoicePaymentShop>(context,listen: false).update_date(picked);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<InvoicePayment>(context).load();
+    Provider.of<InvoicePaymentShop>(context).load();
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
@@ -72,59 +82,59 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Create Invoice ( Construction ) ",
+                                        "Expense ( Shop )",
                                         style: TextStyle(
-                                            fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                            fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(height: 40,),
+                                      SizedBox(height: 40.h,),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           NameAutocomplete(
-                                            names: Provider.of<InvoicePayment>(context).name_data,
-                                            def_val: Provider.of<InvoicePayment>(context).From_Name.text,
+                                            names: Provider.of<InvoicePaymentShop>(context).name_data,
+                                            def_val: Provider.of<InvoicePaymentShop>(context).From_Name.text,
                                             valueText: "From",
                                             border: false,
-                                            Controller: Provider.of<InvoicePayment>(context).From_Name,
+                                            Controller: Provider.of<InvoicePaymentShop>(context).From_Name,
                                             inputformatter: false,
                                           ),
                                           NameAutocomplete(
-                                            names: Provider.of<InvoicePayment>(context).name_data,
+                                            names: Provider.of<InvoicePaymentShop>(context).name_data,
                                             def_val: "",
                                             valueText: "To",
                                             border: true,
-                                              Controller: Provider.of<InvoicePayment>(context).To_Name,
+                                            Controller: Provider.of<InvoicePaymentShop>(context).To_Name,
                                             inputformatter: false,
-                                          )
+                                          ),
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 10,
+                                        height: 10.h,
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           NameAutocomplete(
-                                            names: Provider.of<InvoicePayment>(context).pan_data,
-                                            def_val: Provider.of<InvoicePayment>(context).From_PAN.text,
+                                            names: Provider.of<InvoicePaymentShop>(context).pan_data,
+                                            def_val: Provider.of<InvoicePaymentShop>(context).From_PAN.text,
                                             valueText: "PAN",
                                             border: false,
-                                            Controller: Provider.of<InvoicePayment>(context).From_PAN ,
+                                            Controller: Provider.of<InvoicePaymentShop>(context).From_PAN ,
                                             inputformatter: false
                                           ),
                                           NameAutocomplete(
-                                            names: Provider.of<InvoicePayment>(context).pan_data,
-                                            def_val: Provider.of<InvoicePayment>(context).final_pan,
+                                            names: Provider.of<InvoicePaymentShop>(context).pan_data,
+                                            def_val: Provider.of<InvoicePaymentShop>(context).final_pan,
                                             valueText: "VAT",
                                             border: true,
-                                            Controller: Provider.of<InvoicePayment>(context).To_PAN,
+                                            Controller: Provider.of<InvoicePaymentShop>(context).To_PAN,
                                               inputformatter: true
                                           ),
                                         ],
                                       ),
 
                                       SizedBox(
-                                        height: 10,
+                                        height: 10.h,
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,10 +143,10 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                Provider.of<InvoicePayment>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePayment>(context,listen: false).selectedDate!)}",
-                                                style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<InvoicePaymentShop>(context,listen: false).selectedDate!)}",
+                                                style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                               ),
-                                              SizedBox(width: 20),
+                                              SizedBox(width: 20.w),
                                               ElevatedButton(
                                                 onPressed: () => _selectDate(context),
                                                 style: ElevatedButton.styleFrom(
@@ -144,31 +154,31 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                                     backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
                                                 child: Text(
                                                   'Pick a Date',
-                                                  style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                  style: TextStyle(fontSize: 15.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          NameAutocomplete(names: Provider.of<InvoicePayment>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePayment>(context).To_Address,inputformatter: false,)
+                                          NameAutocomplete(names: Provider.of<InvoicePaymentShop>(context).address_data, def_val: "", valueText: "Buyer's Address", border: true, Controller: Provider.of<InvoicePaymentShop>(context).To_Address,inputformatter: false,)
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 10,
+                                        height: 10.h,
                                       ),
 
                                       SizedBox(
-                                        height: 20,
+                                        height: 20.h,
                                       ),
 
                                       // Header of Invoice
                                       InvoiceHeader(),
 
-                                      SizedBox(height: 20),
+                                      SizedBox(height: 20.h),
 
                                       // Actual Loop for the items
                                       InvoiceCreate(),
 
-                                      SizedBox(height: 20),
+                                      SizedBox(height: 20.h),
 
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
@@ -176,14 +186,14 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                           Container(
                                             decoration: BoxDecoration(color: Provider.of<AppColors>(context).appColors.quaternary, shape: BoxShape.circle),
                                             child: IconButton(
-                                              onPressed: Provider.of<InvoicePayment>(context).addRow,
+                                              onPressed: Provider.of<InvoicePaymentShop>(context).addRow,
                                               icon: Icon(Icons.add),
                                               color: Provider.of<AppColors>(context).appColors.primaryText,
                                             ),
                                           )
                                         ],
                                       ),
-                                      SizedBox(height: 20,),
+                                      SizedBox(height: 20.h,),
                                       Container(
                                         // alignment: Alignment.centerRight,
                                         padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
@@ -193,7 +203,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                           children: [
                                             // Intended for remarks of bill Custom Text
                                             Expanded(child: TextField(
-                                              controller: Provider.of<InvoicePayment>(context).RemarksController,
+                                              controller: Provider.of<InvoicePaymentShop>(context).RemarksController,
                                                 keyboardType: TextInputType.multiline,
                                               maxLines: 5,
                                               cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
@@ -210,7 +220,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                                 alignLabelWithHint: true,
                                                   labelStyle: TextStyle(
                                                   color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                                    fontSize: 20,
+                                                    fontSize: 20.sp,
                                                     fontWeight: FontWeight.w400
 
 
@@ -221,7 +231,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                                             )),
 
                                             SizedBox(
-                                              width: 100,
+                                              width: 100.w,
                                             ),
 
                                             // This is right invoice total with VAT discount and all
@@ -281,7 +291,8 @@ void showOverlay(BuildContext context) {
             child: Container(
                 width: 0.55*width,
                 height: 0.75*height,
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.r)
+,
 
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -301,11 +312,11 @@ void showOverlay(BuildContext context) {
                       bottom: 0,
                       right: 0,
                       child: ElevatedButton(
-                          onPressed:() {
-                            Provider.of<InvoicePayment>(context, listen: false).toJson();
-                            Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+                          onPressed:() async{
+                            Provider.of<InvoicePaymentShop>(context, listen: false).toJson();
+                            await Provider.of<InvoicePaymentShop>(context, listen: false).createInvoicePost();
                             hideOverlay();
-                            if(Provider.of<InvoicePayment>(context, listen: false).post_response == 200){
+                            if(Provider.of<InvoicePaymentShop>(context, listen: false).post_response == 200){
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -319,6 +330,24 @@ void showOverlay(BuildContext context) {
 
                                 ),
                               );
+                              final General_Provider = Provider.of<General>(context, listen: false);
+                              final InvoicePayment_Provider = Provider.of<InvoicePaymentShop>(context, listen: false);
+
+                              bool result = await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Invoice Created!'),
+                                  content: Text('Do you want to print this Invoice?'),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context, false), child: Text('No, I will do it later')),
+                                    TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Yes')),
+                                  ],
+                                ),
+                              );
+                              if(result && InvoicePayment_Provider.InvoiceNumber != null){
+                                General_Provider.printNetworkImage(InvoicePayment_Provider.InvoiceNumber!);
+                              }
+                              print(result);
                             }
                             else{
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -341,7 +370,7 @@ void showOverlay(BuildContext context) {
                               backgroundColor: Provider.of<AppColors>(context).appColors.success),
                           child: Text(
                             "Create Invoice",
-                            style: TextStyle(fontSize: 22, color: Colors.white),
+                            style: TextStyle(fontSize: 22.sp, color: Colors.white),
                           )),
                     ),
 
@@ -358,14 +387,17 @@ void showOverlay(BuildContext context) {
 
                             child: Image.network(
                               "http://127.0.0.1:8000/invoice/preview/?t=${DateTime.now().millisecondsSinceEpoch}",
-                              headers: {"Cache-Control": "no-cache"},
+                              headers: {
+                                "Cache-Control": "no-cache",
+                                'Authorization':'Bearer ${Provider.of<Data>(context).access_token}'
+                              },
 
                               // "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
                               height: 0.69 * height,
                             ),
                           ),
                         ),
-                        SizedBox(width: 50,),
+                        SizedBox(width: 50.w,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -377,27 +409,27 @@ void showOverlay(BuildContext context) {
                                     "Total Amount : ",
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                    "Rs. ${Provider.of<InvoicePayment>(context).totalAmountControllers.text}",
+                                    "Rs. ${Provider.of<InvoicePaymentShop>(context).totalAmountControllers.text}",
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 22,
+                                    fontSize: 22.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(height: 20.h,),
                             SizedBox(
-                              height: 250,
-                              width: 250,
+                              height: 250.h,
+                              width: 250.w,
                               child: Container(
                                 // color: Colors.white54,
-                                child: Image.network("https://user-images.githubusercontent.com/11562076/103693127-140e3c80-4f99-11eb-9be1-0aebd6b133bb.png",width: 300,)
+                                child: Image.network("https://user-images.githubusercontent.com/11562076/103693127-140e3c80-4f99-11eb-9be1-0aebd6b133bb.png",width: 300.w,)
                               ),
                             ),
                             SizedBox(height: 30,),
@@ -410,14 +442,14 @@ void showOverlay(BuildContext context) {
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(width: 10,),
+                                SizedBox(width: 10.w,),
                                 FlutterSwitch(
-                                  value: Provider.of<InvoicePayment>(context).Paid,
-                                  onToggle:(_) => Provider.of<InvoicePayment>(context,listen: false).togglePaid(),
+                                  value: Provider.of<InvoicePaymentShop>(context).Paid,
+                                  onToggle:(_) => Provider.of<InvoicePaymentShop>(context,listen: false).togglePaid(),
                                   borderRadius: 15,
                                   toggleSize: 25,
                                   height: 30,
@@ -464,9 +496,9 @@ class CreateInvoiceButton extends StatelessWidget {
       right: 20,
       child: ElevatedButton(
           onPressed: () async{
-            if(Provider.of<InvoicePayment>(context, listen: false).isFormComplete()) {
-              Provider.of<InvoicePayment>(context, listen: false).toJson();
-              await Provider.of<InvoicePayment>(context, listen: false).previewInvoice();
+            if(Provider.of<InvoicePaymentShop>(context, listen: false).isFormComplete()) {
+              Provider.of<InvoicePaymentShop>(context, listen: false).toJson();
+              await Provider.of<InvoicePaymentShop>(context, listen: false).previewInvoice();
               showOverlay(context);
             }
             else{
@@ -487,8 +519,8 @@ class CreateInvoiceButton extends StatelessWidget {
             }
             },
         // () {
-          //   Provider.of<InvoicePayment>(context, listen: false).toJson();
-          //   Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+          //   Provider.of<InvoicePaymentShop>(context, listen: false).toJson();
+          //   Provider.of<InvoicePaymentShop>(context, listen: false).createInvoicePost();
           //
           // },
           style: ElevatedButton.styleFrom(
@@ -496,7 +528,7 @@ class CreateInvoiceButton extends StatelessWidget {
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
             "Preview Invoice",
-            style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText),
+            style: TextStyle(fontSize: 22.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
           )),
     );
   }
@@ -507,24 +539,24 @@ class RightInvoiceTotal extends StatelessWidget {
     super.key,
   });
 
-  // TextEditingController controllerGrand = Provider.of<InvoicePayment>(context).grandPriceControllers,
+  // TextEditingController controllerGrand = Provider.of<InvoicePaymentShop>(context).grandPriceControllers,
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).totalPriceControllers,text: 'Total : '),
+        RightInvoiceComp(Controller: Provider.of<InvoicePaymentShop>(context).totalPriceControllers,text: 'Total : '),
         SizedBox(
           height: 10,
         ),
 
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).discountControllers, text: "Discount % : ",onChanged: Provider.of<InvoicePayment>(context, listen: false).discountPercentage,),
+        RightInvoiceComp(Controller: Provider.of<InvoicePaymentShop>(context).discountControllers, text: "Discount % : ",onChanged: Provider.of<InvoicePaymentShop>(context, listen: false).discountPercentage,),
         SizedBox(height: 10,),
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).taxable_amount_PriceControllers, text: "Taxable Amount : ",),
+        RightInvoiceComp(Controller: Provider.of<InvoicePaymentShop>(context).taxable_amount_PriceControllers, text: "Taxable Amount : ",),
         SizedBox(height: 10,),
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).PriceVATControllers, text: "13% VAT : ",),
+        RightInvoiceComp(Controller: Provider.of<InvoicePaymentShop>(context).PriceVATControllers, text: "13% VAT : ",),
         SizedBox(height: 10,),
-        RightInvoiceComp(Controller: Provider.of<InvoicePayment>(context).totalAmountControllers, text: "Total Amount : "),
+        RightInvoiceComp(Controller: Provider.of<InvoicePaymentShop>(context).totalAmountControllers, text: "Total Amount : "),
       ],
     );
   }
@@ -689,7 +721,7 @@ class InvoiceCreate extends StatelessWidget {
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: Provider.of<InvoicePayment>(context).invoiceItems.length,
+              itemCount: Provider.of<InvoicePaymentShop>(context).invoiceItems.length,
               itemBuilder: (context, index) {
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 1000),
@@ -710,7 +742,7 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).HSCodeControllers[index],
+                          controller: Provider.of<InvoicePaymentShop>(context).HSCodeControllers[index],
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
                           decoration: InputDecoration(
@@ -726,33 +758,132 @@ class InvoiceCreate extends StatelessWidget {
                       SizedBox(
                         width: 20,
                       ),
+                      // Expanded(
+                      //   flex: 8,
+                      //   child: TextField(
+                      //     controller: Provider.of<InvoicePaymentShop>(context).nameControllers[index],
+                      //     cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                      //     style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                      //     decoration: InputDecoration(
+                      //         isDense: true,
+                      //         filled: true,
+                      //         fillColor: Provider.of<AppColors>(context).appColors.primary,
+                      //         border: OutlineInputBorder(borderSide: BorderSide.none),
+                      //         // Change focus border color here
+                      //         focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
+                      //   ),
+                      // ),
                       Expanded(
                         flex: 8,
-                        child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).nameControllers[index],
-                          cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                          decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: Provider.of<AppColors>(context).appColors.primary,
-                              border: OutlineInputBorder(borderSide: BorderSide.none),
-                              // Change focus border color here
-                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
-                        ),
+                        child: Builder(builder: (context) {
+                          List stocks = Provider.of<Stocks>(context).decoded_response['stocks'];
+
+                          // Flatten stock_entries into full data
+                          List<Map<String, dynamic>> options = [];
+                          for (var stock in stocks) {
+                            for (var entry in stock['stock_entries']) {
+                              options.add({
+                                'name': stock['name'],
+                                'CP Rate': entry['CP Rate'],
+                                'SP Rate': entry['SP Rate'],
+                                'From Name': entry['From Name'],
+                                'stockId': entry['id'],
+                                'HSCode': stock['HSCode']
+                              });
+                            }
+                          }
+
+                          return Autocomplete<Map<String, dynamic>>(
+                            optionsBuilder: (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text.isEmpty) {
+                                return const Iterable<Map<String, dynamic>>.empty();
+                              }
+
+                              return options.where((option) =>
+                                  option['name']
+                                      .toLowerCase()
+                                      .contains(textEditingValue.text.toLowerCase()));
+                            },
+                            displayStringForOption: (Map<String, dynamic> option) => option['name'],
+                            onSelected: (selection) {
+                              // Set only name in name field
+                              Provider.of<InvoicePaymentShop>(context, listen: false)
+                                  .nameControllers[index].text = selection['name'];
+
+                              // Set unit price (SP Rate) in another field
+                              Provider.of<InvoicePaymentShop>(context, listen: false)
+                                  .rateControllers[index].text = selection['SP Rate'].toString();
+                              Provider.of<InvoicePaymentShop>(context, listen: false)
+                                  .HSCodeControllers[index].text = selection['HSCode'].toString();
+                              Provider.of<InvoicePaymentShop>(context, listen: false)
+                                  .idControllers[index].text = selection['stockId'].toString();
+
+                            },
+                            fieldViewBuilder: (context, textEditingController, focusNode, _) {
+                              return TextField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
+                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  filled: true,
+                                  fillColor: Provider.of<AppColors>(context).appColors.primary,
+                                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                ),
+                              );
+                            },
+                            optionsViewBuilder: (context, onSelected, options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    width: 350,
+                                    height: 200,
+                                    color: Provider.of<AppColors>(context).appColors.background,
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      itemCount: options.length,
+                                      itemBuilder: (context, index) {
+                                        final option = options.elementAt(index);
+                                        return ListTile(
+                                          title: Text(
+                                            '${option['name']} | Cost Price : ${option['CP Rate']} | ${option['From Name']}',
+                                            style: TextStyle(
+                                                color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                            ),
+                                          ),
+                                          tileColor: Provider.of<AppColors>(context).appColors.quaternary,
+                                          hoverColor:Provider.of<AppColors>(context).appColors.tertiary ,
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }),
                       ),
+
+
                       SizedBox(
                         width: 20,
                       ),
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).quantityControllers[index],
+                          controller: Provider.of<InvoicePaymentShop>(context).quantityControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           onChanged: (value) {
-                            Provider.of<InvoicePayment>(context, listen: false).calculateTotalPrice(index);
+                            Provider.of<InvoicePaymentShop>(context, listen: false).calculateTotalPrice(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -771,7 +902,7 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).unitControllers[index],
+                          controller: Provider.of<InvoicePaymentShop>(context).unitControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -790,12 +921,12 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).rateControllers[index],
+                          controller: Provider.of<InvoicePaymentShop>(context).rateControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           onChanged: (value) {
-                            Provider.of<InvoicePayment>(context, listen: false).calculateTotalPrice(index);
+                            Provider.of<InvoicePaymentShop>(context, listen: false).calculateTotalPrice(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -814,9 +945,9 @@ class InvoiceCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<InvoicePayment>(context).amountPriceControllers[index],
+                          controller: Provider.of<InvoicePaymentShop>(context).amountPriceControllers[index],
                           onChanged: (value) {
-                            Provider.of<InvoicePayment>(context, listen: false).grandTotal();
+                            Provider.of<InvoicePaymentShop>(context, listen: false).grandTotal();
                           },
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
@@ -832,7 +963,7 @@ class InvoiceCreate extends StatelessWidget {
                               focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
                         ),
                       ),
-                      IconButton(onPressed: () => Provider.of<InvoicePayment>(context, listen: false).removeRow(index), icon: Icon(Icons.close)),
+                      IconButton(onPressed: () => Provider.of<InvoicePaymentShop>(context, listen: false).removeRow(index), icon: Icon(Icons.close)),
                     ],
                   ),
                 );
@@ -865,9 +996,9 @@ class NameAutocomplete extends StatelessWidget {
         },
         displayStringForOption: (String option) => option,
         onSelected: (String selection) {
-          print(Provider.of<InvoicePayment>(context, listen: false).selectedName);
-          Provider.of<InvoicePayment>(context, listen: false).updateSelectedName(selection);
-          print(Provider.of<InvoicePayment>(context, listen: false).selectedName);
+          print(Provider.of<InvoicePaymentShop>(context, listen: false).selectedName);
+          Provider.of<InvoicePaymentShop>(context, listen: false).updateSelectedName(selection);
+          print(Provider.of<InvoicePaymentShop>(context, listen: false).selectedName);
           print('Selected: $selection');
         },
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
@@ -954,7 +1085,7 @@ class notificationbox extends StatelessWidget {
             children: [
               Text(
                 "Notifications",
-                style: TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 20),
+                style: TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 20.sp),
               ),
               SizedBox(
                 height: 10,
@@ -985,7 +1116,7 @@ class notificationbox extends StatelessWidget {
                               ),
                               Text(
                                 "This is the description for heading 1",
-                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.NotificationBody, fontSize: 12),
+                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.NotificationBody, fontSize: 12.sp),
                               ),
                             ],
                           ),

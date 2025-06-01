@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:recordex/Create%20Expense/expense_rightside.dart';
-import 'package:recordex/Hive/hive_main.dart';
-import '../HomePage/color.dart';
+
+import 'package:recordex/Processing/Hive/hive_main.dart';
+import '../../HomePage/color.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
@@ -1101,6 +1101,7 @@ class Login_Provider extends ChangeNotifier{
     try {
 
       await clearAuthTokens();
+      accessToken = "";
       error = false;
 
       // Add any other cleanup you need to do here
@@ -1444,7 +1445,9 @@ class   Data extends ChangeNotifier{
   late String Company_Type="";
   late String Company="";
   late String PAN = "";
+  late String username = "";
   String? access_token = accessToken;
+  late Map decodedResponse ={};
   void get_data()async{
     final response = await http.get(
       Uri.parse(url+"/data/general/"),
@@ -1454,10 +1457,11 @@ class   Data extends ChangeNotifier{
       },
     );
     if(response.statusCode == 200){
-      Map decoded_response = jsonDecode(response.body);
-      Company_Type = decoded_response["Company Type"];
-      Company = decoded_response["Company"];
-      PAN = decoded_response["PAN No"].toString();
+      decodedResponse = jsonDecode(response.body);
+      Company_Type = decodedResponse["Company Type"];
+      Company = decodedResponse["Company"];
+      PAN = decodedResponse["PAN No"].toString();
+      username = decodedResponse["username"].toString();
       // print(decoded_response["Company"]);
     }
     else{
@@ -1471,6 +1475,7 @@ class SettingsProvider extends ChangeNotifier{
   String? fileName;
   Uint8List? bytes;
   int? responseCode;
+  TextEditingController startingInvoiceNumber = TextEditingController();
 
   Future<void> pickPdf() async {
     final result = await FilePicker.platform.pickFiles(
@@ -1509,6 +1514,20 @@ class SettingsProvider extends ChangeNotifier{
       print("problem");
     }
     notifyListeners();
+  }
+
+  Future<void> InvoiceStartingRequest() async{
+    final data = {
+      "Starting Invoice" : startingInvoiceNumber.text
+    };
+    final response = await http.post(
+        Uri.parse(url+"/create/employeelogs/"),
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization':'Bearer ${accessToken}'
+        },
+        body: jsonEncode(data)
+    );
   }
 
 

@@ -4,8 +4,9 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
+import '../Processing/Provider/main_provider.dart';
 import '../topside.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class AddStocks extends StatefulWidget {
   const AddStocks({super.key});
@@ -41,7 +42,7 @@ class _AddStocksState extends State<AddStocks> {
       height: MediaQuery.of(context).size.height,
       color: Provider.of<AppColors>(context).appColors.background,
       child: Padding(
-        padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
+        padding:  EdgeInsets.only(top: 20.0.h,bottom:20.h,right: 0,left: 20.w),
         // padding: const EdgeInsets.only(top: 20,bottom: 20),
         child: Stack(
           children: [
@@ -49,7 +50,7 @@ class _AddStocksState extends State<AddStocks> {
 
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+                  padding:  EdgeInsets.only(bottom: 20.h),
                   child: Topside(),
                 ),
                 Expanded(
@@ -61,7 +62,7 @@ class _AddStocksState extends State<AddStocks> {
                           child: Container(
                             // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
                             // color: Colors.red,
-                            padding: EdgeInsets.only(right: 40),
+                            padding: EdgeInsets.only(right: 40.w),
                               alignment: Alignment.topLeft,
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
@@ -71,10 +72,10 @@ class _AddStocksState extends State<AddStocks> {
                                     Text(
                                       "Manage Invoices",
                                       style: TextStyle(
-                                          fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                          fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                                     ),
 
-                                    SizedBox(height: 40,),
+                                    SizedBox(height: 40.h,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -86,9 +87,9 @@ class _AddStocksState extends State<AddStocks> {
                                               children: [
                                                 Text(
                                                   Provider.of<ExpenseProvider>(context,listen: false).selectedDate == null ? "Added Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<ExpenseProvider>(context,listen: false).selectedDate!)}",
-                                                  style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                  style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                 ),
-                                                SizedBox(width: 20),
+                                                SizedBox(width: 20.w),
                                                 ElevatedButton(
                                                   onPressed: () => _selectDate(context),
                                                   style: ElevatedButton.styleFrom(
@@ -96,12 +97,12 @@ class _AddStocksState extends State<AddStocks> {
                                                       backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
                                                   child: Text(
                                                     'Pick a Date',
-                                                    style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                    style: TextStyle(fontSize: 15.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 20,),
+                                            SizedBox(height: 20.h,),
                                             NameAutocomplete(
                                               names: [],
                                               def_val: Provider.of<Stocks>(context).BillNo.text,
@@ -123,7 +124,7 @@ class _AddStocksState extends State<AddStocks> {
                                               Controller: Provider.of<Stocks>(context).From_Name,
                                               inputformatter: false,
                                             ),
-                                            SizedBox(height: 20,),
+                                            SizedBox(height: 20.h,),
                                             NameAutocomplete(
                                                 names: Provider.of<InvoicePaymentShop>(context).pan_data,
                                                 def_val: Provider.of<Stocks>(context).From_PAN.text,
@@ -136,11 +137,11 @@ class _AddStocksState extends State<AddStocks> {
                                         )
                                       ],
                                     ),
-                                    SizedBox(height: 40,),
+                                    SizedBox(height: 40.h,),
                                     StockHeader(),
 
                                     StockCreate(),
-                                    SizedBox(height: 20,),
+                                    SizedBox(height: 20.h,),
                                     Container(
                                       decoration: BoxDecoration(color: Provider.of<AppColors>(context).appColors.quaternary, shape: BoxShape.circle),
                                       child: IconButton(
@@ -170,7 +171,7 @@ class _AddStocksState extends State<AddStocks> {
                                               alignLabelWithHint: true,
                                               labelStyle: TextStyle(
                                                   color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                                  fontSize: 20,
+                                                  fontSize: 20.sp,
                                                   fontWeight: FontWeight.w400
 
 
@@ -181,7 +182,7 @@ class _AddStocksState extends State<AddStocks> {
                                         )),
 
                                         // SizedBox(
-                                        //   width: 50,
+                                        //   width: 50.w,
                                         // ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
@@ -194,7 +195,7 @@ class _AddStocksState extends State<AddStocks> {
 
                                       ],
                                     ),
-                                    SizedBox(height: 20,),
+                                    SizedBox(height: 20.h,),
 
 
                                     SizedBox(height: 40,)
@@ -232,8 +233,8 @@ class CreateStocksButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20,
-      right: 20,
+      bottom: 20.h,
+      right: 20.w,
       child: ElevatedButton(
           onPressed: () async{
             if(Provider.of<Stocks>(context, listen: false).isFormComplete()) {
@@ -263,11 +264,11 @@ class CreateStocksButton extends StatelessWidget {
           //
           // },
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+              padding: EdgeInsets.symmetric(horizontal: 30.h, vertical: 15.w), // Adjust padding
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
             "Preview Invoice",
-            style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText),
+            style: TextStyle(fontSize: 22.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
           )),
     );
   }
@@ -281,7 +282,7 @@ class StockHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -295,7 +296,7 @@ class StockHeader extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
           Expanded(
             flex: 3,
@@ -304,7 +305,7 @@ class StockHeader extends StatelessWidget {
             ),),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
           Expanded(
             flex: 8,
@@ -313,7 +314,7 @@ class StockHeader extends StatelessWidget {
             ),),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
           Expanded(
             flex: 3,
@@ -322,7 +323,7 @@ class StockHeader extends StatelessWidget {
             ),),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
           Expanded(
             flex: 3,
@@ -331,7 +332,7 @@ class StockHeader extends StatelessWidget {
             ),),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
           Expanded(
             flex: 3,
@@ -339,7 +340,7 @@ class StockHeader extends StatelessWidget {
                 color: Provider.of<AppColors>(context).appColors.secondaryText
             ),),
           ),
-          SizedBox(width: 20,),
+          SizedBox(width: 20.w,),
 
           Expanded(
             flex: 3,
@@ -347,7 +348,7 @@ class StockHeader extends StatelessWidget {
                 color: Provider.of<AppColors>(context).appColors.secondaryText
             ),),
           ),
-          SizedBox(width: 20,),
+          SizedBox(width: 20.w,),
           Expanded(
             flex: 3,
             child: Text("Unit Selling Price",style: TextStyle(
@@ -355,7 +356,7 @@ class StockHeader extends StatelessWidget {
             ),),
           ),
           SizedBox(
-            width: 20,
+            width: 20.w,
           ),
 
           Expanded(
@@ -364,7 +365,7 @@ class StockHeader extends StatelessWidget {
                 color: Provider.of<AppColors>(context).appColors.secondaryText
             ),),
           ),
-          SizedBox(width: 10,)
+          SizedBox(width: 10.w,)
 
         ],
       ),
@@ -381,9 +382,9 @@ class StockCreate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white.withOpacity(0.05),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 400), // Set max height
+        constraints: BoxConstraints(maxHeight: 400.h), // Set max height
         child: SingleChildScrollView(
           child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -404,7 +405,7 @@ class StockCreate extends StatelessWidget {
                         ),),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 3,
@@ -423,7 +424,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 8,
@@ -441,7 +442,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 3,
@@ -465,7 +466,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 3,
@@ -484,7 +485,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 3,
@@ -508,7 +509,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 20.w,
                       ),
                       Expanded(
                         flex: 3,
@@ -531,7 +532,7 @@ class StockCreate extends StatelessWidget {
                               focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
                         ),
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(width: 20.w,),
                       Expanded(
                         flex: 3,
                         child: TextField(
@@ -554,7 +555,7 @@ class StockCreate extends StatelessWidget {
                         ),
                       ),
 
-                      SizedBox(width: 20,),
+                      SizedBox(width: 20.w,),
                       Expanded(
                         flex: 3,
                         child: TextField(
@@ -602,9 +603,9 @@ class RightStockCPTotal extends StatelessWidget {
         Text(
           "Cost Price : ",
           style: TextStyle(
-              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 20.h,),
 
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalCPPriceControllers,text: 'Total : '),
         SizedBox(
@@ -612,11 +613,11 @@ class RightStockCPTotal extends StatelessWidget {
         ),
 
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).discountControllers, text: "Discount % : ",onChanged: Provider.of<Stocks>(context, listen: false).discountPercentage,),
-        SizedBox(height: 10,),
+        SizedBox(height: 10.h,),
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).taxable_amount_PriceControllers, text: "Taxable Amount : ",),
-        SizedBox(height: 10,),
+        SizedBox(height: 10.h,),
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).PriceVATControllers, text: "13% VAT : ",),
-        SizedBox(height: 10,),
+        SizedBox(height: 10.h,),
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalAmountControllers, text: "Total Amount : "),
       ],
     );
@@ -639,18 +640,18 @@ class RightStockSPTotal extends StatelessWidget {
         Text(
           "Selling  Price : ",
           style: TextStyle(
-              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 20.h,),
 
         RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalSPPriceControllers,text: 'Total : '),
-        SizedBox(height: 40,),
+        SizedBox(height: 40.h,),
         Text(
           "Payment to Dealer",
           style: TextStyle(
-              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 20.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -659,18 +660,18 @@ class RightStockSPTotal extends StatelessWidget {
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: Provider.of<AppColors>(context).appColors.primaryText,
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(width: 10.w,),
             FlutterSwitch(
               value: Provider.of<Stocks>(context).Paid,
               onToggle:(_) => Provider.of<Stocks>(context,listen: false).togglePaid(),
-              borderRadius: 15,
-              toggleSize: 25,
-              height: 30,
-              width: 60,
+              borderRadius: 15.r,
+              toggleSize: 25.r,
+              height: 30.h,
+              width: 60.w,
               activeIcon: Icon(Icons.check, color: Colors.green),
 
               inactiveIcon: Icon(Icons.close, color: Colors.red[700]),
@@ -702,7 +703,7 @@ class RightInvoiceComp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 400,
+      width: 400.w,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -716,12 +717,12 @@ class RightInvoiceComp extends StatelessWidget {
               )
           ),
           SizedBox(
-            width: 40,
+            width: 40.w,
           ),
           Flexible(
             flex: 4,
             child: Container(
-              width: 250,
+              width: 250.w,
               child: TextField(
                 controller: Controller,
                 onChanged:(value){ onChanged?.call();},
@@ -741,7 +742,7 @@ class RightInvoiceComp extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 10,)
+          SizedBox(width: 10.h,)
         ],
       ),
     );
@@ -760,7 +761,7 @@ class NameAutocomplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
+      width: 320.w,
       child: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
@@ -809,8 +810,8 @@ class NameAutocomplete extends StatelessWidget {
               elevation: 4.0,
               child: Container(
                 margin: EdgeInsets.only(top: 0),
-                width: 300, // Set custom width for the dropdown
-                height: 200,
+                width: 300.w, // Set custom width for the dropdown
+                height: 200.h,
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: options.length,
@@ -842,8 +843,8 @@ class CreateInvoiceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20,
-      right: 20,
+      bottom: 20.h,
+      right: 20.w,
       child: ElevatedButton(
           onPressed: () async{
             if(Provider.of<Stocks>(context, listen: false).isFormComplete()) {
@@ -876,11 +877,11 @@ class CreateInvoiceButton extends StatelessWidget {
           //
           // },
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
+              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h), // Adjust padding
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
             "Add Stocks",
-            style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText,),
+            style: TextStyle(fontSize: 22.sp, color: Provider.of<AppColors>(context).appColors.primaryText,),
           )),
     );
   }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
+import '../../Processing/Provider/main_provider.dart';
 import '../topside.dart';
 import 'dart:ui';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class InvoiceManagementRightSide extends StatefulWidget {
   const InvoiceManagementRightSide({super.key});
@@ -68,7 +69,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                         Text(
                                           "Manage Invoices",
                                           style: TextStyle(
-                                              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                                         ),
                                         IconButton(
                                             onPressed: Provider.of<invoiceManagementProvider>(context).filtermenuchange,
@@ -92,7 +93,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                           children: [
                                             Text("Filter with Date : "),
                                             SizedBox(
-                                              width: 20,
+                                              width: 20.w,
                                             ),
                                           ],
                                         ),
@@ -117,14 +118,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                   children: [
                                                     Text(
                                                       "Total Inoives Created this month : ",
-                                                      style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                     ),
                                                     SizedBox(
-                                                      width: 10,
+                                                      width: 10.w,
                                                     ),
                                                     Text(
                                                       "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
-                                                      style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
                                                 ),
@@ -136,14 +137,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                     Text(
                                                       "Total Paid Invoices this month : ",
                                                       textAlign: TextAlign.left,
-                                                      style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                     ),
                                                     SizedBox(
                                                       width: 10,
                                                     ),
                                                     Text(
                                                       "${Provider.of<invoiceManagementProvider>(context, listen: false).paidInvoice}",
-                                                      style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
                                                 ),
@@ -161,14 +162,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                     children: [
                                                       Text(
                                                         "Total Invoices Created this month : ",
-                                                        style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
                                                         "${Provider.of<invoiceManagementProvider>(context, listen: false).totalInvoice}",
-                                                        style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                        style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
                                                   ),
@@ -180,14 +181,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                       Text(
                                                         "Total Unpaid Invoices this month : ",
                                                         textAlign: TextAlign.left,
-                                                        style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
                                                         "${Provider.of<invoiceManagementProvider>(context, listen: false).unpaidInvoice}",
-                                                        style: TextStyle(fontSize: 28, color: Colors.red, fontWeight: FontWeight.w300),
+                                                        style: TextStyle(fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
                                                   ),
@@ -216,7 +217,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                           child: Text(
                                             "To",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         Expanded(
@@ -224,14 +225,14 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                             child: Text(
                                               "Created Date",
                                               style: TextStyle(
-                                                  fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                  fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                             )),
                                         Expanded(
                                           flex: 2,
                                           child: Text(
                                             "Total Amount",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         Expanded(
@@ -239,7 +240,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                           child: Text(
                                             "Remarks",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         SizedBox(
@@ -252,7 +253,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                             "Status",
                                             // textAlign: TextAlign.end,
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         SizedBox(
@@ -311,20 +312,20 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                                 "${item["To Name"]}",
                                                                 maxLines: 1,
                                                                 overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 16, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 16.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
                                                             Expanded(
                                                                 flex: 2,
                                                                 child: Text(
                                                                   "${item["date"]}",
-                                                                  style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                  style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                                 )),
                                                             Expanded(
                                                               flex: 2,
                                                               child: Text(
                                                                 "${item["Total Amount"]}",
-                                                                style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
 
@@ -334,7 +335,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                                 "${item["Remarks"]}",
                                                                 maxLines: 1,
                                                                 overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -353,7 +354,8 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                                                                     maxLines: 1,
                                                                     overflow: TextOverflow.ellipsis,
                                                                     style: TextStyle(
-                                                                      fontSize: 14,
+                                                                      fontSize: 14.sp,
+                                                                      color: Colors.white
                                                                       // color: index %2 == 0? Colors.green : Colors.red
                                                                     ),
                                                                   ),
@@ -426,7 +428,8 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
               child: Container(
                   width: 0.6 * width,
                   height: 0.75 * height,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20.r)
+,
                   color: Provider.of<AppColors>(context).appColors.primary,
                   child: Stack(
                     children: [
@@ -449,7 +452,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                               child: Text(
                                   "Print ",
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     color: Colors.white
                                   ),
                               ),
@@ -464,7 +467,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                               child: Text(
                                 "Save ",
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     color: Colors.white
                                 ),
                               ),
@@ -506,7 +509,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                               Text(
                                 "Payment status : ",
                                 style: TextStyle(
-                                    fontSize: 22,
+                                    fontSize: 22.sp,
                                     color: Provider.of<AppColors>(context).appColors.primaryText
                                 ),
                               ),

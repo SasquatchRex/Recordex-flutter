@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
-import 'PercentageLine.dart';
-import '../../topside.dart';
-import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 
 class Profile_Dash extends StatelessWidget {
@@ -15,8 +10,8 @@ class Profile_Dash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 60,
-      height: 60,
+      width: 60.w,
+      height: 60.h,
       child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: Image.asset(

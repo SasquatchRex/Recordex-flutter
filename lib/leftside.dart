@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
-import 'topside.dart';
-// import '../../Provider/color_provider.dart';
+import '../Processing/Provider/main_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
+
 
 int activeTileIndexMain = 0;
 
@@ -37,28 +37,28 @@ class _LeftSideState extends State<LeftSide> {
       MenuItem(icon: Icons.group, text: "Employees"),
       MenuItem(icon: Icons.create_new_folder, text: "Create Expense"),
       MenuItem(icon: Icons.monetization_on, text: "Expense Management"),
-      MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
+      MenuItem(icon: Icons.attach_money, text: "Income & Revenue"),
       MenuItem(icon: Icons.category, text: "Category Management"),
       MenuItem(icon: Icons.create_new_folder_outlined, text: "Create Invoice"),
       MenuItem(icon: Icons.manage_history, text: "Manage Invoice"),
       MenuItem(icon: Icons.group, text: "Team Collaboration"),
       MenuItem(icon: Icons.report, text: "Reports & Analysis"),
-      MenuItem(icon: Icons.money, text: "Bank & Payment Integration"),
-      MenuItem(icon: Icons.settings, text: "Settings & Customization"),
+      MenuItem(icon: Icons.money, text: "Bank & Payment"),
+      MenuItem(icon: Icons.settings, text: "Settings "),
     ];
     final List<MenuItem> menuItemsShop = [
       MenuItem(icon: Icons.home, text: "Dashboard"),
       MenuItem(icon: Icons.group, text: "Employees"),
       MenuItem(icon: Icons.add_box,text: "Add Stocks"),
       MenuItem(icon: Icons.folder,text: "Manage Stocks"),
-      MenuItem(icon: Icons.attach_money, text: "Income & Revenue Tracking"),
-      MenuItem(icon: Icons.category, text: "Category Management"),
+      MenuItem(icon: Icons.attach_money, text: "Income & Revenue "),
+      MenuItem(icon: Icons.category, text: "Category"),
       MenuItem(icon: Icons.create_new_folder_outlined, text: "Create Invoice"),
       MenuItem(icon: Icons.manage_history, text: "Manage Invoice"),
       MenuItem(icon: Icons.group, text: "Team Collaboration"),
       MenuItem(icon: Icons.report, text: "Reports & Analysis"),
-      MenuItem(icon: Icons.money, text: "Bank & Payment Integration"),
-      MenuItem(icon: Icons.settings, text: "Settings & Customization"),
+      MenuItem(icon: Icons.money, text: "Bank & Payment"),
+      MenuItem(icon: Icons.settings, text: "Settings"),
     ];
 
     var menuItems = Provider.of<Data>(context,listen: false).Company_Type == "Construction"? menuItemsConstruction
@@ -89,8 +89,8 @@ class _LeftSideState extends State<LeftSide> {
                   color: Provider.of<AppColors>(context).appColors.primary,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, bottom: 20,),
+                padding:  EdgeInsets.only(
+                    top: 20.h, bottom: 20.h,),
                 child: Column(
                   children: menuItems.asMap().entries.map((entry) {
                     final index = entry.key;
@@ -152,7 +152,7 @@ class _LeftSideState extends State<LeftSide> {
 
                       style: TextStyle(
                         color: Provider.of<AppColors>(context).appColors.primaryText,
-                        fontSize: 0.015 * width,
+                        fontSize: 0.015.sp * width,
                         fontWeight: FontWeight.w700,
 
                       ),
@@ -172,7 +172,7 @@ class _LeftSideState extends State<LeftSide> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Provider.of<AppColors>(context).appColors.CompanyDesc,
-                          fontSize: 0.006 * width,
+                          fontSize: 0.006.sp * width,
                           fontWeight: FontWeight.w100,
                           // overflow: TextOverflow.ellipsis,
                         ),
@@ -235,7 +235,7 @@ class MenuTiles extends StatelessWidget {
                   color: isActive ? appColors.Icon : appColors.IconNotActive,
                 ),
                 if (fullMenu) ...[
-                  const SizedBox(width: 30),
+                  SizedBox(width: 30.w),
                   Expanded(
                     child: Text(
                       item.text,
@@ -245,6 +245,7 @@ class MenuTiles extends StatelessWidget {
                         color: isActive
                             ? appColors.MenuActive
                             : appColors.MenuNotActive,
+                        fontSize: 14.sp
                       ),
                     ),
                   ),

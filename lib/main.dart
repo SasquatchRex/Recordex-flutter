@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:recordex/Authentication/login.dart';
-import 'package:recordex/Provider/color_provider.dart';
-import 'package:recordex/Provider/main_provider.dart';
-
+import 'package:recordex/Processing/Provider/main_provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
@@ -30,9 +27,9 @@ void main() async{
     title: "Recordex",
     titleBarStyle: TitleBarStyle.normal,
     windowButtonVisibility: true,
-
-
   );
+
+
   await windowManager.waitUntilReadyToShow(windowOptions,() async {
     await windowManager.show();
     await windowManager.focus();
@@ -40,6 +37,8 @@ void main() async{
 
   });
   WidgetsFlutterBinding.ensureInitialized();
+
+
   runApp( MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => General()),

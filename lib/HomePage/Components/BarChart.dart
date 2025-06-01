@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
+import '../../Processing/Provider/main_provider.dart';
 import '../../topside.dart';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class BarChartWidget extends StatelessWidget {
   const BarChartWidget({super.key});
@@ -23,7 +24,7 @@ class BarChartWidget extends StatelessWidget {
           true, // Show all horizontal lines
           getDrawingHorizontalLine: (value) => FlLine(
             color: Colors.white.withOpacity(0.2),
-            strokeWidth: 1,
+            strokeWidth: 1.w,
           ),
         ),
         titlesData: FlTitlesData(
@@ -34,7 +35,7 @@ class BarChartWidget extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toInt().toString(),
-                  style:  TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontSize: 12),
+                  style:  TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText, fontSize: 12.sp),
                 );
               },
               interval: 10,
@@ -59,7 +60,7 @@ class BarChartWidget extends StatelessWidget {
 
                 return Text(
                   months[value.toInt()],
-                  style:  TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 12),
+                  style:  TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 12.sp),
                 );
               },
               interval: 1,

@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
+import '../Processing/Provider/main_provider.dart';
 import '../topside.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class ManageStocks extends StatefulWidget {
   const ManageStocks({super.key});
@@ -42,14 +43,14 @@ class _ManageStocksState extends State<ManageStocks> {
 
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
+                  padding: EdgeInsets.only(bottom: 20.h),
                   child: Topside(),
                 ),
                 Expanded(
                   child: Container(
                     // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
                     // color: Colors.red,
-                    padding: EdgeInsets.only(right: 30),
+                    padding: EdgeInsets.only(right: 30).w,
                       alignment: Alignment.topLeft,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
@@ -59,15 +60,15 @@ class _ManageStocksState extends State<ManageStocks> {
                             Text(
                               "Manage Stocks",
                               style: TextStyle(
-                                  fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                  fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(height: 40,),
+                            SizedBox(height: 40.h,),
                             GridView.extent(
                               maxCrossAxisExtent: 200, // number of items per row
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              mainAxisSpacing: 20,
-                              crossAxisSpacing: 25,
+                              mainAxisSpacing: 20.w,
+                              crossAxisSpacing: 25.h,
                               children: Provider.of<Stocks>(context).decoded_response['stocks']
                                   .map<Widget>((item) => GestureDetector(
                                 onTap: () {
@@ -75,9 +76,9 @@ class _ManageStocksState extends State<ManageStocks> {
                                   showOverlay(context, item);
                                 },
                                 child: Container(
-                                  // width: 50,
-                                  // height: 50,
-                                  padding: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+                                  // width: 50.w,
+                                  // height: 50.h,
+                                  padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 10.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: Provider.of<AppColors>(context).appColors.primary,
@@ -101,16 +102,16 @@ class _ManageStocksState extends State<ManageStocks> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 3,
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 15.sp,
                                             color: Provider.of<AppColors>(context).appColors.secondaryText,
                                           fontWeight: FontWeight.w700
                                         ),
                                       ),
-                                      // SizedBox(height: 10,),
+                                      // SizedBox(height: 10.h,),
                                       Text(
                                         "H.S Code : ${item['HSCode'].length}",
                                         style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 13.sp,
                                             color: Provider.of<AppColors>(context).appColors.secondaryText,
                                             fontWeight: FontWeight.w600
                                         ),
@@ -118,7 +119,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                       Text(
                                         "Entries : ${item['stock_entries'].length}",
                                         style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 13.sp,
                                             color: Provider.of<AppColors>(context).appColors.secondaryText,
                                             fontWeight: FontWeight.w600
                                         ),
@@ -126,7 +127,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                       Text(
                                         "No. of unpaid Stock : ${item['No of unpaid']}",
                                         style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 13.sp,
                                             color: Provider.of<AppColors>(context).appColors.secondaryText,
                                             fontWeight: FontWeight.w600
                                         ),
@@ -139,7 +140,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             style: TextStyle(
-                                                fontSize: 13,
+                                                fontSize: 13.sp,
                                                 color: Provider.of<AppColors>(context).appColors.secondaryText,
                                                 fontWeight: FontWeight.w500
                                             ),
@@ -154,7 +155,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                   :item['Remaining Quantity'] < 5? Colors.redAccent
                                                   : item['Remaining Quantity'] < 10? Colors.orange
                                                   : Colors.green,
-                                              fontSize: 18,
+                                              fontSize: 18.sp,
 
 
                                             ),
@@ -162,9 +163,9 @@ class _ManageStocksState extends State<ManageStocks> {
                                         ],
                                       ),
 
-                                      // SizedBox(height: 10,),
+                                      // SizedBox(height: 10.h,),
 
-                                      // SizedBox(height: 10,),
+                                      // SizedBox(height: 10.h,),
 
                                     ],
                                   ),
@@ -220,7 +221,8 @@ class _ManageStocksState extends State<ManageStocks> {
               child: Container(
                   width: 0.75 * width,
                   height: 0.75 * height,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20.r)
+,
                   color: Provider.of<AppColors>(context).appColors.primary,
                   child: Stack(
                     children: [
@@ -238,7 +240,7 @@ class _ManageStocksState extends State<ManageStocks> {
                           child: Text(
                               "Stock Detail for ${Stock['name']}",
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 24.sp,
                               fontWeight: FontWeight.w700,
                                 color: Provider.of<AppColors>(context).appColors.primaryText
                             ),
@@ -256,7 +258,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                     // color: Provider.of<AppColors>(context).appColors.secondary,
                                     padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
                                     margin: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
-                                    height: 30,
+                                    height: 30.h,
                                     // width: 0.5*width,
                                     child: Row(
                                       children: [
@@ -265,7 +267,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                             child: Text(
                                               "S.N.",
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -277,7 +279,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -289,7 +291,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -301,7 +303,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -335,7 +337,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                    child: Text(
                                                        "${index+1}",
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 18.sp,
                                                           color: Provider.of<AppColors>(context).appColors.secondaryText
                                                         ),
                                                    )
@@ -347,7 +349,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                         overflow: TextOverflow.ellipsis,
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 18.sp,
                                                           color: Provider.of<AppColors>(context).appColors.secondaryText
                                                         ),
                                                    )
@@ -359,7 +361,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                         overflow: TextOverflow.ellipsis,
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 18.sp,
                                                           color: Provider.of<AppColors>(context).appColors.secondaryText
                                                         ),
                                                    )
@@ -371,7 +373,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                         overflow: TextOverflow.ellipsis,
                                                         maxLines: 1,
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 18.sp,
                                                           color: Provider.of<AppColors>(context).appColors.secondaryText
                                                         ),
                                                    )
@@ -389,7 +391,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                        maxLines: 1,
                                                        overflow: TextOverflow.ellipsis,
                                                        style: TextStyle(
-                                                         fontSize: 14,
+                                                         fontSize: 14.sp,
                                                          color: Colors.white
                                                          // color: index %2 == 0? Colors.green : Colors.red
                                                        ),
@@ -407,7 +409,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 20,),
+                            SizedBox(width: 20.w,),
                             Container(
                               color: Provider.of<AppColors>(context).appColors.secondary,
                               width: 0.2*width,
@@ -424,10 +426,10 @@ class _ManageStocksState extends State<ManageStocks> {
                                           style:TextStyle(
                                               color: Provider.of<AppColors>(context).appColors.secondaryText,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 20
+                                            fontSize: 20.sp
                                           ),
                                         ),
-                                        SizedBox(width: 20,),
+                                        SizedBox(width: 20.w,),
                                         Text(
                                           "${Stock['Remaining Quantity']}",
                                           style:TextStyle(
@@ -437,7 +439,7 @@ class _ManageStocksState extends State<ManageStocks> {
                                                   Colors.orange
                                                     : Colors.red,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 38
+                                            fontSize: 38.sp
                                           ),
                                         ),
                                       ],

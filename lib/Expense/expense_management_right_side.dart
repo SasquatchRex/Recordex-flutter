@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
+import '../../Processing/Provider/main_provider.dart';
 import '../topside.dart';
 import 'dart:ui';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class ExpenseManagementRightSide extends StatefulWidget {
   const ExpenseManagementRightSide({super.key});
@@ -66,7 +67,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                         Text(
                                           "Manage Expenses",
                                           style: TextStyle(
-                                              fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                              fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                                         ),
                                         IconButton(
                                             onPressed: Provider.of<ExpenseManagementProvider>(context).filtermenuchange,
@@ -90,7 +91,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                           children: [
                                             Text("Filter with Date : "),
                                             SizedBox(
-                                              width: 20,
+                                              width: 20.w,
                                             ),
                                           ],
                                         ),
@@ -100,7 +101,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                   Padding(
                                     padding: const EdgeInsets.only(right: 40.0),
                                     child: Container(
-                                      // height: 150,
+                                      // height: 150.h,
                                       color: Provider.of<AppColors>(context).appColors.primary,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -115,33 +116,33 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                                   children: [
                                                     Text(
                                                       "Total Inoives Created this month : ",
-                                                      style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                     ),
                                                     SizedBox(
-                                                      width: 10,
+                                                      width: 10.w,
                                                     ),
                                                     Text(
                                                       "13.2k",
-                                                      style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: 10,
+                                                  height: 10.h,
                                                 ),
                                                 Row(
                                                   children: [
                                                     Text(
                                                       "Total Paid Expenses this month : ",
                                                       textAlign: TextAlign.left,
-                                                      style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                      style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                     ),
                                                     SizedBox(
-                                                      width: 10,
+                                                      width: 10.w,
                                                     ),
                                                     Text(
                                                       "10.2k",
-                                                      style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                      style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                     )
                                                   ],
                                                 ),
@@ -159,33 +160,33 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                                     children: [
                                                       Text(
                                                         "Total Inoives Created this month : ",
-                                                        style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
                                                         "13.2k",
-                                                        style: TextStyle(fontSize: 28, color: Colors.green, fontWeight: FontWeight.w300),
+                                                        style: TextStyle(fontSize: 28.sp, color: Colors.green, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
                                                   ),
                                                   SizedBox(
-                                                    height: 10,
+                                                    height: 10.h,
                                                   ),
                                                   Row(
                                                     children: [
                                                       Text(
                                                         "Total Unpaid Expenses this month : ",
                                                         textAlign: TextAlign.left,
-                                                        style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                        style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.secondaryText),
                                                       ),
                                                       SizedBox(
                                                         width: 10,
                                                       ),
                                                       Text(
                                                         "10.2k",
-                                                        style: TextStyle(fontSize: 28, color: Colors.red, fontWeight: FontWeight.w300),
+                                                        style: TextStyle(fontSize: 28.sp, color: Colors.red, fontWeight: FontWeight.w300),
                                                       )
                                                     ],
                                                   ),
@@ -214,7 +215,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                           child: Text(
                                             "To",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         Expanded(
@@ -222,14 +223,14 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                             child: Text(
                                               "Created Date",
                                               style: TextStyle(
-                                                  fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                  fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                             )),
                                         Expanded(
                                           flex: 2,
                                           child: Text(
                                             "Total Amount",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         Expanded(
@@ -237,7 +238,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                           child: Text(
                                             "Remarks",
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         SizedBox(
@@ -250,7 +251,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                             "Status",
                                             // textAlign: TextAlign.end,
                                             style: TextStyle(
-                                                fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
+                                                fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         SizedBox(
@@ -268,7 +269,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 10.0, bottom: 10, right: 40),
                                       child: ConstrainedBox(
-                                        constraints: BoxConstraints(maxHeight: 400),
+                                        constraints: BoxConstraints(maxHeight: 400.h),
                                         child: Container(
                                           color: Provider.of<AppColors>(context).appColors.primary,
                                           padding: EdgeInsets.symmetric(vertical: 6),
@@ -307,20 +308,20 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                                                 "${item["From Name"]}",
                                                                 maxLines: 1,
                                                                 overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 16, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 16.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
                                                             Expanded(
                                                                 flex: 2,
                                                                 child: Text(
                                                                   "${item["date"]}",
-                                                                  style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                  style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                                 )),
                                                             Expanded(
                                                               flex: 2,
                                                               child: Text(
                                                                 "${item["Total Amount"]}",
-                                                                style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
 
@@ -330,7 +331,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                                                 "${item["Remarks"]}",
                                                                 maxLines: 1,
                                                                 overflow: TextOverflow.ellipsis,
-                                                                style: TextStyle(fontSize: 14, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                                style: TextStyle(fontSize: 14.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -349,7 +350,7 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
                                                                     maxLines: 1,
                                                                     overflow: TextOverflow.ellipsis,
                                                                     style: TextStyle(
-                                                                      fontSize: 14,
+                                                                      fontSize: 14.sp,
                                                                       // color: index %2 == 0? Colors.green : Colors.red
                                                                     ),
                                                                   ),
@@ -422,7 +423,8 @@ class _ExpenseManagementRightSideState extends State<ExpenseManagementRightSide>
               child: Container(
                   width: 0.6 * width,
                   height: 0.75 * height,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20.r)
+,
                   color: Provider.of<AppColors>(context).appColors.primary,
                   child: Stack(
                     children: [

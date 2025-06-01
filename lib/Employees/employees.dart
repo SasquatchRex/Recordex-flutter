@@ -1,14 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:recordex/Create%20Expense/expense_rightside.dart';
-
-import '../../Provider/main_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
+import '../../Processing/Provider/main_provider.dart';
 import '../topside.dart';
 
 class Employees extends StatefulWidget {
@@ -31,352 +26,357 @@ class _EmployeesState extends State<Employees> {
 
   @override
   Widget build(BuildContext context) {
-    return  AnimatedContainer(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.linear,
-      // width: widget.fullMenu
-      //     ? 0.80 * MediaQuery.of(context).size.width
-      //     : 0.89 * MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Provider.of<AppColors>(context).appColors.background,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
-        // padding: const EdgeInsets.only(top: 20,bottom: 20),
-        child: Stack(
-          children: [
-            Column(
 
+    return  LayoutBuilder(
+      builder: (context,constraints) {
+        final width = constraints.maxWidth;
+
+
+        return AnimatedContainer(
+
+          duration: Duration(milliseconds: 400),
+          curve: Curves.linear,
+          // width: widget.fullMenu
+          //     ? 0.80 * MediaQuery.of(context).size.width
+          //     : 0.89 * MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Provider.of<AppColors>(context).appColors.background,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0,bottom:20,right: 0,left: 20),
+            // padding: const EdgeInsets.only(top: 20,bottom: 20),
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Topside(),
-                ),
-                Expanded(
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.linear,
-                    padding: EdgeInsets.only(right: 50),
-                    child: Container(
-                      // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
-                      // color: Colors.red,
-                        alignment: Alignment.topLeft,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Manage Employees",
-                                    style: TextStyle(
-                                        fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
-                                  ),
-                                  ElevatedButton(
-                                      onPressed:()=> Provider.of<EmployeesProvider>(context,listen: false).toggle_employee_space(),
-                                      child: Text(
-                                        !Provider.of<EmployeesProvider>(context,).add_employee_space?"Add Employee" : "Close",
-                                        style: TextStyle(
-                                            // color: Provider.of<AppColors>(context).appColors.primaryText,
-                                          color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(!Provider.of<EmployeesProvider>(context,).add_employee_space?Colors.green:Colors.red),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5), // roundness
-                                          side: BorderSide(color:!Provider.of<EmployeesProvider>(context,).add_employee_space? Colors.green : Colors.red, width: 2), // border
-                                        ),
-                                      ),
+                Column(
 
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 40,),
-                              GridView.extent(
-                                maxCrossAxisExtent: 220, // number of items per row
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                mainAxisSpacing: 15,
-                                crossAxisSpacing: 15,
-                                childAspectRatio: 1/1.15,
-                                children: Provider.of<EmployeesProvider>(context,listen: false).decoded_response
-                                    .map<Widget>((employee) => GestureDetector(
-                                  onTap: ()async {
-                                    // print(item);
-                                    await Provider.of<EmployeesProvider>(context,listen: false).getEmployeelogs(employee['id']);
-                                    showOverlay(context,employee);
-                                  },
-                                  child: Container(
-                                    // width: 50,
-                                    // height: 70,
-                                    padding: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Provider.of<AppColors>(context).appColors.primary,
-                                      borderRadius: BorderRadius.circular(10),
-                                      // border: Border.all(color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green),
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //     color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green, // shadow color
-                                      //     spreadRadius: 2,  // how wide the shadow spreads
-                                      //     blurRadius: 15,    // how blurry the shadow is
-                                      //     offset: Offset(0, 2), // position of shadow: x (right), y (down)
-                                      //   ),
-                                      // ],
-                                    ),
-                                    child: Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        CircleAvatar(
-                                          foregroundColor:Colors.white,
-                                          backgroundColor:Colors.grey,
-                                          radius: 50,
-                                          child: Icon(
-                                            Icons.person,
-                                            size: 90,
-                                          ),
-                                        ),
-                                        SizedBox(height: 12,),
-                                        Text(
-                                            "${employee["name"]}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Provider.of<AppColors>(context).appColors.primaryText,
-                                            fontWeight: FontWeight.w800
-                                          ),
-                                        ),
-                                        Text(
-                                            "${employee["position"]}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                            fontWeight: FontWeight.w700
-                                          ),
-                                        ),
-                                        Text(
-                                            "Salary : Rs. ${employee["monthlySalary"]}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                            fontWeight: FontWeight.w600
-                                          ),
-                                        ),
-                                        Text(
-                                            "${employee["contact"]}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Provider.of<AppColors>(context).appColors.QuaternaryText,
-                                          ),
-                                        ),
-                                        // SizedBox(height: 10,),
-
-                                        // SizedBox(height: 10,),
-
-                                      ],
-                                    ),
-                                  ),
-                                ))
-                                    .toList(),
-                              )
-
-                            ],
-                          ),
-                        )
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Topside(),
                     ),
-                  ),
-                ),
-                if(Provider.of<EmployeesProvider>(context,).add_employee_space == true)
-                  SizedBox(height: 30,),
-                if(Provider.of<EmployeesProvider>(context,).add_employee_space == true)
-                  Container(
-                  // height: 200,
-                  margin: EdgeInsets.only(right: 50),
-                  padding: EdgeInsets.all( 30),
-                  color: Provider.of<AppColors>(context).appColors.primary,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                    Expanded(
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.linear,
+                        padding: EdgeInsets.only(right: 50.w),
+                        child: Container(
+                          // width: widget.fullMenu? 0.6 * MediaQuery.of(context).size.width : 0.69* MediaQuery.of(context).size.width,
+                          // color: Colors.red,
+                            alignment: Alignment.topLeft,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Manage Employees",
+                                        style: TextStyle(
+                                            fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                      ),
+                                      ElevatedButton(
+                                          onPressed:()=> Provider.of<EmployeesProvider>(context,listen: false).toggle_employee_space(),
+                                          child: Text(
+                                            !Provider.of<EmployeesProvider>(context,).add_employee_space?"Add Employee" : "Close",
+                                            style: TextStyle(
+                                                // color: Provider.of<AppColors>(context).appColors.primaryText,
+                                              color: Colors.white,
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(!Provider.of<EmployeesProvider>(context,).add_employee_space?Colors.green:Colors.red),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5), // roundness
+                                              side: BorderSide(color:!Provider.of<EmployeesProvider>(context,).add_employee_space? Colors.green : Colors.red, width: 2.w), // border
+                                            ),
+                                          ),
+
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 40.h,),
+                                  Wrap(
+                                    spacing: 15, // horizontal spacing
+                                    runSpacing: 15,
+                                    children: Provider.of<EmployeesProvider>(context,listen: false).decoded_response
+                                        .map<Widget>((employee) => GestureDetector(
+                                      onTap: ()async {
+                                        // print(item);
+                                        await Provider.of<EmployeesProvider>(context,listen: false).getEmployeelogs(employee['id']);
+                                        showOverlay(context,employee);
+                                      },
+                                      child: Container(
+                                        width: 200.w,
+                                        // height: 70.h,
+                                        padding: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Provider.of<AppColors>(context).appColors.primary,
+                                          borderRadius: BorderRadius.circular(10),
+                                          // border: Border.all(color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green),
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color: item['Remaining Quantity'] < 5 ? Colors.red :item['Remaining Quantity'] < 10? Colors.orange: Colors.green, // shadow color
+                                          //     spreadRadius: 2,  // how wide the shadow spreads
+                                          //     blurRadius: 15,    // how blurry the shadow is
+                                          //     offset: Offset(0, 2), // position of shadow: x (right), y (down)
+                                          //   ),
+                                          // ],
+                                        ),
+                                        child: Column(
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            CircleAvatar(
+                                              foregroundColor:Colors.white,
+                                              backgroundColor:Colors.grey,
+                                              radius: 50,
+                                              child: Icon(
+                                                Icons.person,
+                                                size: 90.r,
+                                              ),
+                                            ),
+                                            SizedBox(height: 12.h,),
+                                            Text(
+                                                "${employee["name"]}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Provider.of<AppColors>(context).appColors.primaryText,
+                                                fontWeight: FontWeight.w800
+                                              ),
+                                            ),
+                                            Text(
+                                                "${employee["position"]}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                                fontWeight: FontWeight.w700
+                                              ),
+                                            ),
+                                            Text(
+                                                "Salary : Rs. ${employee["monthlySalary"]}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                                                fontWeight: FontWeight.w600
+                                              ),
+                                            ),
+                                            Text(
+                                                "${employee["contact"]}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Provider.of<AppColors>(context).appColors.QuaternaryText,
+                                              ),
+                                            ),
+                                            // SizedBox(height: 10.h,),
+
+                                            // SizedBox(height: 10.h,),
+
+                                          ],
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                  )
+
+                                ],
+                              ),
+                            )
+                        ),
+                      ),
+                    ),
+                    if(Provider.of<EmployeesProvider>(context,).add_employee_space == true)
+                      SizedBox(height: 30.h,),
+                    if(Provider.of<EmployeesProvider>(context,).add_employee_space == true)
                       Container(
-                        width: 200,
-                        child: CircleAvatar(
-                          foregroundColor:Colors.white,
-                          backgroundColor:Colors.grey,
-                          radius: 55,
-                          child: Icon(
-                            Icons.person,
-                            size: 75,
+                      // height: 200.h,
+                      margin: EdgeInsets.only(right: 50),
+                      padding: EdgeInsets.all( 30),
+                      color: Provider.of<AppColors>(context).appColors.primary,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: 200.w,
+                            child: CircleAvatar(
+                              foregroundColor:Colors.white,
+                              backgroundColor:Colors.grey,
+                              radius: 55,
+                              child: Icon(
+                                Icons.person,
+                                size: 75,
+                              ),
+
+                            ),
                           ),
-
-                        ),
-                      ),
-                      SizedBox(width: 30,),
-                      Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 350,
-                                // color: Colors.white,
-                                child: TextField(
-                                  controller: Provider.of<EmployeesProvider>(context,).name,
-                                  style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                  cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
-                                  decoration: InputDecoration(
-                                    fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                    labelText: 'Name',
-                                    labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black), // Change focus border color here
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 20,),
-                              Container(
-                                width: 350,
-                                // color: Colors.white,
-                                child: TextField(
-                                  controller: Provider.of<EmployeesProvider>(context,).position,
-                                  style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                  cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
-
-                                  decoration: InputDecoration(
-                                    fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                    labelText: 'Position',
-                                    labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                          SizedBox(width: 30.w,),
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 350.w,
+                                    // color: Colors.white,
+                                    child: TextField(
+                                      controller: Provider.of<EmployeesProvider>(context,).name,
+                                      style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                      cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+                                      decoration: InputDecoration(
+                                        fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                        labelText: 'Name',
+                                        labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          )
-                      ),
-                      Expanded(
-                          child: Column(
-                          children: [
-                            Container(
-                              width: 250,
-                              // color: Colors.white,
-                              child: TextField(
-                                controller: Provider.of<EmployeesProvider>(context,).salary,
-                                inputFormatters:[
-                                  LengthLimitingTextInputFormatter(9), // max 5 digits
-                                  FilteringTextInputFormatter.digitsOnly, // only digits
+                                  SizedBox(height: 20.h,),
+                                  Container(
+                                    width: 350,
+                                    // color: Colors.white,
+                                    child: TextField(
+                                      controller: Provider.of<EmployeesProvider>(context,).position,
+                                      style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                      cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
 
+                                      decoration: InputDecoration(
+                                        fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                        labelText: 'Position',
+                                        labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
-                                cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+                              )
+                          ),
+                          Expanded(
+                              child: Column(
+                              children: [
+                                Container(
+                                  width: 250,
+                                  // color: Colors.white,
+                                  child: TextField(
+                                    controller: Provider.of<EmployeesProvider>(context,).salary,
+                                    inputFormatters:[
+                                      LengthLimitingTextInputFormatter(9), // max 5 digits
+                                      FilteringTextInputFormatter.digitsOnly, // only digits
 
-                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                decoration: InputDecoration(
-                                  fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                  labelText: 'Monthly Salary',
-                                  labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                    ],
+                                    cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+
+                                    style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                    decoration: InputDecoration(
+                                      fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                      labelText: 'Monthly Salary',
+                                      labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 20,),
-                            Container(
-                              width: 250,
-                              // color: Colors.white,
-                              child: TextField(
-                                controller: Provider.of<EmployeesProvider>(context,).contact,
-                                inputFormatters:[
-                                  LengthLimitingTextInputFormatter(10), // max 5 digits
-                                  FilteringTextInputFormatter.digitsOnly, // only digits
+                                SizedBox(height: 20.h,),
+                                Container(
+                                  width: 250,
+                                  // color: Colors.white,
+                                  child: TextField(
+                                    controller: Provider.of<EmployeesProvider>(context,).contact,
+                                    inputFormatters:[
+                                      LengthLimitingTextInputFormatter(10), // max 5 digits
+                                      FilteringTextInputFormatter.digitsOnly, // only digits
 
-                                ],
-                                cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+                                    ],
+                                    cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
 
-                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                decoration: InputDecoration(
-                                  fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                  labelText: 'Contact Number',
-                                  labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                    style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                    decoration: InputDecoration(
+                                      fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                      labelText: 'Contact Number',
+                                      labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                      ),
+                                    ),
                                   ),
                                 ),
+                              ],
+                            )
+                          ),
+                          ElevatedButton(
+                            onPressed:()async{
+                              await Provider.of<EmployeesProvider>(context,listen: false).addEmployee();
+                              await Provider.of<EmployeesProvider>(context,listen: false).getEmployee();
+
+                              },
+                            child: Text(
+                              "Save",
+                              style: TextStyle(
+                                // color: Provider.of<AppColors>(context).appColors.primaryText,
+                                  color: Colors.white,
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w600
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                          ],
-                        )
-                      ),
-                      ElevatedButton(
-                        onPressed:()async{
-                          await Provider.of<EmployeesProvider>(context,listen: false).addEmployee();
-                          await Provider.of<EmployeesProvider>(context,listen: false).getEmployee();
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.green),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5), // roundness
+                                  side: BorderSide(color: Colors.green, width: 2), // border
+                                ),
+                              ),
 
-                          },
-                        child: Text(
-                          "Save",
-                          style: TextStyle(
-                            // color: Provider.of<AppColors>(context).appColors.primaryText,
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.green),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5), // roundness
-                              side: BorderSide(color: Colors.green, width: 2), // border
                             ),
                           ),
 
-                        ),
+
+
+                        ],
                       ),
+                    )
+                  ],
+                ),
 
 
 
-                    ],
-                  ),
-                )
+
               ],
             ),
-
-
-
-
-          ],
-        ),
-      ),
-      // child: Text("Hello"),
+          ),
+          // child: Text("Hello"),
+        );
+      }
     );
   }
 
@@ -410,7 +410,8 @@ void showOverlay(BuildContext context,Map employee) {
             child: Container(
                 width: 0.75 * width,
                 height: 0.75 * height,
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.r)
+,
                 color: Provider.of<AppColors>(context).appColors.primary,
                 child: Stack(
                   children: [
@@ -429,7 +430,7 @@ void showOverlay(BuildContext context,Map employee) {
                           "Employee Details",
                           style: TextStyle(
                               color: Provider.of<AppColors>(context).appColors.primaryText,
-                              fontSize: 28,
+                              fontSize: 28.sp,
                               fontWeight: FontWeight.w600
                           ),
                         )
@@ -478,7 +479,7 @@ void showOverlay(BuildContext context,Map employee) {
                             "Save",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: 22.sp,
                                 fontWeight: FontWeight.w600
                             ),
                             textAlign: TextAlign.center,
@@ -493,176 +494,261 @@ void showOverlay(BuildContext context,Map employee) {
                       padding: const EdgeInsets.symmetric(vertical: 60.0,horizontal: 10),
                       child: Row(
                         children: [
-                          Container(
-                            color: Provider.of<AppColors>(context).appColors.secondary,
-                            width: 0.3*width,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            foregroundColor:Colors.white,
-                                            backgroundColor:Colors.grey,
-                                            radius: 50,
-                                            child: Icon(
-                                              Icons.person,
-                                              size: 90,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10,),
-                                          Text(
-                                            "${employee['name']}",
-                                            style: TextStyle(
-                                                color: Provider.of<AppColors>(context).appColors.primaryText,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 20
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                          SingleChildScrollView(
 
-                                  // Container(height: 250,),
-                                  Container(
-                                    color: Provider.of<AppColors>(context).appColors.primary,
-                                    padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Container(
+                              color: Provider.of<AppColors>(context).appColors.secondary,
+                              width: 0.3*width,
+                              height: 0.6*height,
+                              child: Padding(
+                                padding:  EdgeInsets.symmetric(horizontal: 10.w,vertical: 15.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Center(
-                                          child: Text(
-                                              "Salary Payment",
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            CircleAvatar(
+                                              foregroundColor:Colors.white,
+                                              backgroundColor:Colors.grey,
+                                              radius: 50.r,
+                                              child: Icon(
+                                                Icons.person,
+                                                size: 90.r,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h,),
+                                            Text(
+                                              "${employee['name']}",
+                                              style: TextStyle(
+                                                  color: Provider.of<AppColors>(context).appColors.primaryText,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 20.sp
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      color: Provider.of<AppColors>(context).appColors.primary,
+                                      padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 15.h),
+                                      child: Column(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              "Edit Employee's Details",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Provider.of<AppColors>(context).appColors.primaryText,
                                                   fontWeight: FontWeight.w700,
-                                                  fontSize: 24
+                                                  fontSize: 24.sp
                                               ),
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 20,),
-                                        Container(
-                                          width: 250,
-                                          alignment: Alignment.topLeft,
-                                          // color: Colors.white,
-                                          child: TextField(
-                                            controller: Provider.of<EmployeesProvider>(context,).amount,
-                                            inputFormatters:[
-                                              LengthLimitingTextInputFormatter(10), // max 5 digits
-                                              FilteringTextInputFormatter.digitsOnly, // only digits
+                                          SizedBox(height: 20.h,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: 200.w,
+                                                alignment: Alignment.topLeft,
+                                                // color: Colors.white,
+                                                child: TextField(
+                                                  controller: Provider.of<EmployeesProvider>(context,).amount,
+                                                  inputFormatters:[
+                                                    LengthLimitingTextInputFormatter(10), // max 5 digits
+                                                    FilteringTextInputFormatter.digitsOnly, // only digits
 
+                                                  ],
+                                                  cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+
+                                                  style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                  decoration: InputDecoration(
+                                                    fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                                    labelText: 'Post',
+                                                    labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              // SizedBox(width: 20,),
+                                              Container(
+                                                width: 200.w,
+                                                alignment: Alignment.topLeft,
+                                                // color: Colors.white,
+                                                child: TextField(
+                                                  controller: Provider.of<EmployeesProvider>(context,).amount,
+                                                  inputFormatters:[
+                                                    LengthLimitingTextInputFormatter(10), // max 5 digits
+                                                    FilteringTextInputFormatter.digitsOnly, // only digits
+
+                                                  ],
+                                                  cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+
+                                                  style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                                  decoration: InputDecoration(
+                                                    fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                                    labelText: 'Contact No',
+                                                    labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                                    ),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ],
-                                            cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
 
-                                            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                            decoration: InputDecoration(
-                                              fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                              labelText: 'Amount',
-                                              labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Colors.black), // Change focus border color here
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10,),
-                                        Container(
-                                          width: 250,
-                                          // color: Colors.white,
-                                          child: TextField(
-                                            controller: Provider.of<EmployeesProvider>(context,).reason,
-                                            cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
-
-                                            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                            decoration: InputDecoration(
-                                              fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                              labelText: 'Reason',
-                                              labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Colors.black), // Change focus border color here
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,),
-                                        Container(
-                                          width: 250,
-                                          // color: Colors.white,
-                                          child: TextField(
-                                            controller: Provider.of<EmployeesProvider>(context,).dateController,
-                                            cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
-                                            inputFormatters: [LengthLimitingTextInputFormatter(10), DateInputFormatter()],
-                                            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
-                                            decoration: InputDecoration(
-                                              fillColor: Provider.of<AppColors>(context).appColors.secondary ,
-                                              labelText: 'Date of Transaction (YYYY-MM-DD)',
-                                              labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: Colors.black), // Change focus border color here
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,),
-                                        if(Provider.of<EmployeesProvider>(context,).reason.text != "" && Provider.of<EmployeesProvider>(context,).amount.text != "")
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: ElevatedButton(
-                                            onPressed:()async{
-                                              await Provider.of<EmployeesProvider>(context,listen: false).postLog(employee['id']);
-                                              await Provider.of<EmployeesProvider>(context,listen: false).getEmployeelogs(employee['id']);
-                                            },
+                                    // Container(height: 250,),
+                                    Container(
+                                      color: Provider.of<AppColors>(context).appColors.primary,
+                                      padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 15.h),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Center(
                                             child: Text(
-                                              "Add Log",
-                                              style: TextStyle(
-                                                // color: Provider.of<AppColors>(context).appColors.primaryText,
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-
-                                              ),
-                                              textAlign: TextAlign.center,
+                                                "Salary Payment",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Provider.of<AppColors>(context).appColors.primaryText,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 24.sp
+                                                ),
                                             ),
-                                            style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all(Colors.red),
-                                              alignment: Alignment.center,
-                                              padding: MaterialStateProperty.all(
-                                                EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                                              ),
-                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  side: BorderSide(color: Colors.red, width: 2),
+                                          ),
+                                          SizedBox(height: 20.h,),
+                                          Container(
+                                            width: 250.w,
+                                            alignment: Alignment.topLeft,
+                                            // color: Colors.white,
+                                            child: TextField(
+                                              controller: Provider.of<EmployeesProvider>(context,).amount,
+                                              inputFormatters:[
+                                                LengthLimitingTextInputFormatter(10), // max 5 digits
+                                                FilteringTextInputFormatter.digitsOnly, // only digits
+
+                                              ],
+                                              cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+
+                                              style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              decoration: InputDecoration(
+                                                fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                                labelText: 'Amount',
+                                                labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.black), // Change focus border color here
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 20,),
+                                          SizedBox(height: 10.h,),
+                                          Container(
+                                            width: 250.w,
+                                            // color: Colors.white,
+                                            child: TextField(
+                                              controller: Provider.of<EmployeesProvider>(context,).reason,
+                                              cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
 
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                              style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              decoration: InputDecoration(
+                                                fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                                labelText: 'Reason',
+                                                labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 20.h,),
+                                          Container(
+                                            width: 250.w,
+                                            // color: Colors.white,
+                                            child: TextField(
+                                              controller: Provider.of<EmployeesProvider>(context,).dateController,
+                                              cursorColor:Provider.of<AppColors>(context).appColors.primaryText ,
+                                              inputFormatters: [LengthLimitingTextInputFormatter(10), DateInputFormatter()],
+                                              style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              decoration: InputDecoration(
+                                                fillColor: Provider.of<AppColors>(context).appColors.secondary ,
+                                                labelText: 'Date of Transaction (YYYY-MM-DD)',
+                                                labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: Colors.black), // Change focus border color here
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 20.h,),
+                                          if(Provider.of<EmployeesProvider>(context,).reason.text != "" && Provider.of<EmployeesProvider>(context,).amount.text != "")
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: ElevatedButton(
+                                              onPressed:()async{
+                                                await Provider.of<EmployeesProvider>(context,listen: false).postLog(employee['id']);
+                                                await Provider.of<EmployeesProvider>(context,listen: false).getEmployeelogs(employee['id']);
+                                              },
+                                              child: Text(
+                                                "Add Log",
+                                                style: TextStyle(
+                                                  // color: Provider.of<AppColors>(context).appColors.primaryText,
+                                                    color: Colors.white,
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.w600,
+
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              style: ButtonStyle(
+                                                backgroundColor: MaterialStateProperty.all(Colors.red),
+                                                alignment: Alignment.center,
+                                                padding: MaterialStateProperty.all(
+                                                  EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                                                ),
+                                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    side: BorderSide(color: Colors.red, width: 2),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 20.h,),
+
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -673,7 +759,7 @@ void showOverlay(BuildContext context,Map employee) {
                                     // color: Provider.of<AppColors>(context).appColors.secondary,
                                     padding: EdgeInsets.symmetric(vertical: 2,horizontal: 10),
                                     margin: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
-                                    height: 30,
+                                    height: 30.h,
                                     // width: 0.5*width,
                                     child: Row(
                                       children: [
@@ -682,7 +768,7 @@ void showOverlay(BuildContext context,Map employee) {
                                             child: Text(
                                               "S.N.",
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -694,7 +780,7 @@ void showOverlay(BuildContext context,Map employee) {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -706,7 +792,7 @@ void showOverlay(BuildContext context,Map employee) {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -718,7 +804,7 @@ void showOverlay(BuildContext context,Map employee) {
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   color: Provider.of<AppColors>(context).appColors.primaryText
                                               ),
                                             )
@@ -727,7 +813,7 @@ void showOverlay(BuildContext context,Map employee) {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 10,),
+                                  SizedBox(height: 10.h,),
                                   SingleChildScrollView(
                                     child: ListView.builder(
                                       physics: NeverScrollableScrollPhysics(),
@@ -748,7 +834,7 @@ void showOverlay(BuildContext context,Map employee) {
                                                   child: Text(
                                                     "${index+1}",
                                                     style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         color: Provider.of<AppColors>(context).appColors.secondaryText
                                                     ),
                                                   )
@@ -760,7 +846,7 @@ void showOverlay(BuildContext context,Map employee) {
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
                                                     style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         color: Provider.of<AppColors>(context).appColors.secondaryText
                                                     ),
                                                   )
@@ -772,7 +858,7 @@ void showOverlay(BuildContext context,Map employee) {
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
                                                     style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         color: Provider.of<AppColors>(context).appColors.secondaryText
                                                     ),
                                                   )
@@ -784,7 +870,7 @@ void showOverlay(BuildContext context,Map employee) {
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
                                                     style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         color: Provider.of<AppColors>(context).appColors.secondaryText
                                                     ),
                                                   )

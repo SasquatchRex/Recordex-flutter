@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'package:recordex/HomePage/color.dart';
-import '../Provider/main_provider.dart';
+import '../Processing/Provider/main_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 import 'Common Components/notification.dart';
 import 'Authentication/login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 // bool fullMenu = true;
 
@@ -45,71 +45,68 @@ class _TopsideState extends State<Topside> {
       ),
       child: Padding(
         padding:
-            const EdgeInsets.only(top: 10, bottom: 10, right: 20, left: 20),
+             EdgeInsets.only(top: 10.h, bottom: 10.h, right: 20.w, left: 20.w),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: Provider.of<General>(context).toggleMenu,
-                        // print(fullMenu);
+                GestureDetector(
+                  onTap: Provider.of<General>(context).toggleMenu,
+                    // print(fullMenu);
 
-                      child: Icon(
-                        Icons.menu,
-                        color: Provider.of<AppColors>(context).appColors.Icon,
-                      ),
-                    ),
-                    SizedBox(width: 25,),
-                    Container(
-                      width:  width*0.6,
-                      // height: 10,
-                      child: SearchBox(
-                        controller: _searchController,
-                        hintText: "Search",
-                        onChanged: (query) {
-                          // Handle search query changes
-                          print("Search query: $query");
-                        },
-                        onClear: () {
-                          setState(() {
-                            _searchController.clear();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
+                  child: Icon(
+                    Icons.menu,
+                    color: Provider.of<AppColors>(context).appColors.Icon,
+                  ),
                 ),
+                SizedBox(width: 25.w,),
+                Expanded(
+                  // width:  width*0.6.w,
+                  // height: 50.h,
+                  child: SearchBox(
+                    controller: _searchController,
+                    hintText: "Search",
+                    onChanged: (query) {
+                      // Handle search query changes
+                      print("Search query: $query");
+                    },
+                    onClear: () {
+                      setState(() {
+                        _searchController.clear();
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(width: 50.w,),
                 Row(
                   children: [
                     FlutterSwitch(
                       value: Provider.of<AppColors>(context).isDark,
                       onToggle:(_) => Provider.of<AppColors>(context,listen: false).toggleTheme(),
-                      borderRadius: 15,
-                      toggleSize: 22,
+                      borderRadius: 15.r,
+                      // toggleSize: 22.w,
                       activeIcon: Icon(Icons.dark_mode, color: Colors.deepPurpleAccent.shade700),
                       inactiveIcon: Icon(Icons.light_mode, color: Colors.yellow[700]),
                       activeColor: Colors.white12,
                       inactiveColor: Colors.black12,
 
                     ),
-                    SizedBox(width: 20,),
+                    SizedBox(width: 20.w,),
 
 
 
 
-                    SizedBox(width: 20,),
+                    SizedBox(width: 20.w,),
                     GestureDetector(
                       onTap: () => notificationOverlay(context),
                         child: Notification()
                     ),
 
-                    SizedBox(width: 20,),
+                    SizedBox(width: 20.w,),
                     Profile(),
-                    SizedBox(width: 20,),
+                    SizedBox(width: 20.w,),
                     GestureDetector(
                       onTap:()async{
 
@@ -159,8 +156,8 @@ class Notification extends StatelessWidget {
                     top: -5, // Position above the icon
                     right: -5, // Position to the right of the icon
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      width: 20.w,
+                      height: 20.h,
                       alignment: Alignment.topCenter,
                       decoration: BoxDecoration(
                         color: Provider.of<AppColors>(context).appColors.NotificationPing,
@@ -170,7 +167,7 @@ class Notification extends StatelessWidget {
                         "4",
                         style: TextStyle(
                           color: Provider.of<AppColors>(context).appColors.primaryText,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -189,8 +186,8 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 30,
-      height: 30,
+      width: 30.w,
+      height: 30.h,
       child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: Image.asset(
@@ -227,10 +224,11 @@ class _SearchBoxState extends State<SearchBox> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.all(0),
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      // height: 20,
+      margin: EdgeInsets.all(0.r)
+,
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
 
       decoration: BoxDecoration(
         // color: Colors.grey[200],
@@ -247,7 +245,7 @@ class _SearchBoxState extends State<SearchBox> {
       child: Row(
         children: [
           Icon(Icons.search, color: Provider.of<AppColors>(context).appColors.Icon),
-          SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(// Ensures the TextField takes up the remaining space
 
             child: TextField(

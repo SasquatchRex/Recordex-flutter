@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
+import '../Processing/Provider/main_provider.dart';
 import '../topside.dart';
 
 class CategoryManagementRightSide extends StatefulWidget {

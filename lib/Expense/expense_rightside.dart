@@ -1,12 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Provider/main_provider.dart';
+import '../Processing/Provider/main_provider.dart';
 import '../topside.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
 import 'package:nepali_utils/nepali_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class ExpenseRightside extends StatefulWidget {
   const ExpenseRightside({super.key});
@@ -67,9 +68,9 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Create Expense",
+                                        "Expense",
                                         style: TextStyle(
-                                            fontSize: 24, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
+                                            fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(height: 40,),
                                       Row(
@@ -125,9 +126,9 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                         children: [
                                           Text(
                                             Provider.of<ExpenseProvider>(context,listen: false).selectedDate == null ? "Date : " : "Selected Date : ${NepaliDateFormat('yyyy-MM-dd').format(Provider.of<ExpenseProvider>(context,listen: false).selectedDate!)}",
-                                            style: TextStyle(fontSize: 18, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                            style: TextStyle(fontSize: 18.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                           ),
-                                          SizedBox(width: 20),
+                                          SizedBox(width: 20.w),
                                           ElevatedButton(
                                             onPressed: () => _selectDate(context),
                                             style: ElevatedButton.styleFrom(
@@ -135,7 +136,7 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                                 backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
                                             child: Text(
                                               'Pick a Date',
-                                              style: TextStyle(fontSize: 15, color: Provider.of<AppColors>(context).appColors.primaryText),
+                                              style: TextStyle(fontSize: 15.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
                                             ),
                                           ),
                                         ],
@@ -194,7 +195,7 @@ class _ExpenseRightsideState extends State<ExpenseRightside> {
                                                   alignLabelWithHint: true,
                                                   labelStyle: TextStyle(
                                                       color: Provider.of<AppColors>(context).appColors.secondaryText,
-                                                      fontSize: 20,
+                                                      fontSize: 20.sp,
                                                       fontWeight: FontWeight.w400
 
 
@@ -265,7 +266,8 @@ void showOverlay(BuildContext context) {
             child: Container(
                 width: 0.55*width,
                 height: 0.75*height,
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.r)
+,
 
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -324,8 +326,8 @@ void showOverlay(BuildContext context) {
                               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
                               backgroundColor: Provider.of<AppColors>(context).appColors.success),
                           child: Text(
-                            "Create Expense",
-                            style: TextStyle(fontSize: 22, color: Colors.white),
+                            "Expense",
+                            style: TextStyle(fontSize: 22.sp, color: Colors.white),
                           )),
                     ),
 
@@ -361,7 +363,7 @@ void showOverlay(BuildContext context) {
                                   "Total Amount : ",
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -369,7 +371,7 @@ void showOverlay(BuildContext context) {
                                   "Rs. ${Provider.of<InvoicePayment>(context).totalAmountControllers.text}",
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 22,
+                                    fontSize: 22.sp,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -394,7 +396,7 @@ void showOverlay(BuildContext context) {
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: Provider.of<AppColors>(context).appColors.primaryText,
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -457,8 +459,8 @@ class CreateInvoiceButton extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Adjust padding
               backgroundColor: Provider.of<AppColors>(context).appColors.quaternary),
           child: Text(
-            "Create Expense Invoice",
-            style: TextStyle(fontSize: 22, color: Provider.of<AppColors>(context).appColors.primaryText),
+            "Expense Invoice",
+            style: TextStyle(fontSize: 22.sp, color: Provider.of<AppColors>(context).appColors.primaryText),
           )),
     );
   }
@@ -916,7 +918,7 @@ class notificationbox extends StatelessWidget {
             children: [
               Text(
                 "Notifications",
-                style: TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 20),
+                style: TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 20.sp),
               ),
               SizedBox(
                 height: 10,
@@ -947,7 +949,7 @@ class notificationbox extends StatelessWidget {
                               ),
                               Text(
                                 "This is the description for heading 1",
-                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.NotificationBody, fontSize: 12),
+                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.NotificationBody, fontSize: 12.sp),
                               ),
                             ],
                           ),

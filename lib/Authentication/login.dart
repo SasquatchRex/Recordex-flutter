@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:recordex/HomePage/homepage_right.dart';
 import 'package:recordex/homepage.dart';
-import '../../Provider/main_provider.dart';
+import '../../Processing/Provider/main_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -108,7 +108,7 @@ class Login_Widget extends StatelessWidget {
       flex: 3,
       child: Container(
         color: Colors.transparent,
-        // height: 700,
+        // height: 700.h,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,7 +117,7 @@ class Login_Widget extends StatelessWidget {
               "Login to Recordex",
               style: TextStyle(
                   color: Provider.of<AppColors>(context).appColors.primaryText,
-                fontSize: 28,
+                fontSize: 28.sp,
                 fontWeight: FontWeight.w600
               ),
             ),
@@ -130,8 +130,9 @@ class Login_Widget extends StatelessWidget {
             ),
             SizedBox(height: 40,),
             Container(
-              margin: const EdgeInsets.all(10.0),
-              width: 350,
+              margin:  EdgeInsets.all(10.0.r)
+,
+              width: 350.w,
               child: TextField(
                   controller: Provider.of<Login_Provider>(context,listen: false).username,
                   decoration: InputDecoration(
@@ -150,8 +151,9 @@ class Login_Widget extends StatelessWidget {
                   style: const TextStyle(color: Colors.white)),
             ),
             Container(
-              margin: const EdgeInsets.all(10.0),
-              width: 350,
+              margin:  EdgeInsets.all(10.0.r)
+,
+              width: 350.w,
               child: TextField(
                   controller: Provider.of<Login_Provider>(context,listen: false).password,
                   decoration: InputDecoration(
@@ -172,9 +174,10 @@ class Login_Widget extends StatelessWidget {
             ),
 
             Container(
-              margin: const EdgeInsets.all(10.0),
-              width: 300,
-              height: 50,
+              margin:  EdgeInsets.all(10.0.r)
+,
+              width: 300.w,
+              height: 50.h,
               child: ElevatedButton(
                 onPressed: ()async{
 
@@ -195,19 +198,20 @@ class Login_Widget extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   'Login',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
               ),
             ),
             // Container(
-            //   margin: const EdgeInsets.all(10.0),
-            //   width: 300,
-            //   height: 50,
+            //   margin: const EdgeInsets.all(10.0.r)
+
+            //   width: 300.w,
+            //   height: 50.h,
             //   child: ElevatedButton(
             //
             //     onPressed: () {
@@ -226,13 +230,14 @@ class Login_Widget extends StatelessWidget {
             //     ),
             //     child: const Text('Sign In with Google',
             //         style: TextStyle(
-            //             color: Colors.black, fontSize: 16)),
+            //             color: Colors.black, fontSize: 16.sp)),
             //   ),
             // ),
 
             Center(
               child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding:  EdgeInsets.all(16.0.r)
+,
                   child: GestureDetector(
                     onTap: () {
                       // Navigator.pushAndRemoveUntil(
@@ -244,12 +249,12 @@ class Login_Widget extends StatelessWidget {
                       // );
                       // Add your button press logic here
                     },
-                    child: const Text(
+                    child:  Text(
                       "Don't Already have an account? Contact admin",
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         color: Colors.white54,
-                        fontSize: 16.0,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

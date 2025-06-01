@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../Provider/main_provider.dart';
-import '../../topside.dart';
+import '../../Processing/Provider/main_provider.dart';
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ← MUST BE ADDED
+
 
 
 
@@ -27,8 +27,8 @@ class HalfCircleProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     // final clampedPercentage = percentage.clamp(0, 100);
     return SizedBox(
-      height: size,
-      width: size,
+      height: size.h,
+      width: size.w,
       child: CustomPaint(
         painter: _HalfCirclePainter(
           percentage: percentage,
@@ -41,7 +41,7 @@ class HalfCircleProgress extends StatelessWidget {
             "${percentage.toInt()}%",
             style: TextStyle(
               color: Provider.of<AppColors>(context).appColors.primaryText,
-              fontSize: size * 0.2, // Scale font size based on size
+              fontSize: size.r * 0.2, // Scale font size based on size
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -72,7 +72,7 @@ class _HalfCirclePainter extends CustomPainter {
     final backgroundPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
+      ..strokeWidth = strokeWidth.w
       ..strokeCap = StrokeCap.round;
 
     canvas.drawArc(
@@ -87,7 +87,7 @@ class _HalfCirclePainter extends CustomPainter {
     final progressPaint = Paint()
       ..color = progressColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
+      ..strokeWidth = strokeWidth.w
       ..strokeCap = StrokeCap.round;
 
     final sweepAngle = (percentage / 100) * pi; // Calculate progress angle

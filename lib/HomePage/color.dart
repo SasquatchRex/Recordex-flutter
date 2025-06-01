@@ -130,14 +130,15 @@ class AppColorsLight extends AppColors {
     'IconNotActive': Colors.black45,
 
     'primaryText': Colors.black,
-    'secondaryText': Colors.black87,
+    // 'secondaryText': Colors.black87,
+    'secondaryText': Color(0x94131313),
     'tertiaryText': Colors.black54,
     'QuaternaryText': Colors.black45,
     'QuinaryText': Colors.black12,
 
     'NotificationPing': Colors.red, //Notification
-    'MenuActive': Colors.black87, //Menu
-    'MenuNotActive': Colors.black54, //Menu
+    'MenuActive': Colors.black, //Menu
+    'MenuNotActive': Colors.black87, //Menu
     'CompanyDesc': Colors.black54, //Company Description
     'NotificationHeader': Colors.black54, //Notification
     'NotificationBody': Colors.black38, //Notification
