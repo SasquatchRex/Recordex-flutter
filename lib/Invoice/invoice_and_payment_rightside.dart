@@ -22,6 +22,16 @@ class InvoicePaymentRightside extends StatefulWidget {
 class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
   // NepaliDateTime? selectedDate;
 
+  void initState() {
+    super.initState();
+
+    // This is where you call your provider method
+    Future.microtask(() {
+      // await Provider.of<Stocks>(context, listen: false).getStocks();
+      Provider.of<InvoicePayment>(context, listen: false).initializer(context);
+    });
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final NepaliDateTime? picked = await picker.showMaterialDatePicker(
       context: context,
@@ -52,7 +62,7 @@ class _InvoicePaymentRightsideState extends State<InvoicePaymentRightside> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Padding(
-                      padding: EdgeInsets.only(left: 50,right: 50, top: 20,bottom:80),
+                      padding: EdgeInsets.only(left: 50.w,right: 50.w, top: 20.h,bottom:80.h),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -279,9 +289,9 @@ void showOverlay(BuildContext context) {
                       bottom: 0,
                       right: 0,
                       child: ElevatedButton(
-                          onPressed:() {
+                          onPressed:() async {
                             Provider.of<InvoicePayment>(context, listen: false).toJson();
-                            Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
+                            await Provider.of<InvoicePayment>(context, listen: false).createInvoicePost();
                             hideOverlay();
                             if(Provider.of<InvoicePayment>(context, listen: false).post_response == 200){
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -297,6 +307,24 @@ void showOverlay(BuildContext context) {
 
                                 ),
                               );
+                              final General_Provider = Provider.of<General>(context, listen: false);
+                              final InvoicePayment_Provider = Provider.of<InvoicePayment>(context, listen: false);
+
+                              bool result = await showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Invoice Created!'),
+                                  content: Text('Do you want to print this Invoice?'),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context, false), child: Text('No, I will do it later')),
+                                    TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Yes')),
+                                  ],
+                                ),
+                              );
+                              if(result && InvoicePayment_Provider.InvoiceNumber != null){
+                                General_Provider.printNetworkImage(InvoicePayment_Provider.InvoiceNumber!);
+                              }
+                              print(result);
                             }
                             else{
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -312,6 +340,7 @@ void showOverlay(BuildContext context) {
 
                                 ),
                               );
+
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -336,8 +365,10 @@ void showOverlay(BuildContext context) {
 
                             child: Image.network(
                               "http://127.0.0.1:8000/invoice/preview/?t=${DateTime.now().millisecondsSinceEpoch}",
-                              headers: {"Cache-Control": "no-cache"},
-
+                              headers: {
+                                "Cache-Control": "no-cache",
+                                'Authorization':'Bearer ${Provider.of<Data>(context).access_token}'
+                              },
                               // "https://static.vecteezy.com/vite/assets/photo-masthead-375-BoK_p8LG.webp",
                               height: 0.69 * height,
                             ),
@@ -660,7 +691,7 @@ class InvoiceCreate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white.withOpacity(0.05),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 400), // Set max height
         child: SingleChildScrollView(
@@ -672,14 +703,15 @@ class InvoiceCreate extends StatelessWidget {
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 1000),
                   curve: Curves.elasticInOut,
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding:  EdgeInsets.symmetric(vertical: 4.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         flex: 1,
                         child: Text("${index + 1}",style: TextStyle(
-                            color: Provider.of<AppColors>(context).appColors.secondaryText
+                            color: Provider.of<AppColors>(context).appColors.secondaryText,
+                          fontSize: 17.sp
                         ),),
                       ),
                       SizedBox(
@@ -690,7 +722,7 @@ class InvoiceCreate extends StatelessWidget {
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).HSCodeControllers[index],
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -709,7 +741,7 @@ class InvoiceCreate extends StatelessWidget {
                         child: TextField(
                           controller: Provider.of<InvoicePayment>(context).nameControllers[index],
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -733,7 +765,7 @@ class InvoiceCreate extends StatelessWidget {
                             Provider.of<InvoicePayment>(context, listen: false).calculateTotalPrice(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -752,7 +784,7 @@ class InvoiceCreate extends StatelessWidget {
                           controller: Provider.of<InvoicePayment>(context).unitControllers[index],
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -776,7 +808,7 @@ class InvoiceCreate extends StatelessWidget {
                             Provider.of<InvoicePayment>(context, listen: false).calculateTotalPrice(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -800,7 +832,7 @@ class InvoiceCreate extends StatelessWidget {
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
-                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+                          style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText,fontSize: 17.sp),
                           decoration: InputDecoration(
                               isDense: true,
                               filled: true,
@@ -833,7 +865,8 @@ class NameAutocomplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
+      width: 320.w,
+      height: 50.h,
       child: Autocomplete<String>(
         optionsBuilder: (TextEditingValue textEditingValue) {
           if (textEditingValue.text.isEmpty) {
@@ -860,10 +893,16 @@ class NameAutocomplete extends StatelessWidget {
 
               ]: [],
             // enabled: border,
-            style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
+            style: TextStyle(
+                color: Provider.of<AppColors>(context).appColors.primaryText,
+                fontSize: 17.sp
+            ),
             decoration: InputDecoration(
               labelText: '${valueText}',
-              labelStyle: TextStyle(color: Provider.of<AppColors>(context).appColors.secondaryText),
+              labelStyle: TextStyle(
+                  color: Provider.of<AppColors>(context).appColors.secondaryText,
+                  fontSize: 18.sp
+              ),
               border: border
                   ? OutlineInputBorder(
                       borderSide: BorderSide(color: Provider.of<AppColors>(context).appColors.primary), // Change focus border color here
@@ -907,73 +946,3 @@ class NameAutocomplete extends StatelessWidget {
 
 }
 
-class notificationbox extends StatelessWidget {
-  const notificationbox({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      top: 80,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        width: 300,
-        height: 400,
-        decoration: BoxDecoration(
-          color: Provider.of<AppColors>(context).appColors.primary,
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-          child: Column(
-            children: [
-              Text(
-                "Notifications",
-                style: TextStyle(color: Provider.of<AppColors>(context).appColors.tertiaryText, fontSize: 20.sp),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              for (int i = 1; i <= 5; i++)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      print("Option 1");
-                    },
-                    child: Container(
-                        color: Provider.of<AppColors>(context).appColors.secondary,
-                        width: 300,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Heading 1",
-                                style: TextStyle(
-                                  color: Provider.of<AppColors>(context).appColors.NotificationHeader,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                "This is the description for heading 1",
-                                style: TextStyle(color: Provider.of<AppColors>(context).appColors.NotificationBody, fontSize: 12.sp),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

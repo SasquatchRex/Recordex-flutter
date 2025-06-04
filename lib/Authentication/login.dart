@@ -30,20 +30,20 @@ class _LoginState extends State<Login> {
                 child: Row(
                   children: [
                     Login_Widget(height: height,),
-                    Expanded(
-                      flex: 4,
-                      child: Container(
-                        height: height,
-                        color: Provider.of<AppColors>(context).appColors.background,
-                          // color: Colors.red,
-                        child: Column(
-                              children: [
-                                Text("hello")
-                              ]
-                            )
-
-                      ),
-                    )
+                    // Expanded(
+                    //   flex: 4,
+                    //   child: Container(
+                    //     height: height,
+                    //     color: Provider.of<AppColors>(context).appColors.background,
+                    //       // color: Colors.red,
+                    //     child: Column(
+                    //           children: [
+                    //             Text("hello")
+                    //           ]
+                    //         )
+                    //
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -180,9 +180,9 @@ class Login_Widget extends StatelessWidget {
               height: 50.h,
               child: ElevatedButton(
                 onPressed: ()async{
-
                   await Provider.of<Login_Provider>(context,listen: false).login(Provider.of<Login_Provider>(context,listen: false).username,Provider.of<Login_Provider>(context,listen: false).password);
                   if(Provider.of<Login_Provider>(context,listen: false).loggedin){
+                    Provider.of<General>(context,listen: false).getToken();
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) => Homepage()),
                           (Route<dynamic> route) => false,

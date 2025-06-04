@@ -42,7 +42,8 @@ class _ManageStocksState extends State<ManageStocks> {
                     fontSize: 24.sp, color: Provider.of<AppColors>(context).appColors.primaryText, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 40.h,),
-              GridView.extent(
+              Provider.of<Stocks>(context).decoded_response['stocks'] != null?
+                GridView.extent(
                 maxCrossAxisExtent: 200, // number of items per row
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -152,6 +153,7 @@ class _ManageStocksState extends State<ManageStocks> {
                 ))
                     .toList(),
               )
+              : Container()
 
             ],
           ),

@@ -23,6 +23,7 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
     Future.microtask(() {
       Provider.of<invoiceManagementProvider>(context, listen: false).getInvoices();
       Provider.of<invoiceManagementProvider>(context, listen: false).get_invoice_data();
+
     });
   }
 
@@ -418,7 +419,10 @@ class _InvoiceManagementRightSideState extends State<InvoiceManagementRightSide>
                         child: Row(
                           children: [
                             ElevatedButton(
-                              onPressed: (){},
+                              onPressed: (){
+                                final General_Provider = Provider.of<General>(context, listen: false);
+                                General_Provider.printNetworkImage(InvoiceNumber);
+                              },
                               child: Text(
                                   "Print ",
                                   style: TextStyle(

@@ -59,7 +59,13 @@ class General with ChangeNotifier{
 
     doc.addPage(
       pw.Page(
-        build: (context) => pw.Center(child: pw.Image(image)),
+        margin: pw.EdgeInsets.zero,
+        build: (context) => pw.SizedBox(
+            child: pw.Image(image,fit: pw.BoxFit.cover),
+            width: context.page.pageFormat.width,
+            height: context.page.pageFormat.height,
+
+        ),
       ),
     );
 
@@ -103,6 +109,15 @@ class InvoicePayment extends ChangeNotifier{
   TextEditingController To_PAN = TextEditingController(text: '-');
   TextEditingController To_Address = TextEditingController();
   NepaliDateTime selectedDate = NepaliDateTime.now();
+
+  void initializer(BuildContext context){
+    final dataProvider = Provider.of<Data>(context,listen: false);
+    From_Name = TextEditingController(text:dataProvider.Company );
+    From_PAN = TextEditingController(text:dataProvider.PAN );
+
+    notifyListeners();
+
+  }
 
   void togglePaid(){
     Paid = !Paid;
@@ -340,8 +355,6 @@ class InvoicePayment extends ChangeNotifier{
   }
 
   Future <void> previewInvoice() async{
-    final tokens = await getAuthTokens();
-    final accessToken = tokens['accessToken'];
     final response = await http.post(
       Uri.parse(url + "/invoice/preview/"),
       body: jsonEncode(toJson()),
@@ -358,9 +371,8 @@ class InvoicePayment extends ChangeNotifier{
     print(response.statusCode);
   }
   int? post_response;
+  String? InvoiceNumber;
   Future <void> createInvoicePost() async{
-    final tokens = await getAuthTokens();
-    final accessToken = tokens['accessToken'];
     final response = await http.post(
         Uri.parse(url + "/create/invoice/"),
         body: jsonEncode(toJson()),
@@ -649,8 +661,6 @@ class InvoicePaymentShop extends ChangeNotifier{
   }
 
   Future <void> previewInvoice() async{
-    final tokens = await getAuthTokens();
-    final accessToken = tokens['accessToken'];
     final response = await http.post(
       Uri.parse(url + "/invoice/preview/"),
       body: jsonEncode(toJson()),
@@ -709,6 +719,7 @@ class ExpenseProvider extends ChangeNotifier{
   String final_pan = "";
   int numcount = 1;
 
+
   String def_return_pan(){
     var result = data
         .where((d) => d["name"] == name_data[0])
@@ -757,6 +768,15 @@ class ExpenseProvider extends ChangeNotifier{
   TextEditingController To_Name = TextEditingController(text: "Gandaki Drilling and Construction");
   TextEditingController To_PAN = TextEditingController(text: "1000001");
   NepaliDateTime selectedDate = NepaliDateTime.now();
+
+  void initializer(BuildContext context){
+    final dataProvider = Provider.of<Data>(context,listen: false);
+    To_Name = TextEditingController(text:dataProvider.Company );
+    To_PAN = TextEditingController(text:dataProvider.PAN );
+
+    notifyListeners();
+
+  }
 
   void update_date(NepaliDateTime date){
     selectedDate = date;
@@ -1118,12 +1138,18 @@ class Login_Provider extends ChangeNotifier{
     }
     print(response.body);
     if (response.statusCode == 200 && !error){
+      accessToken = '';
       loggedout=true;
       loggedin=false;
 
 
     } else {
       loggedout=false;
+      try{
+        await clearAuthTokens();
+      } catch(e){
+        print(e);
+      }
     }
     notifyListeners();
     return response.statusCode;
@@ -1161,231 +1187,123 @@ class CheckToken extends ChangeNotifier{
 
 }
 
-class Stocks extends ChangeNotifier{
+class Stocks extends ChangeNotifier {
+  List<dynamic> data = [];
+  String? selectedName;
+  bool paid = false;
 
-  List <dynamic> data =[];
-  String? selectedName = null;
-  bool Paid = false;
-  TextEditingController From_Name = TextEditingController();
-  TextEditingController From_PAN = TextEditingController(text: '-');
-  TextEditingController BillNo = TextEditingController(text: '-');
+  late Map<String, dynamic> decoded_response = {};
 
-
-  void togglePaid(){
-    Paid = !Paid;
-    notifyListeners();
-  }
-
+  final fromName = TextEditingController();
+  final fromPAN = TextEditingController(text: '-');
+  final billNo = TextEditingController(text: '-');
+  final totalCP = TextEditingController();
+  final totalSP = TextEditingController();
+  final taxableAmount = TextEditingController();
+  final vatAmount = TextEditingController();
+  final discount = TextEditingController(text: "0");
+  final totalAmount = TextEditingController();
+  final remarks = TextEditingController(text: "-");
 
   NepaliDateTime selectedDate = NepaliDateTime.now();
 
-  void update_date(NepaliDateTime date){
+  List<_InvoiceItem> invoiceItems = [];
+
+  void togglePaid() {
+    paid = !paid;
+    notifyListeners();
+  }
+
+  void updateDate(NepaliDateTime date) {
     selectedDate = date;
     notifyListeners();
   }
 
-
-
-  List<Map<String, dynamic>> invoiceItems = [];
-  List<TextEditingController> HSCodeControllers = [];
-  List<TextEditingController> nameControllers = [];
-  List<TextEditingController> quantityControllers = [];
-  List<TextEditingController> rateCPControllers = [];
-  List<TextEditingController> rateSPControllers = [];
-  List<TextEditingController> unitControllers = [];
-  List<TextEditingController> CPPriceControllers = [];
-  List<TextEditingController> SPPriceControllers = [];
-  TextEditingController totalCPPriceControllers = TextEditingController();
-  TextEditingController totalSPPriceControllers = TextEditingController();
-  TextEditingController taxable_amount_PriceControllers = TextEditingController();
-  TextEditingController PriceVATControllers = TextEditingController();
-  TextEditingController discountControllers = TextEditingController(text: "0");
-  TextEditingController totalAmountControllers = TextEditingController();
-  TextEditingController RemarksController = TextEditingController(text: "-");
-
   void addRow() {
-    invoiceItems.add({"hs": "","name": "","unitPrice": "","unitCP" : "","unitSP":"", "quantity": "",  "Cost Price": "", "Selling Price":""});
-    HSCodeControllers.add(TextEditingController(text: "-"));
-    nameControllers.add(TextEditingController());
-    quantityControllers.add(TextEditingController());
-    rateCPControllers.add(TextEditingController());
-    rateSPControllers.add(TextEditingController());
-    unitControllers.add(TextEditingController(text: "-"));
-    CPPriceControllers.add(TextEditingController());
-    SPPriceControllers.add(TextEditingController());
+    invoiceItems.add(_InvoiceItem());
     notifyListeners();
   }
 
   void removeRow([int? index]) {
     if (index == null) {
-      // Clear all rows
-      for (var controller in [
-        nameControllers,
-        HSCodeControllers,
-        quantityControllers,
-        rateCPControllers,
-        rateSPControllers,
-        unitControllers,
-        CPPriceControllers,
-        SPPriceControllers
-      ]) {
-        for (var c in controller) {
-          c.dispose();
-        }
-        controller.clear();
-      }
+      invoiceItems.forEach((e) => e.dispose());
       invoiceItems.clear();
-      From_PAN.clear();
-      From_Name.clear();
-      discountControllers.text = "0";
-      RemarksController.text ="-";
-    } else {
-      // Remove single row
+      _resetControllers();
+    } else if (index < invoiceItems.length) {
+      invoiceItems[index].dispose();
       invoiceItems.removeAt(index);
-      nameControllers[index].dispose();
-      HSCodeControllers[index].dispose();
-      quantityControllers[index].dispose();
-      rateCPControllers[index].dispose();
-      rateSPControllers[index].dispose();
-      unitControllers[index].dispose();
-      CPPriceControllers[index].dispose();
-      SPPriceControllers[index].dispose();
-
-      nameControllers.removeAt(index);
-      HSCodeControllers.removeAt(index);
-      quantityControllers.removeAt(index);
-      rateCPControllers.removeAt(index);
-      rateSPControllers.removeAt(index);
-      unitControllers.removeAt(index);
-      CPPriceControllers.removeAt(index);
-      SPPriceControllers.removeAt(index);
     }
-
-
-    grandTotal();
-    discountPercentage();
-    // notifyListeners();
+    updateTotals();
   }
 
-  // Calculate the total price for a row
-  void calculateTotalPrice(int index) {
-    double quantity = double.tryParse(quantityControllers[index].text) ?? 0;
-    double unitCPPrice = double.tryParse(rateCPControllers[index].text) ?? 0;
-    double unitSPPrice = double.tryParse(rateSPControllers[index].text) ?? 0;
-    double totalCPPrice = quantity * unitCPPrice;
-    double totalSPPrice = quantity * unitSPPrice;
-    CPPriceControllers[index].text = totalCPPrice.toStringAsFixed(2);
-    SPPriceControllers[index].text = totalSPPrice.toStringAsFixed(2);
-    grandTotal();
-    discountPercentage();
+  void calculateRowTotal(int index) {
+    final item = invoiceItems[index];
+    final qty = double.tryParse(item.quantity.text) ?? 0;
+    final cp = double.tryParse(item.cpRate.text) ?? 0;
+    final sp = double.tryParse(item.spRate.text) ?? 0;
+    item.cpTotal.text = (qty * cp).toStringAsFixed(2);
+    item.spTotal.text = (qty * sp).toStringAsFixed(2);
+    updateTotals();
   }
 
+  void updateTotals() {
+    final totalCPVal = invoiceItems.fold(0.0, (sum, e) => sum + (double.tryParse(e.cpTotal.text) ?? 0));
+    final totalSPVal = invoiceItems.fold(0.0, (sum, e) => sum + (double.tryParse(e.spTotal.text) ?? 0));
 
-  void grandTotal() {
-    double totalCP = 0.0;
-    double totalSP = 0.0;
-    for (var controller in CPPriceControllers) {
-      double value = double.tryParse(controller.text) ?? 0.0;
-      totalCP += value;
-    }
-    for (var controller in SPPriceControllers) {
-      double valueSP = double.tryParse(controller.text) ?? 0.0;
-      totalSP += valueSP;
-    }
-    totalCPPriceControllers.text = totalCP.toStringAsFixed(2);
-    totalSPPriceControllers.text = totalSP.toStringAsFixed(2);
-    // totalamountPriceVATControllers.text = (total + 0.13*total).toStringAsFixed(2);
+    totalCP.text = totalCPVal.toStringAsFixed(2);
+    totalSP.text = totalSPVal.toStringAsFixed(2);
+
+    final discountPercent = double.tryParse(discount.text) ?? 0.0;
+    final discounted = totalCPVal - (discountPercent / 100 * totalCPVal);
+    taxableAmount.text = discounted.toStringAsFixed(2);
+
+    final vat = discounted * 0.13;
+    vatAmount.text = vat.toStringAsFixed(2);
+    totalAmount.text = (discounted + vat).toStringAsFixed(2);
+
     notifyListeners();
   }
 
+  void _resetControllers() {
+    fromPAN.clear();
+    fromName.clear();
+    discount.text = "0";
+    remarks.text = "-";
+  }
 
-  void discountPercentage(){
-    double totalPrice = double.tryParse(totalCPPriceControllers.text) ?? 0.0;
-    double discountPer = double.tryParse(discountControllers.text) ?? 0.0;
-
-
-    taxable_amount_PriceControllers.text = (totalPrice-0.01*discountPer*totalPrice).toStringAsFixed(2) ;
-    double taxable_amount = double.tryParse(taxable_amount_PriceControllers.text) ?? 0.0;
-    PriceVATControllers.text = (0.13*taxable_amount).toStringAsFixed(2);
-    double vat_amount = double.tryParse(PriceVATControllers.text) ?? 0.0;
-    totalAmountControllers.text = (vat_amount + taxable_amount).toStringAsFixed(2);
-
-    // taxable_amount_PriceControllers.text = totalPrice - double.tryParse(finalAmountControllers.text) ?? 0.0));
-
-    notifyListeners();
-
+  bool isFormComplete() {
+    for (var item in invoiceItems) {
+      if (!item.isComplete()) return false;
+    }
+    return [
+      totalCP.text,
+      taxableAmount.text,
+      vatAmount.text,
+      discount.text,
+      totalAmount.text,
+      remarks.text,
+      fromName.text,
+      fromPAN.text
+    ].every((t) => t.isNotEmpty);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "Stock Items": List.generate(invoiceItems.length, (index) => {
-        "H.S Code" : HSCodeControllers[index].text,
-        "Name": nameControllers[index].text,
-        "CP Rate": rateCPControllers[index].text,
-        "SP Rate": rateSPControllers[index].text,
-        "Unit": unitControllers[index].text,
-        "Quantity": quantityControllers[index].text,
-        "Cost Total": CPPriceControllers[index].text,
-        "Selling Total": SPPriceControllers[index].text,
-      }),
-      "Total Cost Price": totalCPPriceControllers.text,
-      "Total Selling Price": totalSPPriceControllers.text,
-      "Taxable Amount":taxable_amount_PriceControllers.text,
-      "VAT Amount": PriceVATControllers.text,
-      "Discount Percentage": discountControllers.text,
-      "Total Amount": totalAmountControllers.text,
-      "Remarks": RemarksController.text,
-
-      "From Name": From_Name.text,
-      "From PAN": From_PAN.text,
-      "Bill No": BillNo.text,
-
-
-      "Payment Paid":Paid,
-      "Date" :  NepaliDateFormat('yyyy-MM-dd').format(selectedDate)
-
-
+      "Stock Items": invoiceItems.map((e) => e.toJson()).toList(),
+      "Total Cost Price": totalCP.text,
+      "Total Selling Price": totalSP.text,
+      "Taxable Amount": taxableAmount.text,
+      "VAT Amount": vatAmount.text,
+      "Discount Percentage": discount.text,
+      "Total Amount": totalAmount.text,
+      "Remarks": remarks.text,
+      "From Name": fromName.text,
+      "From PAN": fromPAN.text,
+      "Bill No": billNo.text,
+      "Payment Paid": paid,
+      "Date": NepaliDateFormat('yyyy-MM-dd').format(selectedDate),
     };
   }
-
-  bool isFormComplete() {
-    // Check if all invoice item fields are filled
-    for (int i = 0; i < invoiceItems.length; i++) {
-      if (HSCodeControllers[i].text.isEmpty ||
-          nameControllers[i].text.isEmpty ||
-          rateCPControllers[i].text.isEmpty ||
-          rateSPControllers[i].text.isEmpty ||
-          unitControllers[i].text.isEmpty ||
-          quantityControllers[i].text.isEmpty ||
-          CPPriceControllers[i].text.isEmpty ||
-          SPPriceControllers[i].text.isEmpty
-      ) {
-        return false;
-      }
-    }
-
-    // Check other required fields
-    final requiredFields = [
-      totalCPPriceControllers.text,
-      taxable_amount_PriceControllers.text,
-      PriceVATControllers.text,
-      discountControllers.text,
-      totalAmountControllers.text,
-      RemarksController.text,
-      From_Name.text,
-      From_PAN.text,
-    ];
-
-    for (final field in requiredFields) {
-      if (field.isEmpty) return false;
-    }
-
-    // Optionally, check date
-    if (selectedDate == null) return false;
-
-    return true;
-  }
-
   Future <void> addStockPost() async{
     final response = await http.post(
         Uri.parse(url + "/create/stocks/"),
@@ -1402,15 +1320,6 @@ class Stocks extends ChangeNotifier{
     print(response.statusCode);
     Map decoded_response = jsonDecode(response.body);
     print(decoded_response["message"]);
-  }
-
-  late Map<String, dynamic> decoded_response = {};
-  bool filtermenu = false;
-
-
-  void filtermenuchange(){
-    filtermenu = !filtermenu;
-    notifyListeners();
   }
 
 
@@ -1430,17 +1339,321 @@ class Stocks extends ChangeNotifier{
     }
 
   }
+// ... HTTP methods stay the same ...
+}
 
-  void updateSelectedName(String name, int index) {
-    selectedName = name;
+class _InvoiceItem {
+  final hsCode = TextEditingController(text: "-");
+  final name = TextEditingController();
+  final unit = TextEditingController(text: "-");
+  final quantity = TextEditingController();
+  final cpRate = TextEditingController();
+  final spRate = TextEditingController();
+  final cpTotal = TextEditingController();
+  final spTotal = TextEditingController();
 
-    notifyListeners();
+  void dispose() {
+    [hsCode, name, unit, quantity, cpRate, spRate, cpTotal, spTotal].forEach((c) => c.dispose());
   }
 
+  bool isComplete() {
+    return [hsCode, name, unit, quantity, cpRate, spRate, cpTotal, spTotal].every((c) => c.text.isNotEmpty);
+  }
 
-
-
+  Map<String, dynamic> toJson() {
+    return {
+      "H.S Code": hsCode.text,
+      "Name": name.text,
+      "CP Rate": cpRate.text,
+      "SP Rate": spRate.text,
+      "Unit": unit.text,
+      "Quantity": quantity.text,
+      "Cost Total": cpTotal.text,
+      "Selling Total": spTotal.text,
+    };
+  }
 }
+
+// class Stocks extends ChangeNotifier{
+//
+//   List <dynamic> data =[];
+//   String? selectedName = null;
+//   bool Paid = false;
+//   TextEditingController From_Name = TextEditingController();
+//   TextEditingController From_PAN = TextEditingController(text: '-');
+//   TextEditingController BillNo = TextEditingController(text: '-');
+//
+//
+//   void togglePaid(){
+//     Paid = !Paid;
+//     notifyListeners();
+//   }
+//
+//
+//   NepaliDateTime selectedDate = NepaliDateTime.now();
+//
+//   void update_date(NepaliDateTime date){
+//     selectedDate = date;
+//     notifyListeners();
+//   }
+//
+//
+//
+//   List<Map<String, dynamic>> invoiceItems = [];
+//   List<TextEditingController> HSCodeControllers = [];
+//   List<TextEditingController> nameControllers = [];
+//   List<TextEditingController> quantityControllers = [];
+//   List<TextEditingController> rateCPControllers = [];
+//   List<TextEditingController> rateSPControllers = [];
+//   List<TextEditingController> unitControllers = [];
+//   List<TextEditingController> CPPriceControllers = [];
+//   List<TextEditingController> SPPriceControllers = [];
+//   TextEditingController totalCPPriceControllers = TextEditingController();
+//   TextEditingController totalSPPriceControllers = TextEditingController();
+//   TextEditingController taxable_amount_PriceControllers = TextEditingController();
+//   TextEditingController PriceVATControllers = TextEditingController();
+//   TextEditingController discountControllers = TextEditingController(text: "0");
+//   TextEditingController totalAmountControllers = TextEditingController();
+//   TextEditingController RemarksController = TextEditingController(text: "-");
+//
+//   void addRow() {
+//     invoiceItems.add({"hs": "","name": "","unitPrice": "","unitCP" : "","unitSP":"", "quantity": "",  "Cost Price": "", "Selling Price":""});
+//     HSCodeControllers.add(TextEditingController(text: "-"));
+//     nameControllers.add(TextEditingController());
+//     quantityControllers.add(TextEditingController());
+//     rateCPControllers.add(TextEditingController());
+//     rateSPControllers.add(TextEditingController());
+//     unitControllers.add(TextEditingController(text: "-"));
+//     CPPriceControllers.add(TextEditingController());
+//     SPPriceControllers.add(TextEditingController());
+//     notifyListeners();
+//   }
+//
+//   void removeRow([int? index]) {
+//     if (index == null) {
+//       // Clear all rows
+//       for (var controller in [
+//         nameControllers,
+//         HSCodeControllers,
+//         quantityControllers,
+//         rateCPControllers,
+//         rateSPControllers,
+//         unitControllers,
+//         CPPriceControllers,
+//         SPPriceControllers
+//       ]) {
+//         for (var c in controller) {
+//           c.dispose();
+//         }
+//         controller.clear();
+//       }
+//       invoiceItems.clear();
+//       From_PAN.clear();
+//       From_Name.clear();
+//       discountControllers.text = "0";
+//       RemarksController.text ="-";
+//     } else {
+//       // Remove single row
+//       invoiceItems.removeAt(index);
+//       nameControllers[index].dispose();
+//       HSCodeControllers[index].dispose();
+//       quantityControllers[index].dispose();
+//       rateCPControllers[index].dispose();
+//       rateSPControllers[index].dispose();
+//       unitControllers[index].dispose();
+//       CPPriceControllers[index].dispose();
+//       SPPriceControllers[index].dispose();
+//
+//       nameControllers.removeAt(index);
+//       HSCodeControllers.removeAt(index);
+//       quantityControllers.removeAt(index);
+//       rateCPControllers.removeAt(index);
+//       rateSPControllers.removeAt(index);
+//       unitControllers.removeAt(index);
+//       CPPriceControllers.removeAt(index);
+//       SPPriceControllers.removeAt(index);
+//     }
+//
+//
+//     grandTotal();
+//     discountPercentage();
+//     // notifyListeners();
+//   }
+//
+//   // Calculate the total price for a row
+//   void calculateTotalPrice(int index) {
+//     double quantity = double.tryParse(quantityControllers[index].text) ?? 0;
+//     double unitCPPrice = double.tryParse(rateCPControllers[index].text) ?? 0;
+//     double unitSPPrice = double.tryParse(rateSPControllers[index].text) ?? 0;
+//     double totalCPPrice = quantity * unitCPPrice;
+//     double totalSPPrice = quantity * unitSPPrice;
+//     CPPriceControllers[index].text = totalCPPrice.toStringAsFixed(2);
+//     SPPriceControllers[index].text = totalSPPrice.toStringAsFixed(2);
+//     grandTotal();
+//     discountPercentage();
+//   }
+//
+//
+//   void grandTotal() {
+//     double totalCP = 0.0;
+//     double totalSP = 0.0;
+//     for (var controller in CPPriceControllers) {
+//       double value = double.tryParse(controller.text) ?? 0.0;
+//       totalCP += value;
+//     }
+//     for (var controller in SPPriceControllers) {
+//       double valueSP = double.tryParse(controller.text) ?? 0.0;
+//       totalSP += valueSP;
+//     }
+//     totalCPPriceControllers.text = totalCP.toStringAsFixed(2);
+//     totalSPPriceControllers.text = totalSP.toStringAsFixed(2);
+//     // totalamountPriceVATControllers.text = (total + 0.13*total).toStringAsFixed(2);
+//     notifyListeners();
+//   }
+//
+//
+//   void discountPercentage(){
+//     double totalPrice = double.tryParse(totalCPPriceControllers.text) ?? 0.0;
+//     double discountPer = double.tryParse(discountControllers.text) ?? 0.0;
+//
+//
+//     taxable_amount_PriceControllers.text = (totalPrice-0.01*discountPer*totalPrice).toStringAsFixed(2) ;
+//     double taxable_amount = double.tryParse(taxable_amount_PriceControllers.text) ?? 0.0;
+//     PriceVATControllers.text = (0.13*taxable_amount).toStringAsFixed(2);
+//     double vat_amount = double.tryParse(PriceVATControllers.text) ?? 0.0;
+//     totalAmountControllers.text = (vat_amount + taxable_amount).toStringAsFixed(2);
+//
+//     // taxable_amount_PriceControllers.text = totalPrice - double.tryParse(finalAmountControllers.text) ?? 0.0));
+//
+//     notifyListeners();
+//
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     return {
+//       "Stock Items": List.generate(invoiceItems.length, (index) => {
+//         "H.S Code" : HSCodeControllers[index].text,
+//         "Name": nameControllers[index].text,
+//         "CP Rate": rateCPControllers[index].text,
+//         "SP Rate": rateSPControllers[index].text,
+//         "Unit": unitControllers[index].text,
+//         "Quantity": quantityControllers[index].text,
+//         "Cost Total": CPPriceControllers[index].text,
+//         "Selling Total": SPPriceControllers[index].text,
+//       }),
+//       "Total Cost Price": totalCPPriceControllers.text,
+//       "Total Selling Price": totalSPPriceControllers.text,
+//       "Taxable Amount":taxable_amount_PriceControllers.text,
+//       "VAT Amount": PriceVATControllers.text,
+//       "Discount Percentage": discountControllers.text,
+//       "Total Amount": totalAmountControllers.text,
+//       "Remarks": RemarksController.text,
+//
+//       "From Name": From_Name.text,
+//       "From PAN": From_PAN.text,
+//       "Bill No": BillNo.text,
+//
+//
+//       "Payment Paid":Paid,
+//       "Date" :  NepaliDateFormat('yyyy-MM-dd').format(selectedDate)
+//
+//
+//     };
+//   }
+//
+//   bool isFormComplete() {
+//     // Check if all invoice item fields are filled
+//     for (int i = 0; i < invoiceItems.length; i++) {
+//       if (HSCodeControllers[i].text.isEmpty ||
+//           nameControllers[i].text.isEmpty ||
+//           rateCPControllers[i].text.isEmpty ||
+//           rateSPControllers[i].text.isEmpty ||
+//           unitControllers[i].text.isEmpty ||
+//           quantityControllers[i].text.isEmpty ||
+//           CPPriceControllers[i].text.isEmpty ||
+//           SPPriceControllers[i].text.isEmpty
+//       ) {
+//         return false;
+//       }
+//     }
+//
+//     // Check other required fields
+//     final requiredFields = [
+//       totalCPPriceControllers.text,
+//       taxable_amount_PriceControllers.text,
+//       PriceVATControllers.text,
+//       discountControllers.text,
+//       totalAmountControllers.text,
+//       RemarksController.text,
+//       From_Name.text,
+//       From_PAN.text,
+//     ];
+//
+//     for (final field in requiredFields) {
+//       if (field.isEmpty) return false;
+//     }
+//
+//     // Optionally, check date
+//     if (selectedDate == null) return false;
+//
+//     return true;
+//   }
+//
+//   Future <void> addStockPost() async{
+//     final response = await http.post(
+//         Uri.parse(url + "/create/stocks/"),
+//         body: jsonEncode(toJson()),
+//         headers: {
+//           'Content-Type' : 'application/json',
+//           'Authorization':'Bearer ${accessToken}'
+//         }
+//     );
+//     // if(response.statusCode == 200){
+//     //   removeRow();
+//     // }
+//     // print(jsonEncode(toJson()));
+//     print(response.statusCode);
+//     Map decoded_response = jsonDecode(response.body);
+//     print(decoded_response["message"]);
+//   }
+//
+//   late Map<String, dynamic> decoded_response = {};
+//   bool filtermenu = false;
+//
+//
+//   void filtermenuchange(){
+//     filtermenu = !filtermenu;
+//     notifyListeners();
+//   }
+//
+//
+//   Future <void> getStocks() async{
+//     final response = await http.get(
+//         Uri.parse(url+"/stocks/"),
+//         headers : {
+//           'Content-Type' : 'application/json',
+//           'Authorization':'Bearer ${accessToken}'
+//         }
+//     );
+//
+//     if(response.statusCode == 200) {
+//       decoded_response = jsonDecode(response.body);
+//       // print(decoded_response);
+//       notifyListeners();
+//     }
+//
+//   }
+//
+//   void updateSelectedName(String name, int index) {
+//     selectedName = name;
+//
+//     notifyListeners();
+//   }
+//
+//
+//
+//
+// }
 
 
 class   Data extends ChangeNotifier{

@@ -26,7 +26,7 @@ class _AddStocksState extends State<AddStocks> {
     );
 
     if (picked != null && picked != Provider.of<Stocks>(context,listen: false).selectedDate) {
-      Provider.of<Stocks>(context,listen: false).update_date(picked);
+      Provider.of<Stocks>(context,listen: false).updateDate(picked);
     }
   }
 
@@ -86,10 +86,10 @@ class _AddStocksState extends State<AddStocks> {
                                 SizedBox(height: 20.h,),
                                 NameAutocomplete(
                                   names: [],
-                                  def_val: Provider.of<Stocks>(context).BillNo.text,
+                                  def_val: Provider.of<Stocks>(context).billNo.text,
                                   valueText: "Bill No",
                                   border: true,
-                                  Controller: Provider.of<Stocks>(context).BillNo,
+                                  Controller: Provider.of<Stocks>(context).billNo,
                                   inputformatter: false,
                                 ),
                               ],
@@ -102,16 +102,16 @@ class _AddStocksState extends State<AddStocks> {
                                   def_val: "",
                                   valueText: "Dealer's Name",
                                   border: true,
-                                  Controller: Provider.of<Stocks>(context).From_Name,
+                                  Controller: Provider.of<Stocks>(context).fromName,
                                   inputformatter: false,
                                 ),
                                 SizedBox(height: 20.h,),
                                 NameAutocomplete(
                                     names: Provider.of<InvoicePaymentShop>(context).pan_data,
-                                    def_val: Provider.of<Stocks>(context).From_PAN.text,
+                                    def_val: Provider.of<Stocks>(context).fromPAN.text,
                                     valueText: "Dealer's PAN",
                                     border: true,
-                                    Controller: Provider.of<Stocks>(context).From_PAN,
+                                    Controller: Provider.of<Stocks>(context).fromPAN,
                                     inputformatter: true
                                 ),
                               ],
@@ -135,7 +135,7 @@ class _AddStocksState extends State<AddStocks> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(child: TextField(
-                              controller: Provider.of<Stocks>(context).RemarksController,
+                              controller: Provider.of<Stocks>(context).remarks,
                               keyboardType: TextInputType.multiline,
                               maxLines: 5,
                               cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
@@ -385,7 +385,7 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).HSCodeControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].hsCode,
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
                           decoration: InputDecoration(
@@ -404,7 +404,7 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 8,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).nameControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].name,
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
                           decoration: InputDecoration(
@@ -422,12 +422,12 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).quantityControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].quantity,
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           onChanged: (value) {
-                            Provider.of<Stocks>(context, listen: false).calculateTotalPrice(index);
+                            Provider.of<Stocks>(context, listen: false).calculateRowTotal(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -446,7 +446,7 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).unitControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].unit,
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -465,12 +465,12 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).rateCPControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].cpRate,
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           onChanged: (value) {
-                            Provider.of<Stocks>(context, listen: false).calculateTotalPrice(index);
+                            Provider.of<Stocks>(context, listen: false).calculateRowTotal(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -489,9 +489,9 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).CPPriceControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].cpRate,
                           onChanged: (value) {
-                            Provider.of<Stocks>(context, listen: false).grandTotal();
+                            Provider.of<Stocks>(context, listen: false).updateTotals();
                           },
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
@@ -511,12 +511,12 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).rateSPControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].spRate,
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
                           // ✅ Allows only numbers and one decimal point
                           onChanged: (value) {
-                            Provider.of<Stocks>(context, listen: false).calculateTotalPrice(index);
+                            Provider.of<Stocks>(context, listen: false).calculateRowTotal(index);
                           },
                           cursorColor: Provider.of<AppColors>(context).appColors.MenuActive,
                           style: TextStyle(color: Provider.of<AppColors>(context).appColors.primaryText),
@@ -534,9 +534,9 @@ class StockCreate extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: TextField(
-                          controller: Provider.of<Stocks>(context).SPPriceControllers[index],
+                          controller: Provider.of<Stocks>(context).invoiceItems[index].spTotal,
                           onChanged: (value) {
-                            Provider.of<Stocks>(context, listen: false).grandTotal();
+                            Provider.of<Stocks>(context, listen: false).updateTotals();
                           },
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))],
@@ -582,18 +582,18 @@ class RightStockCPTotal extends StatelessWidget {
         ),
         SizedBox(height: 20.h,),
 
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalCPPriceControllers,text: 'Total : '),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalCP,text: 'Total : '),
         SizedBox(
           height: 10,
         ),
 
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).discountControllers, text: "Discount % : ",onChanged: Provider.of<Stocks>(context, listen: false).discountPercentage,),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).discount, text: "Discount % : ",onChanged: Provider.of<Stocks>(context, listen: false).updateTotals,),
         SizedBox(height: 10.h,),
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).taxable_amount_PriceControllers, text: "Taxable Amount : ",),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).taxableAmount, text: "Taxable Amount : ",),
         SizedBox(height: 10.h,),
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).PriceVATControllers, text: "13% VAT : ",),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).vatAmount, text: "13% VAT : ",),
         SizedBox(height: 10.h,),
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalAmountControllers, text: "Total Amount : "),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalAmount, text: "Total Amount : "),
       ],
     );
   }
@@ -619,7 +619,7 @@ class RightStockSPTotal extends StatelessWidget {
         ),
         SizedBox(height: 20.h,),
 
-        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalSPPriceControllers,text: 'Total : '),
+        RightInvoiceComp(Controller: Provider.of<Stocks>(context).totalSP,text: 'Total : '),
         SizedBox(height: 40.h,),
         Text(
           "Payment to Dealer",
@@ -641,7 +641,7 @@ class RightStockSPTotal extends StatelessWidget {
             ),
             SizedBox(width: 10.w,),
             FlutterSwitch(
-              value: Provider.of<Stocks>(context).Paid,
+              value: Provider.of<Stocks>(context).paid,
               onToggle:(_) => Provider.of<Stocks>(context,listen: false).togglePaid(),
               borderRadius: 15.r,
               toggleSize: 25.r,
